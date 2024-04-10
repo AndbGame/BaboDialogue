@@ -1,0 +1,1 @@
+Scriptname BaboAliasDeathScript extends ReferenceAlias  
