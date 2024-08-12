@@ -100,7 +100,7 @@ If BoyFriendNum == 1
 	
 Endif
 if NextUpdate
-	RegisterUpdate(8)
+	RegisterUpdate(8.0)
 Endif
 EndFunction
 
@@ -108,7 +108,7 @@ Function BoyFriendTriggerEnd(Actor BoyFriend, int BoyFriendNum)
 	If BoyFriendNum == 1
 		BaboWhiterunBreezehomeVCTrigger.setvalue(0)
 		BaboWhiterunBreezehomeVCEventCounts.setvalue(BaboWhiterunBreezehomeVCEventCounts.getvalue() + 1)
-		RegisterUpdate(2)
+		RegisterUpdate(2.0)
 	Endif
 	BoyFriend.evaluatepackage()
 EndFunction
@@ -137,7 +137,7 @@ Function ViceCaptainRefreshPackage()
 	WhiterunViceCaptainRef.getactorref().evaluatepackage()	
 EndFunction
 
-Function RegisterUpdate(Int TimeLimit)
+Function RegisterUpdate(float TimeLimit)
 	UnregisterForUpdateGameTime()
 	RegisterForSingleUpdateGameTime(TimeLimit); this is Customizable
 EndFunction

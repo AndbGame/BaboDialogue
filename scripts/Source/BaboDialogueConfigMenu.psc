@@ -268,6 +268,7 @@ event OnPageReset(string page)
 		OID_BaboChangeLocation05Percentage = AddSliderOption("$BaboChangeLocationEvent05", BaboChangeLocation05Percentage.GetValue(), "{0}")
 		OID_BaboChangeLocation06Percentage = AddSliderOption("$BaboChangeLocationEvent06", BaboChangeLocation06Percentage.GetValue(), "{0}")
 		OID_BaboChangeLocation07Percentage = AddSliderOption("$BaboChangeLocationEvent07", BaboChangeLocation07Percentage.GetValue(), "{0}")
+		OID_BaboChangeLocation08Percentage = AddSliderOption("$BaboChangeLocationEvent08", BaboChangeLocation08Percentage.GetValue(), "{0}")
 		AddEmptyOption()
 		AddHeaderOption("$BaboUniqueEventSetting")
 		OID_BaboEventWhiterunOrcVisitorsNextVisitInterval = AddSliderOption("$BaboWhiterunOrcVisitInterval", BaboEventWhiterunOrcVisitorsNextVisitInterval.GetValue(), "{0}")
@@ -747,6 +748,11 @@ ElseIf option == OID_BaboChangeLocation07Percentage
 	SetSliderDialogDefaultValue(50)
 	SetSliderDialogRange(0, 100)
 	SetSliderDialogInterval(1.0)
+ElseIf option == OID_BaboChangeLocation08Percentage
+	SetSliderDialogStartValue(BaboChangeLocation08Percentage.GetValue())
+	SetSliderDialogDefaultValue(50)
+	SetSliderDialogRange(0, 100)
+	SetSliderDialogInterval(1.0)
 ElseIf option == OID_BaboEventWhiterunOrcVisitorsNextVisitInterval
 	SetSliderDialogStartValue(BaboEventWhiterunOrcVisitorsNextVisitInterval.GetValue())
 	SetSliderDialogDefaultValue(84)
@@ -1217,6 +1223,10 @@ Event OnOptionSliderAccept(Int Option, Float Value)
 
 	ElseIf option == OID_BaboChangeLocation07Percentage
 		BaboChangeLocation07Percentage.SetValue(Value)
+		SetSliderOptionValue(option, value as int, "{0}")
+		
+		ElseIf option == OID_BaboChangeLocation08Percentage
+		BaboChangeLocation08Percentage.SetValue(Value)
 		SetSliderOptionValue(option, value as int, "{0}")
 	
 	ElseIf option == OID_BaboEventWhiterunOrcVisitorsNextVisitInterval
@@ -1808,6 +1818,8 @@ ElseIf (Option == OID_BaboChangeLocation06Percentage)
 		SetInfoText("$BaboChangeLocationEvent06Info")
 ElseIf (Option == OID_BaboChangeLocation07Percentage)
 		SetInfoText("$BaboChangeLocationEvent07Info")
+ElseIf (Option == OID_BaboChangeLocation08Percentage)
+		SetInfoText("$BaboChangeLocationEvent08Info")
 ElseIf (Option == OID_BaboEventWhiterunOrcVisitorsNextVisitInterval)
 		SetInfoText("$BaboWhiterunOrcVisitIntervalInfo")
 ElseIf (Option == OID_BaboWhiterunBreezehomeGameDayInterval)
@@ -2241,6 +2253,7 @@ Function ExportSettings()
 	JsonUtil.SetintValue(File, "BaboChangeLocationEvent05", BaboChangeLocation05Percentage.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboChangeLocationEvent06", BaboChangeLocation06Percentage.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboChangeLocationEvent07", BaboChangeLocation07Percentage.GetValue() as int)
+	JsonUtil.SetintValue(File, "BaboChangeLocationEvent08", BaboChangeLocation08Percentage.GetValue() as int)
 	
 	JsonUtil.SetintValue(File, "BaboWhiterunOrcVisitInterval", BaboEventWhiterunOrcVisitorsNextVisitInterval.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboWhiterunViceCaptainInterval", BaboWhiterunBreezehomeGameDayInterval.GetValue() as int)
@@ -2364,6 +2377,7 @@ Function ImportSettings()
 	BaboChangeLocation05Percentageint = JsonUtil.GetintValue(File, "BaboChangeLocationEvent05")
 	BaboChangeLocation06Percentageint = JsonUtil.GetintValue(File, "BaboChangeLocationEvent06")
 	BaboChangeLocation07Percentageint = JsonUtil.GetintValue(File, "BaboChangeLocationEvent07")
+	BaboChangeLocation08Percentageint = JsonUtil.GetintValue(File, "BaboChangeLocationEvent08")
 	
 	BaboEventWhiterunOrcVisitorsNextVisitIntervalint = JsonUtil.GetintValue(File, "BaboWhiterunOrcVisitInterval", BaboEventWhiterunOrcVisitorsNextVisitInterval.GetValue() as int)
 	BaboWhiterunBreezehomeGameDayIntervalint = JsonUtil.GetintValue(File, "BaboWhiterunViceCaptainInterval", BaboWhiterunBreezehomeGameDayInterval.GetValue() as int)
@@ -2475,6 +2489,7 @@ Function ImportSettings()
 	BaboChangeLocation05Percentage.SetValue(BaboChangeLocation05Percentageint)
 	BaboChangeLocation06Percentage.SetValue(BaboChangeLocation06Percentageint)
 	BaboChangeLocation07Percentage.SetValue(BaboChangeLocation07Percentageint)
+	BaboChangeLocation08Percentage.SetValue(BaboChangeLocation08Percentageint)
 
 
 	BaboEventWhiterunOrcVisitorsNextVisitInterval.Setvalue(BaboEventWhiterunOrcVisitorsNextVisitIntervalint)
@@ -2619,6 +2634,7 @@ GlobalVariable Property BaboChangeLocation04Percentage Auto
 GlobalVariable Property BaboChangeLocation05Percentage Auto
 GlobalVariable Property BaboChangeLocation06Percentage Auto
 GlobalVariable Property BaboChangeLocation07Percentage Auto
+GlobalVariable Property BaboChangeLocation08Percentage Auto
 GlobalVariable Property BaboWERegion Auto
 GlobalVariable Property BaboEncounter01percentage Auto
 GlobalVariable Property BaboEncounter02percentage Auto
@@ -2745,6 +2761,7 @@ Int OID_BaboChangeLocation04Percentage
 Int OID_BaboChangeLocation05Percentage
 Int OID_BaboChangeLocation06Percentage
 Int OID_BaboChangeLocation07Percentage
+Int OID_BaboChangeLocation08Percentage
 Int OID_Encounter01Percent
 Int OID_Encounter02Percent
 Int OID_Encounter03Percent
@@ -2987,6 +3004,7 @@ int BaboChangeLocation04Percentageint
 int BaboChangeLocation05Percentageint
 int BaboChangeLocation06Percentageint
 int BaboChangeLocation07Percentageint
+int BaboChangeLocation08Percentageint
 
 int BaboEventWhiterunOrcVisitorsNextVisitIntervalint
 int BaboWhiterunBreezehomeGameDayIntervalint

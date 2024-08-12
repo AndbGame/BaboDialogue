@@ -2,44 +2,9 @@
 ;NEXT FRAGMENT INDEX 26
 Scriptname QF_BaboChangeLocationEvent07_081BCF9D Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY RentRoomMarker
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_RentRoomMarker Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY FollowerRef01
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_FollowerRef01 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY NewLocation
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_NewLocation Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY DrinkMarker01
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_DrinkMarker01 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY SpawnMarker02
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SpawnMarker02 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY DrinkMarker03
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_DrinkMarker03 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY PlayerRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PlayerRef Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY GuestRef02
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_GuestRef02 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY OldLocation
@@ -47,9 +12,9 @@ ReferenceAlias Property Alias_GuestRef02 Auto
 LocationAlias Property Alias_OldLocation Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY DrinkMarker02
+;BEGIN ALIAS PROPERTY RentRoomMarker
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_DrinkMarker02 Auto
+ReferenceAlias Property Alias_RentRoomMarker Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY RecoverMarker
@@ -57,19 +22,24 @@ ReferenceAlias Property Alias_DrinkMarker02 Auto
 ReferenceAlias Property Alias_RecoverMarker Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY FollowerMarker
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_FollowerMarker Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY GuestRef01
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_GuestRef01 Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY RentRoomBed
+;BEGIN ALIAS PROPERTY FollowerRef01
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_RentRoomBed Auto
+ReferenceAlias Property Alias_FollowerRef01 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY PlayerRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerRef Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY FollowerMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_FollowerMarker Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY SpawnMarker01
@@ -77,11 +47,51 @@ ReferenceAlias Property Alias_RentRoomBed Auto
 ReferenceAlias Property Alias_SpawnMarker01 Auto
 ;END ALIAS PROPERTY
 
+;BEGIN ALIAS PROPERTY DrinkMarker03
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_DrinkMarker03 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY NewLocation
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_NewLocation Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY GuestRef02
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_GuestRef02 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RentRoomBed
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RentRoomBed Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY DrinkMarker02
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_DrinkMarker02 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY SpawnMarker02
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_SpawnMarker02 Auto
+;END ALIAS PROPERTY
+
 ;BEGIN FRAGMENT Fragment_13
 Function Fragment_13()
 ;BEGIN CODE
 (BaboSexController as BaboSexControllerManager).ChangeLocationEvent07Messagebox(3)
 setstage(255)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07Messagebox(2)
+(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07StateBegin(Alias_GuestRef02)
+;Begin QTE
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -100,22 +110,10 @@ Setstage(250)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_5
-Function Fragment_5()
+;BEGIN FRAGMENT Fragment_23
+Function Fragment_23()
 ;BEGIN CODE
-;BaboChangeLocationEvent07Scene03.forcestart()
-;(BaboSexController as BaboSexControllerManager).BCLEvent07ScenePlay(3)
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(3, "BaboChangeLocationEvent07")
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_6
-Function Fragment_6()
-;BEGIN CODE
-;BaboChangeLocationEvent07Scene04.forcestart()
-;(BaboSexController as BaboSexControllerManager).BCLEvent07ScenePlay(2)
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(2, "BaboChangeLocationEvent07")
+(BaboSexController as BaboSexControllerManager).ReputationBitchIncrease(2)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -144,6 +142,27 @@ Function Fragment_19()
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+;Aliases will not be deleted
+;(BaboKidnapEvent as BaboKidnapEvenScript).StartUptheEvent(1)
+(BaboSexController as BaboSexControllerManager).ReputationBitchIncrease(2)
+setstage(255)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_16
+Function Fragment_16()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).RecoverControl(true)
+BakaWellRestedBlessing.Cast(Game.GetPlayer(), Game.GetPlayer())
+(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07Messagebox(4)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_9
 Function Fragment_9()
 ;BEGIN CODE
@@ -163,33 +182,10 @@ Function Fragment_25()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_3
-Function Fragment_3()
-;BEGIN CODE
-if BaboSpectatorScript.isrunning()
-BaboSpectatorScript.setstage(250)
-endif
-stop()
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_18
 Function Fragment_18()
 ;BEGIN CODE
 ;QTE Escape
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_11
-Function Fragment_11()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.FadeinMove(Alias_PlayerRef, Alias_RecoverMarker, 67, true)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -208,10 +204,10 @@ Setstage(102)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_23
-Function Fragment_23()
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ReputationBitchIncrease(2)
+(BaboSexController as BaboSexControllerManager).BCLEvent07ScenePlay(4)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -231,10 +227,13 @@ kmyQuest.FadeinMove(Alias_PlayerRef, Alias_RentRoomMarker, 100, true)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
+;BEGIN FRAGMENT Fragment_3
+Function Fragment_3()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).BCLEvent07ScenePlay(4)
+if BaboSpectatorScript.isrunning()
+BaboSpectatorScript.setstage(250)
+endif
+stop()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -252,12 +251,14 @@ Setstage(250)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
+;BEGIN FRAGMENT Fragment_11
+Function Fragment_11()
+;BEGIN AUTOCAST TYPE BaboDiaQuest
+Quest __temp = self as Quest
+BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
+;END AUTOCAST
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).RecoverControl(true)
-BakaWellRestedBlessing.Cast(Game.GetPlayer(), Game.GetPlayer())
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07Messagebox(4)
+kmyQuest.FadeinMove(Alias_PlayerRef, Alias_RecoverMarker, 67, true)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -286,22 +287,12 @@ setstage(110)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
+;BEGIN FRAGMENT Fragment_6
+Function Fragment_6()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07ScenarioStart()
-Actor GuestActorRef = Alias_GuestRef01.getreference() as actor
-Actor GuestActorRef02 = Alias_GuestRef02.getreference() as actor
-(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(GuestActorRef)
-(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(GuestActorRef02)
-;if GuestActorRef.isinfaction(BaboWEAggressiveRapistFaction) || GuestActorRef.isinfaction(SLAX_RapistFaction)
-if (BaboSexController as BaboSexControllerManager).IsactorRapist(GuestActorRef, 50)
-GuestActorRef02.addtofaction(BaboWEAggressiveRapistFaction)
-GuestActorRef.additem(BaboSkoomaLVL, 3)
-GuestActorRef02.additem(BaboSkoomaLVL, 2)
-endif
-
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07Messagebox(1)
+;BaboChangeLocationEvent07Scene04.forcestart()
+;(BaboSexController as BaboSexControllerManager).BCLEvent07ScenePlay(2)
+(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(2, "BaboChangeLocationEvent07")
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -332,6 +323,35 @@ setstage(255)
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_5
+Function Fragment_5()
+;BEGIN CODE
+;BaboChangeLocationEvent07Scene03.forcestart()
+;(BaboSexController as BaboSexControllerManager).BCLEvent07ScenePlay(3)
+(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(3, "BaboChangeLocationEvent07")
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07ScenarioStart()
+Actor GuestActorRef = Alias_GuestRef01.getreference() as actor
+Actor GuestActorRef02 = Alias_GuestRef02.getreference() as actor
+(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(GuestActorRef)
+(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(GuestActorRef02)
+if (BaboSexController as BaboSexControllerManager).IsactorRapist(GuestActorRef, 50, false)
+GuestActorRef02.addtofaction(SLAX_RapistFaction)
+GuestActorRef.additem(BaboSkoomaLVL, 3)
+GuestActorRef02.additem(BaboSkoomaLVL, 2)
+endif
+
+(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07Messagebox(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_7
 Function Fragment_7()
 ;BEGIN AUTOCAST TYPE BaboDiaQuest
@@ -342,27 +362,6 @@ BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
 ;Offer accepted
 ;kmyQuest.SceneForceStart(1)
 (BaboSexController as BaboSexControllerManager).BCLEvent07ScenePlay(0)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-;Aliases will not be deleted
-;(BaboKidnapEvent as BaboKidnapEvenScript).StartUptheEvent(1)
-(BaboSexController as BaboSexControllerManager).ReputationBitchIncrease(2)
-setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07Messagebox(2)
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent07StateBegin(Alias_GuestRef02)
-;Begin QTE
 ;END CODE
 EndFunction
 ;END FRAGMENT

@@ -23,6 +23,7 @@ Quest Property BaboChangeLocationEvent02Plain Auto
 Quest Property BaboChangeLocationEvent02PlainSnow Auto
 Quest Property BaboChangeLocationEvent05 Auto
 Quest Property BaboChangeLocationEvent06 Auto
+Quest Property BaboChangeLocationEvent08 Auto
 Quest Property BaboDialogueWhiterun Auto
 Quest Property BaboDialogueHirelings Auto
 BaboBoyFriendVariableScript Property BoyFriendVariableScript Auto
@@ -60,6 +61,7 @@ Faction property BaboCreatureMatePartnerFaction Auto
 Faction property BaboChangeLocationEvent06Faction Auto
 Faction property BaboEncounter01Faction Auto
 Faction property BaboEncounter02Faction Auto
+Faction property BaboChangeLocationEvent08Faction Auto
 Faction Property SLAX_NudismAddictFaction Auto
 
 
@@ -284,62 +286,6 @@ EndEvent
 
 Function ExternalTrigger(Actor Raper, Bool Raped)
 if Raped == false
-	if (BaboChangeLocationEvent05.getstage() == 20) && (BaboChangeLocationEvent05Visitor.getactorref() == Raper)
-		BaboChangeLocationEvent05.setstage(30);BaboDiaQuest script handles the escapefail situation. Don't have to add elseif.
-
-	elseif (ViceCaptainRef.getactorref() == Raper) && (BaboDialogueWhiterun.getstage() >= 30) && (BaboDialogueWhiterun.getstage() < 60)
-		Raper.Setactorvalue("Variable06", 4)
-		(BaboDialogueWhiterun as BaboDialogueWhiterunScript).WVAS03()
-	elseif Raper.isinfaction(BaboCurrentHireling) || Raper.isinfaction(BaboCurrentAnimalHireling)
-		(BaboDialogueHirelings as BaboDialogueHirelingsQuest).DismissFollower(3)
-	EndIf
-
-	if (Raper.isinfaction(BaboEncounter01Faction))
-		if BaboEncounter01.getstage() == 30
-			BaboEncounter01.setstage(35)
-		endif
-	endif
-	if (Raper.isinfaction(BaboEncounter02Faction))
-		if BaboEncounter02.getstage() == 7
-			BaboEncounter02.setstage(8)
-		endif
-	endif
-	
-	if BaboChangeLocationEvent02.getstage() == 20
-		BaboChangeLocationEvent02.setstage(70)
-	endif
-
-	if BaboChangeLocationEvent02Forest.getstage() == 20
-		BaboChangeLocationEvent02Forest.setstage(70)
-	endif
-
-	if BaboChangeLocationEvent02ForestSnow.getstage() == 20
-		BaboChangeLocationEvent02ForestSnow.setstage(70)
-	endif
-	
-	if BaboChangeLocationEvent02Coast.getstage() == 20
-		BaboChangeLocationEvent02Coast.setstage(70)
-	endif
-	
-	if BaboChangeLocationEvent02Marsh.getstage() == 20
-		BaboChangeLocationEvent02Marsh.setstage(70)
-	endif
-	
-	if BaboChangeLocationEvent02Mountain.getstage() == 20
-		BaboChangeLocationEvent02Mountain.setstage(70)
-	endif
-	
-	if BaboChangeLocationEvent02MountainSnow.getstage() == 20
-		BaboChangeLocationEvent02MountainSnow.setstage(70)
-	endif
-	
-	if BaboChangeLocationEvent02Plain.getstage() == 20
-		BaboChangeLocationEvent02Plain.setstage(70)
-	endif
-	
-	if BaboChangeLocationEvent02PlainSnow.getstage() == 20
-		BaboChangeLocationEvent02PlainSnow.setstage(70)
-	endif
 
 endif
 
@@ -367,11 +313,15 @@ if Raped == true
 	elseif Raper.isinfaction(BaboCurrentHireling) || Raper.isinfaction(BaboCurrentAnimalHireling)
 		(BaboDialogueHirelings as BaboDialogueHirelingsQuest).AfterRapeSceneStart()
 	EndIf
-	
-	if (Raper.isinfaction(BaboEncounter01Faction))
 
+	if (Raper.isinfaction(BaboChangeLocationEvent08Faction))
+		if BaboChangeLocationEvent08.getstage() == 25
+			BaboChangeLocationEvent08.setstage(28)
+		elseif BaboChangeLocationEvent08.getstage() == 45
+			BaboChangeLocationEvent08.setstage(47)
+		endif
 	endif
-	
+
 	if BaboChangeLocationEvent02.getstage() == 20
 		Utility.wait(3.0)
 		BaboChangeLocationEvent02.setstage(30)
@@ -418,6 +368,74 @@ if Raped == true
 	endif
 
 SexCount(1)
+
+else
+
+	if (BaboChangeLocationEvent05.getstage() == 20) && (BaboChangeLocationEvent05Visitor.getactorref() == Raper)
+		BaboChangeLocationEvent05.setstage(30);BaboDiaQuest script handles the escapefail situation. Don't have to add elseif.
+
+	elseif (ViceCaptainRef.getactorref() == Raper) && (BaboDialogueWhiterun.getstage() >= 30) && (BaboDialogueWhiterun.getstage() < 60)
+		Raper.Setactorvalue("Variable06", 4)
+		(BaboDialogueWhiterun as BaboDialogueWhiterunScript).WVAS03()
+	elseif Raper.isinfaction(BaboCurrentHireling) || Raper.isinfaction(BaboCurrentAnimalHireling)
+		(BaboDialogueHirelings as BaboDialogueHirelingsQuest).DismissFollower(3)
+	EndIf
+
+	if (Raper.isinfaction(BaboEncounter01Faction))
+		if BaboEncounter01.getstage() == 30
+			BaboEncounter01.setstage(35)
+		endif
+	endif
+	if (Raper.isinfaction(BaboEncounter02Faction))
+		if BaboEncounter02.getstage() == 7
+			BaboEncounter02.setstage(8)
+		endif
+	endif
+	
+	if (Raper.isinfaction(BaboChangeLocationEvent08Faction))
+		if BaboChangeLocationEvent08.getstage() == 25
+			BaboChangeLocationEvent08.setstage(27)
+		elseif BaboChangeLocationEvent08.getstage() == 45
+			BaboChangeLocationEvent08.setstage(46)
+		endif
+	endif
+	
+	if BaboChangeLocationEvent02.getstage() == 20
+		BaboChangeLocationEvent02.setstage(70)
+	endif
+
+	if BaboChangeLocationEvent02Forest.getstage() == 20
+		BaboChangeLocationEvent02Forest.setstage(70)
+	endif
+
+	if BaboChangeLocationEvent02ForestSnow.getstage() == 20
+		BaboChangeLocationEvent02ForestSnow.setstage(70)
+	endif
+	
+	if BaboChangeLocationEvent02Coast.getstage() == 20
+		BaboChangeLocationEvent02Coast.setstage(70)
+	endif
+	
+	if BaboChangeLocationEvent02Marsh.getstage() == 20
+		BaboChangeLocationEvent02Marsh.setstage(70)
+	endif
+	
+	if BaboChangeLocationEvent02Mountain.getstage() == 20
+		BaboChangeLocationEvent02Mountain.setstage(70)
+	endif
+	
+	if BaboChangeLocationEvent02MountainSnow.getstage() == 20
+		BaboChangeLocationEvent02MountainSnow.setstage(70)
+	endif
+	
+	if BaboChangeLocationEvent02Plain.getstage() == 20
+		BaboChangeLocationEvent02Plain.setstage(70)
+	endif
+	
+	if BaboChangeLocationEvent02PlainSnow.getstage() == 20
+		BaboChangeLocationEvent02PlainSnow.setstage(70)
+	endif
+
 endif
 
 if raper.isinfaction(BaboCreatureArousedFaction)

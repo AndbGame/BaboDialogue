@@ -1831,14 +1831,25 @@ endFunction
 
 ;Inflater - An actor that will get pregnant / Inflation - True(Inflate), False(Deflate) / poolmask - 1(Vaginal), 2(Anal) / amount - the cum amount you want to add or remove / time - literally required time for deflating. / callback - Just type "" It will ignore additional event call
 
-Function SendFHUInflationEvent(form inflater, form injector, Bool Inflation, int poolmask, float amount, float time, string callback)
+Function SendFHUInflationEventNoActor(form inflater, Bool Inflation, int poolmask, float amount, int time, string callback)
+	Int handle = ModEvent.Create("SR_InflateEvent")
+	ModEvent.PushForm(handle, inflater)
+	ModEvent.PushBool(handle, Inflation)
+	ModEvent.PushInt(handle, poolmask)
+	ModEvent.PushFloat(handle, amount)
+	ModEvent.PushInt(handle, time)
+	ModEvent.PushString(handle, callback)
+	ModEvent.Send(handle)
+EndFunction
+
+Function SendFHUInflationEvent(form inflater, form injector, Bool Inflation, int poolmask, float amount, int time, string callback)
 	Int handle = ModEvent.Create("SR_InflateInjectorEvent")
 	ModEvent.PushForm(handle, inflater)
 	ModEvent.PushForm(handle, injector)
 	ModEvent.PushBool(handle, Inflation)
 	ModEvent.PushInt(handle, poolmask)
 	ModEvent.PushFloat(handle, amount)
-	ModEvent.PushFloat(handle, time)
+	ModEvent.Pushint(handle, time)
 	ModEvent.PushString(handle, callback)
 	ModEvent.Send(handle)
 EndFunction

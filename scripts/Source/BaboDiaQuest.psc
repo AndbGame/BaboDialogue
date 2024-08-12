@@ -602,6 +602,10 @@ Function CreatureTraumaExpLoss(Float Mult)
 	BDMScript.CalcCreatureTraumaExpLoss(Mult)
 EndFunction
 
+Function DesignateEventActor(Actor akactor)
+	EventActor = akactor
+EndFunction
+
 
 Function StopAllSexlabAnimations()
 	ThreadSlot.stopall()
@@ -614,6 +618,10 @@ EndFunction
 
 Function fRegisterForSingleUpdateGameTime(float timer)
 	RegisterForSingleUpdateGameTime(timer)
+EndFunction
+
+Function fUnRegisterForUpdateGameTime()
+	UnregisterForUpdateGameTime()
 EndFunction
 
 Event Onupdate()
@@ -651,7 +659,7 @@ EndEvent
 EndState
 
 
-State ChangeLocationEvent08A;WIP
+State ChangeLocationEvent08A
 
 Event Onbeginstate()
 	
@@ -663,7 +671,17 @@ Event Onupdate()
 EndEvent
 
 Event OnupdateGameTime()
-	WERaperQ.setstage(250);just end quest
+	if EventActor.is3dloaded()
+		fRegisterForSingleUpdateGameTime(2.0)
+	elseif !EventActor.is3dloaded() && (WERaperQ.getstage() == 35 || WERaperQ.getstage() == 75)
+		WERaperQ.setstage(208)
+	elseif !EventActor.is3dloaded() && (WERaperQ.getstage() == 12 || WERaperQ.getstage() == 80)
+		WERaperQ.setstage(205)
+	elseif !EventActor.is3dloaded() && WERaperQ.getstage() == 40;Actor store
+		WERaperQ.setstage(240)
+	else
+		WERaperQ.setstage(230)
+	endif
 EndEvent
 
 
@@ -686,6 +704,7 @@ Idle property OrgasmAfter02 auto
 Idle property OrgasmAfter03 auto
 Idle property OrgasmAfter04 auto
 Actor property PlayerREF auto
+Actor property EventActor auto
 Bool Property NexStageSwitch auto
 Bool Property NexStageSwitch02 auto
 Bool Property NexStageSwitch04 auto

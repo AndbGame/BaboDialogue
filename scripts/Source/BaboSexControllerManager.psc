@@ -113,6 +113,8 @@ Faction Property BaboPlayerSurrenderFaction Auto
 Faction Property BaboHateNPC01Faction Auto
 Faction Property BaboHateNPC02Faction Auto
 
+Faction Property BaboDialogueHuggedFaction Auto
+
 Faction Property BaboBigGuySLFaction Auto
 
 BaboDialogueConfigMenu Property BDMCM Auto
@@ -155,6 +157,10 @@ Scene Property BaboChangeLocationEvent01Scene04 Auto
 Scene Property BaboChangeLocationEvent01Scene05 Auto
 Scene Property BaboChangeLocationEvent01Scene06 Auto
 
+Scene Property BaboChangeLocationEvent08AutographScene06 Auto
+Scene Property BaboChangeLocationEvent08AutographScene05 Auto
+Scene Property BaboChangeLocationEvent08AutographScene04 Auto
+Scene Property BaboChangeLocationEvent08AutographScene03 Auto
 Scene Property BaboChangeLocationEvent08AutographScene02 Auto
 Scene Property BaboChangeLocationEvent08AutographScene01 Auto
 Scene Property BaboChangeLocationEvent07SceneWellRested Auto
@@ -233,7 +239,9 @@ Location Property BaboSlaverNobleHouseLocation01 Auto
 Location Property BaboKidnapperLocation01 Auto
 Location Property BaboKidnapperLocation02 Auto
 Location Property BaboKidnapperLocation03 Auto
+Location Property BaboKidnapperLocation04 Auto
 Location Property BaboKidnapperLocationCave Auto
+Location Property BaboKidnapperLocationCave02 Auto
 MiscObject Property Gold001 Auto
 Armor Property BaboBountyRingSerialKiller Auto
 
@@ -254,6 +262,8 @@ GlobalVariable Property BaboPlayerAppearanceTotalValue Auto
 
 Faction Property sla_Arousal auto
 Faction Property BaboWEAggressiveRapistFaction auto
+Faction Property BaboRapistFaction auto
+Faction Property BaboBehaviorPatternFaction auto
 
 Keyword Property SLA_ArmorPretty Auto
 Keyword Property EroticArmor Auto
@@ -267,12 +277,35 @@ Keyword Property ArmorCuirass Auto
 Keyword Property ClothingBody Auto
 Form Property sla_NakedArmorList Auto
 
+formlist property BaboEdibleCheapSusFormList auto
 formlist property BaboEdibleCheapFormList auto
 formlist property BaboStalkerList auto
 formlist property BaboChangeLocationEvent08WindhelmList auto
+
+Formlist Property BaboCL08WindhelmStalkerList Auto
+Formlist Property BaboCL08RiftenStalkerList Auto
+Formlist Property BaboCL08SolitudeStalkerList Auto
+Formlist Property BaboCL08BYOH01StalkerList Auto
+Formlist Property BaboCL08BYOH02StalkerList Auto
+Formlist Property BaboCL08BYOH03StalkerList Auto
+Formlist Property BaboCL08RavenRockStalkerList Auto
+Formlist Property BaboCL08MiscStalkerList Auto
+
+GlobalVariable Property BaboChangeLocation08FraudWindhelm Auto
+GlobalVariable Property BaboChangeLocation08FraudRiften Auto
+GlobalVariable Property BaboChangeLocation08FraudSolitude Auto
+GlobalVariable Property BaboChangeLocation08FraudBYOH01 Auto
+GlobalVariable Property BaboChangeLocation08FraudBYOH02 Auto
+GlobalVariable Property BaboChangeLocation08FraudBYOH03 Auto
+GlobalVariable Property BaboChangeLocation08Fraudsolstheim Auto
+GlobalVariable Property BaboChangeLocation08FraudMIsc Auto
+
+
 faction property SLAX_AggressiveFaction auto
 faction property BaboChangeLocationEvent08FanFaction auto
 faction property BaboChangeLocationEvent08Faction auto
+
+
 actorbase property BaboEventChangeLocation08Visitor01 auto
 objectreference property BaboDumpsterRef auto
 GlobalVariable Property BaboChangeLocation08FanWindhelm Auto
@@ -861,7 +894,11 @@ endFunction
 
 Function FHUInflationEvent(form inflater, form injector, Bool Inflation, int poolmask, float amount, float fhutime, string callback)
 	if BaboFHU.getvalue() == 1
-		BDMScript.SendFHUInflationEvent(inflater, injector, Inflation, poolmask, amount, fhutime, callback)
+		if injector
+			BDMScript.SendFHUInflationEvent(inflater, injector, Inflation, poolmask, amount, fhutime as int, callback)
+		else
+			BDMScript.SendFHUInflationEventNoActor(inflater, Inflation, poolmask, amount, fhutime as int, callback)
+		endif
 	endif
 Endfunction
 
@@ -908,8 +945,12 @@ Function KidnapQuestStart(Actor pTarget, Actor pTargetFriend = None, int Locatio
 		KidnapLocation = BaboKidnapperLocation02
 	elseif LocationNum == 6
 		KidnapLocation = BaboKidnapperLocation03
+	elseif LocationNum == 7
+		KidnapLocation = BaboKidnapperLocation04
 	elseif LocationNum == 10
 		KidnapLocation = BaboKidnapperLocationCave;Bandits
+	elseif LocationNum == 11
+		KidnapLocation = BaboKidnapperLocationCave02
 	elseif LocationNum == 20
 		KidnapLocation = BaboSlaverLocation01
 	elseif LocationNum == 21
@@ -1541,6 +1582,30 @@ String msg
 	elseif num == 3
 		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_03")
 		Debug.messagebox(msg)
+	elseif num == 4
+		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_04")
+		Debug.messagebox(msg)
+	elseif num == 5
+		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_05")
+		Debug.messagebox(msg)
+	elseif num == 6
+		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_06")
+		Debug.messagebox(msg)
+	elseif num == 7
+		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_07")
+		Debug.messagebox(msg)
+	elseif num == 8
+		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_08")
+		Debug.messagebox(msg)
+	elseif num == 9
+		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_09")
+		Debug.messagebox(msg)
+	elseif num == 10
+		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_10")
+		Debug.messagebox(msg)
+	elseif num == 11
+		msg = JsonUtil.getstringvalue(file, "babochangelocationevent08_11")
+		Debug.messagebox(msg)
 	endif
 EndFunction
 
@@ -2164,9 +2229,13 @@ EndFunction
 Function BCLEvent08ScenePlay(int i);Because of an unknown bug, play scene code doesn't operate through Quest tif script.
 EndFunction
 
+Function ActorStore(Actor akactor)
+	akactor.moveto(BaboDumpsterRef)
+EndFunction
+
 Function StalkerActorStore(ReferenceAlias akRef);At the end of package
 Actor akactor = akRef.GetReference() as actor
-	akactor.moveto(BaboDumpsterRef)
+	ActorStore(akactor)
 	BaboStalkerList.addform(akactor)
 EndFunction
 
@@ -2185,6 +2254,21 @@ else
 endif
 EndFunction
 
+Function GetEdibleSusFormlist(actor akactor, int index, int Howmany, bool randomB)
+int ri
+int listsize
+listsize = BaboEdibleCheapSusFormList.getsize()
+if randomB
+	while Howmany > 0
+		ri = Utility.randomint(0, listsize)
+		akactor.additem(BaboEdibleCheapSusFormList.getat(ri) as form, 1)
+		Howmany -= 1
+	endwhile
+else
+	akactor.additem(BaboEdibleCheapSusFormList.getat(index) as form, Howmany)
+endif
+EndFunction
+
 Bool Function BCLEvent08ActorCheck()
 int sizeint = BaboChangeLocationEvent08WindhelmList.getsize()
 	if sizeint > 0
@@ -2194,10 +2278,48 @@ int sizeint = BaboChangeLocationEvent08WindhelmList.getsize()
 	endif
 EndFunction
 
+Function CL08StalkerActorStore(ReferenceAlias akRef, int LocationNumber)
+Actor akactor = akRef.GetReference() as actor
+int ListNumber
+	ActorStore(akactor)
+	if LocationNumber == 1
+		BaboCL08WindhelmStalkerList.addform(akactor)
+		ListNumber = BaboCL08WindhelmStalkerList.getsize()
+		BaboChangeLocation08FraudWindhelm.setvalue(ListNumber)
+	elseif LocationNumber == 2
+		BaboCL08RiftenStalkerList.addform(akactor)
+		ListNumber = BaboCL08RiftenStalkerList.getsize()
+		BaboChangeLocation08FraudRiften.setvalue(ListNumber)
+	elseif LocationNumber == 3
+		BaboCL08SolitudeStalkerList.addform(akactor)
+		ListNumber = BaboCL08SolitudeStalkerList.getsize()
+		BaboChangeLocation08FraudSolitude.setvalue(ListNumber)
+	elseif LocationNumber == 4
+		BaboCL08BYOH01StalkerList.addform(akactor)
+		ListNumber = BaboCL08BYOH01StalkerList.getsize()
+		BaboChangeLocation08FraudBYOH01.setvalue(ListNumber)
+	elseif LocationNumber == 5
+		BaboCL08BYOH02StalkerList.addform(akactor)
+		ListNumber = BaboCL08BYOH02StalkerList.getsize()
+		BaboChangeLocation08FraudBYOH02.setvalue(ListNumber)
+	elseif LocationNumber == 6
+		BaboCL08BYOH03StalkerList.addform(akactor)
+		ListNumber = BaboCL08BYOH03StalkerList.getsize()
+		BaboChangeLocation08FraudBYOH03.setvalue(ListNumber)
+	elseif LocationNumber == 7
+		BaboCL08RavenRockStalkerList.addform(akactor)
+		ListNumber = BaboCL08RavenRockStalkerList.getsize()
+		BaboChangeLocation08Fraudsolstheim.setvalue(ListNumber)
+	else
+		BaboCL08MiscStalkerList.addform(akactor)
+		ListNumber = BaboCL08MiscStalkerList.getsize()
+		BaboChangeLocation08FraudMIsc.setvalue(ListNumber)
+	endif
+EndFunction
+
 Function BCLEvent08ActorStore(ReferenceAlias akRef, int LocationNumber);At the end of package
 Actor akactor = akRef.GetReference() as actor
 int ListNumber
-	akactor.moveto(BaboDumpsterRef)
 	BCLEvent08ActorFanFaction(akactor)
 	if LocationNumber == 1
 		BaboChangeLocationEvent08WindhelmList.addform(akactor)
@@ -2239,6 +2361,8 @@ int ListNumber
 		BaboChangeLocationEvent08Custom03List.addform(akactor)
 		ListNumber = BaboChangeLocationEvent08Custom03List.getsize()
 		BaboChangeLocation08FanCustom03.setvalue(ListNumber)
+	else
+		;Misc
 	endif
 EndFunction
 
@@ -2279,6 +2403,14 @@ elseif EventName == "BaboChangeLocationEvent08"
 		BaboChangeLocationEvent08AutographScene01.forcestart()
 	elseif i == 2
 		BaboChangeLocationEvent08AutographScene02.forcestart()
+	elseif i == 3
+		BaboChangeLocationEvent08AutographScene03.forcestart()
+	elseif i == 4
+		BaboChangeLocationEvent08AutographScene04.forcestart()
+	elseif i == 5
+		BaboChangeLocationEvent08AutographScene05.forcestart()
+	elseif i == 6
+		BaboChangeLocationEvent08AutographScene06.forcestart()
 	endif
 elseif EventName == "BaboChangeLocationEvent02"
 	if i == 1
@@ -2594,6 +2726,15 @@ EndEvent
 Event ChangeLocationEvent05Sex02(string eventName, string argString, float argNum, form sender)
 	BaboChangeLocationEvent05.setstage(25)
 	RandomExhaustionIdle(PlayerRef)
+EndEvent
+
+Event ChangeLocationEvent08(string eventName, string argString, float argNum, form sender)
+	If BaboChangeLocationEvent08.getstage() == 48;Rape
+		RandomExhaustionIdle(PlayerRef)
+		BaboChangeLocationEvent08.setstage(55)
+	ElseIf BaboChangeLocationEvent08.getstage() == 50;Normal sex
+		BaboChangeLocationEvent08.setstage(56)
+	EndIf
 EndEvent
 
 Event Encounter01Sex01(string eventName, string argString, float argNum, form sender)
@@ -3006,17 +3147,26 @@ else
 endif
 EndFunction
 
+Function SetBehaviorPattern(Actor akactor, int rank)
+int randomi = Utility.randomint(0, rank)
+	akactor.addtofaction(BaboBehaviorPatternFaction)
+	akactor.setfactionrank(BaboBehaviorPatternFaction, randomi)
+EndFunction
+
 Function SetChracterRank(Actor akactor, int rank)
 	akactor.addtofaction(SLAX_AggressiveFaction)
 	akactor.setfactionrank(SLAX_AggressiveFaction, rank)
 EndFunction
 
-Bool Function IsactorRapist(Actor akRef, int diminishchance)
-if (akref.isinfaction(SLAX_RapistFaction))
+Bool Function IsactorRapist(Actor akactor, int diminishchance, bool bcriminal)
+if (akactor.isinfaction(SLAX_RapistFaction))
 	return true
 else
 	;RollRapeChance(akRef, diminishchance)
-	if DefineRapist(akRef, RollRapeChance(akRef, diminishchance), 300, true)
+	if DefineRapist(akactor, RollRapeChance(akactor, diminishchance), 300, true)
+		if bcriminal
+			akactor.addtofaction(BaboWEAggressiveRapistFaction)
+		endif
 		return true
 	else
 		return false
@@ -3040,11 +3190,25 @@ int Function RollRapeChance(Actor akRef, int diminishchance)
 		Return chance
 EndFunction
 
+Bool Function DefineRapistCriminal(Actor akactor, int chance, int maxchance, bool givefaction)
+int diceint = Utility.randomint(0, maxchance)
+if diceint < chance
+	if givefaction
+		akactor.addtofaction(BaboWEAggressiveRapistFaction);against guard faction
+		akactor.addtofaction(SLAX_RapistFaction)
+	endif
+	return true
+else
+	return false
+endif
+
+endfunction
+
 Bool Function DefineRapist(Actor akactor, int chance, int maxchance, bool givefaction)
 int diceint = Utility.randomint(0, maxchance)
 if diceint < chance
 	if givefaction
-		akactor.addtofaction(BaboWEAggressiveRapistFaction)
+		akactor.addtofaction(BaboRapistFaction);Neutral, not against gurad faction
 		akactor.addtofaction(SLAX_RapistFaction)
 	endif
 	return true
@@ -3131,7 +3295,7 @@ EndFunction
 
 Function QTESoloAnimation(Actor Victim, Bool Animate = True, String VictimAnim, Bool GainControl = false)
 	If Animate
-		Victim.SetDontMove(True)
+		;Victim.SetDontMove(True)
 		Game.SetPlayerAIDriven(true)
 		
 		if Game.GetCameraState() == 0
@@ -3332,6 +3496,10 @@ Function StateChange(String StateString)
 	GotoState(StateString)
 EndFunction
 
+Function DefineStruggleActor(referencealias Aggressor)
+	StruggleActor = Aggressor.getreference() as actor
+EndFunction
+
 Function ChangeLocationEvent07StateBegin(referencealias Aggressor)
 	StruggleActor = Aggressor.getreference() as actor
 	GotoState("BaboCLEvent07Sub01")
@@ -3514,6 +3682,195 @@ Event OnKeyDown(Int KeyCode)
 		UseSexlabVoice(PlayerRef, true)
 		SoundTime = 0
 	endif	
+EndEvent
+
+Function StruggleBarDisplay(Bool Display = True)
+If Display
+	(BaboWidgetController as BaboQTEWidgetEx).Alpha = 100.0
+	if Game.UsingGamepad()
+		StrafeL = 0x10C;Left
+		StrafeR = 0x10D;Right
+	else
+		If (BDMCM.BaboResistType == "$Attack")
+			StrafeL = Input.GetMappedKey("Left Attack/Block")
+			StrafeR = Input.GetMappedKey("Right Attack/Block")
+		Else
+			StrafeL = Input.GetMappedKey("Strafe Left")
+			StrafeR = Input.GetMappedKey("Strafe Right")
+		Endif
+	endif
+	RegisterForKey(StrafeL)
+	RegisterForKey(StrafeR)
+Else
+	(BaboWidgetController as BaboQTEWidgetEx).Alpha = 0.0
+	(BaboWidgetController as BaboQTEWidgetEx).Percent = 0.0
+	FillDifficulty = 0.0
+	UnregisterForKey(StrafeL)
+	UnregisterForKey(StrafeR)
+EndIf
+EndFunction
+
+Function Restore()
+	Time = 0
+	SoundTime = 0
+	StruggleBarDisplay(False)
+	GotoState("")
+EndFunction
+
+EndState
+
+State BaboFrontHugState
+
+	Event OnBeginState()
+		Game.EnablePlayerControls(1, 0, 0, 0, 0, 0, 0, 0);To display HUD
+		ActorUtil.AddPackageOverride(StruggleActor, BaboDoNothing, 100, 1)
+		StruggleActor.EvaluatePackage()
+		EventPairMotion(StruggleActor, 0, 0, 0, 7, false)
+		utility.wait(1.5)
+		DownedTime = 20.0
+		FillThreshold = PresetFillThreshold
+		StruggleBarDisplay(true)
+		RegisterForSingleUpdate(1.0)
+		ShowHelpMessage()
+		StruggleActor.addtofaction(BaboDialogueHuggedFaction)
+	EndEvent
+	
+	Event OnUpdate() ; Loop to check the situation every 1 second.
+		Time += 1
+		If (BaboWidgetController as BaboQTEWidgetEx).Percent >= 1.0
+			ResistSuccess(StruggleActor)
+			Return
+		Elseif Time > DownedTime
+			ResistFailed(StruggleActor)
+			Return
+		Endif
+	(BaboWidgetController as BaboQTEWidgetEx).Alpha = 100.0
+	RegisterForSingleUpdate(1.0)
+	EndEvent
+
+Function ResistSuccess(actor akactor)
+	Self.EventPairMotion(akactor, 0, 0, 0, 0, true)
+	Debug.sendanimationevent(PlayerRef, "IdleForceDefaultState")
+	Restore()
+EndFunction
+
+Function ResistFailed(actor akactor)
+	Self.EventPairMotion(akactor, 0, 0, 0, 0, true)
+	Debug.sendanimationevent(PlayerRef, "IdleForceDefaultState")
+	Restore()
+EndFunction
+
+
+Event OnKeyDown(Int KeyCode)
+	SoundTime += 1
+	If ((KeyCode == StrafeL) && LeftRight) && (PlayerRef.GetActorValue(DamagevalueString) >= 1.0)
+		LeftRight = False
+		FillDifficulty += FillThreshold
+		PlayerRef.DamageActorValue(DamagevalueString, 1.0)
+		(BaboWidgetController as BaboQTEWidgetEx).Percent = (FillDifficulty)
+	Elseif ((KeyCode == StrafeR) && !LeftRight) && (PlayerRef.GetActorValue(DamagevalueString) >= 1.0)
+		LeftRight = True
+		FillDifficulty += FillThreshold
+		PlayerRef.DamageActorValue(DamagevalueString, 1.0)
+		(BaboWidgetController as BaboQTEWidgetEx).Percent = (FillDifficulty)
+	Endif
+	
+EndEvent
+
+Function StruggleBarDisplay(Bool Display = True)
+If Display
+	(BaboWidgetController as BaboQTEWidgetEx).Alpha = 100.0
+	if Game.UsingGamepad()
+		StrafeL = 0x10C;Left
+		StrafeR = 0x10D;Right
+	else
+		If (BDMCM.BaboResistType == "$Attack")
+			StrafeL = Input.GetMappedKey("Left Attack/Block")
+			StrafeR = Input.GetMappedKey("Right Attack/Block")
+		Else
+			StrafeL = Input.GetMappedKey("Strafe Left")
+			StrafeR = Input.GetMappedKey("Strafe Right")
+		Endif
+	endif
+	RegisterForKey(StrafeL)
+	RegisterForKey(StrafeR)
+Else
+	(BaboWidgetController as BaboQTEWidgetEx).Alpha = 0.0
+	(BaboWidgetController as BaboQTEWidgetEx).Percent = 0.0
+	FillDifficulty = 0.0
+	UnregisterForKey(StrafeL)
+	UnregisterForKey(StrafeR)
+EndIf
+EndFunction
+
+Function Restore()
+	Time = 0
+	SoundTime = 0
+	StruggleBarDisplay(False)
+	if BaboChangeLocationEvent08.isrunning()
+		if BaboChangeLocationEvent08.getstage() == 5
+			BaboChangeLocationEvent08.setstage(6)
+		elseif BaboChangeLocationEvent08.getstage() == 25
+			BaboChangeLocationEvent08.setstage(27)
+		endif
+	endif
+	GotoState("")
+EndFunction
+
+EndState
+
+State BaboSimpleQTEState
+
+	Event OnBeginState()
+		Game.EnablePlayerControls(1, 0, 0, 0, 0, 0, 0, 0);To display HUD
+		;You require to play paired animation separately.
+		utility.wait(1.5)
+		DownedTime = 20.0
+		FillThreshold = PresetFillThreshold
+		StruggleBarDisplay(true)
+		RegisterForSingleUpdate(1.0)
+		ShowHelpMessage()
+	EndEvent
+	
+	Event OnUpdate() ; Loop to check the situation every 1 second.
+		Time += 1
+		If (BaboWidgetController as BaboQTEWidgetEx).Percent >= 1.0
+			ResistSuccess(None)
+			Return
+		Elseif Time > DownedTime
+			ResistFailed(None)
+			Return
+		Endif
+	(BaboWidgetController as BaboQTEWidgetEx).Alpha = 100.0
+	RegisterForSingleUpdate(1.0)
+	EndEvent
+
+Function ResistSuccess(actor akactor)
+	Self.EventPairMotion(akactor, 0, 0, 0, 0, false)
+	Debug.sendanimationevent(PlayerRef, "IdleForceDefaultState")
+	Restore()
+EndFunction
+
+Function ResistFailed(actor akactor)
+	Self.EventPairMotion(akactor, 0, 0, 0, 0, false)
+	Debug.sendanimationevent(PlayerRef, "IdleForceDefaultState")
+	Restore()
+EndFunction
+
+Event OnKeyDown(Int KeyCode)
+	SoundTime += 1
+	If ((KeyCode == StrafeL) && LeftRight) && (PlayerRef.GetActorValue(DamagevalueString) >= 1.0)
+		LeftRight = False
+		FillDifficulty += FillThreshold
+		PlayerRef.DamageActorValue(DamagevalueString, 1.0)
+		(BaboWidgetController as BaboQTEWidgetEx).Percent = (FillDifficulty)
+	Elseif ((KeyCode == StrafeR) && !LeftRight) && (PlayerRef.GetActorValue(DamagevalueString) >= 1.0)
+		LeftRight = True
+		FillDifficulty += FillThreshold
+		PlayerRef.DamageActorValue(DamagevalueString, 1.0)
+		(BaboWidgetController as BaboQTEWidgetEx).Percent = (FillDifficulty)
+	Endif
+	
 EndEvent
 
 Function StruggleBarDisplay(Bool Display = True)

@@ -6,7 +6,11 @@ Scriptname SF_BaboChangeLocationEvent08_08AC4551 Extends Scene Hidden
 Function Fragment_1()
 ;BEGIN CODE
 (BaboSexController as BaboSexControllerManager).QTESoloAnimation(PlayerRef, false, "", true)
-Getowningquest().setstage(26)
+if BaboChangeLocation08Fraud.getvalue() == 1
+Getowningquest().setstage(75)
+else
+Getowningquest().setstage(35)
+endif
 stop()
 ;END CODE
 EndFunction
@@ -25,3 +29,5 @@ EndFunction
 Quest Property BaboSexController  Auto  
 
 Actor Property PlayerRef  Auto  
+
+GlobalVariable Property BaboChangeLocation08Fraud  Auto  
