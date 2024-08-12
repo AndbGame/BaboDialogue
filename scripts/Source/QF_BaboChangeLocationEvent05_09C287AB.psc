@@ -114,8 +114,12 @@ BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
 kmyQuest.UnregisterSexlabHooks()
 (Alias_Guard.getref() as actor).evaluatepackage()
 (Alias_Visitor.getref() as actor).evaluatepackage()
-(Alias_Visitor.getref() as actor).Deletewhenable()
-(Alias_Guard.getref() as actor).Deletewhenable()
+
+Actor[] actors = New Actor[2]
+actors[0] = (Alias_Visitor.getref() as actor)
+actors[1] = (Alias_Visitor.getref() as actor)
+kmyQuest.DeleteWhenAbleWithTimeout(actors, 30)
+
 PlayerRef.ApplyHavokImpulse(0, 0, 1, 1)
 (BaboSexController as BaboSexControllerManager).RecoverControl(true)
 ;END CODE
@@ -262,7 +266,7 @@ Function Fragment_15()
 ;BEGIN CODE
 ;WARNING: Unable to load fragment source from function Fragment_15 in script QF_BaboChangeLocationEvent05_09C287AB
 ;Source NOT loaded
-if (BaboSexController as BaboSexControllerManager).IsactorRapist(Alias_Visitor.getreference() as actor, 40)
+if (BaboSexController as BaboSexControllerManager).IsactorRapist(Alias_Visitor.getreference() as actor, 40, false)
 BaboChangeLocationEvent05VisitorGlobal.setvalue(1)
 else
 BaboChangeLocationEvent05VisitorGlobal.setvalue(0)

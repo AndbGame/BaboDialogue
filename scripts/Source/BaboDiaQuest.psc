@@ -687,6 +687,45 @@ EndEvent
 
 EndState
 
+;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Utils \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Function DeleteWhenAbleWithTimeout(Actor[] actors, float afSeconds = 30.0)
+	Int i = 0
+	bool wait = false
+	While afSeconds > 0
+		i = 0
+		wait = false
+		While (i < actors.Length)
+			If actors[i]
+				If actors[i].GetParentCell() && actors[i].GetParentCell().IsAttached()
+					wait = true
+				Else
+					debug.trace(self + " DeleteWhenAbleWithTimeout " + actors[i] + " in un attached cell - delete")
+					actors[i].Delete()
+					actors[i] = None
+				Endif
+			Endif
+			i += 1
+		EndWhile
+		If wait
+			Utility.Wait(5)
+			afSeconds -= 5
+		Else
+			return
+		EndIf
+	EndWhile
+	
+	i = 0
+	While (i < actors.Length)
+		If actors[i]
+			debug.trace(self + " DeleteWhenAbleWithTimeout " + actors[i] + " is timeouted - delete")
+			actors[i].Delete()
+		Endif
+		i += 1
+	EndWhile
+EndFunction
 
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ This is property zone \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
