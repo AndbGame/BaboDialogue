@@ -84,18 +84,73 @@ Function MoveOrcs()
 (Child2.getreference() as actor).moveto(BaboEvent01XmarkerE)
 EndFunction
 
+Function Kidnapping(bool bBigguy)
+SpawnUnderlings(bBigguy)
+Victims = new Actor[3]
+Victims[0] = SpawnPlace.PlaceActorAtMe(BaboDefeatedSlaveF, 4)
+Victims[1] = SpawnPlace.PlaceActorAtMe(BaboDefeatedSlaveF, 4)
+Victims[2] = SpawnPlace.PlaceActorAtMe(BaboDefeatedSlaveF, 4)
+OrcRaper01.clear()
+OrcRaper02.clear()
+OrcRaper03.clear()
+Game.EnablePlayerControls()
+BaboEventOrcRevisitKidnapChance.setvalue(0)
+int randomi = Utility.randomint(11, 13)
+if (BaboSexController as BaboSexControllerManager).KidnapQuestStart(OrcActors[0], OrcActors[1], randomi, None)
+	(BaboKidnapEvent as BaboKidnapEvenScript).FillKidnapperActors(None, None, OrcActors[2], OrcActors[3], OrcActors[4], OrcActors[5], OrcActors[6], None)
+	(BaboKidnapEvent as BaboKidnapEvenScript).FillVictimActors(Victims[0], Victims[1], Victims[2])
+	(BaboKidnapEvent as BaboKidnapEvenScript).StartUptheEvent(10)
+endif
+EndFunction
+
+Function SpawnUnderlings(Bool bBigguy)
+OrcActors = new Actor[7]
+	OrcActors[0] = OrcRaper01.getreference() as actor
+	OrcActors[1] = OrcRaper02.getreference() as actor
+	OrcActors[2] = OrcRaper03.getreference() as actor
+	if bBigguy
+		OrcActors[3] = SpawnPlace.PlaceActorAtMe(BaboBigGuyOrc01, 4)
+		OrcActors[4] = SpawnPlace.PlaceActorAtMe(BaboBigGuyOrc02, 4)
+		OrcActors[5] = SpawnPlace.PlaceActorAtMe(BaboBigGuyOrc03, 4)
+		OrcActors[6] = SpawnPlace.PlaceActorAtMe(BaboBigGuyOrc04, 4)
+		(BaboSexController as BaboSexControllerManager).AssignSchlong(OrcActors[3], 6, true)
+		(BaboSexController as BaboSexControllerManager).AssignSchlong(OrcActors[4], 6, true)
+		(BaboSexController as BaboSexControllerManager).AssignSchlong(OrcActors[5], 6, true)
+		(BaboSexController as BaboSexControllerManager).AssignSchlong(OrcActors[6], 6, true)
+	else
+		OrcActors[3] = SpawnPlace.PlaceActorAtMe(BaboOrc01, 4)
+		OrcActors[4] = SpawnPlace.PlaceActorAtMe(BaboOrc02, 4)
+		OrcActors[5] = SpawnPlace.PlaceActorAtMe(BaboOrc03, 4)
+		OrcActors[6] = SpawnPlace.PlaceActorAtMe(BaboOrc04, 4)
+	endif
+	OrcActors[0].addtofaction(BaboEventWhiterunOrcVisitors)
+	OrcActors[1].addtofaction(BaboEventWhiterunOrcVisitors)
+	OrcActors[2].addtofaction(BaboEventWhiterunOrcVisitors)
+	OrcActors[3].addtofaction(BaboEventWhiterunOrcVisitors)
+	OrcActors[4].addtofaction(BaboEventWhiterunOrcVisitors)
+	OrcActors[5].addtofaction(BaboEventWhiterunOrcVisitors)
+	OrcActors[6].addtofaction(BaboEventWhiterunOrcVisitors)
+EndFunction
+
 Function SpawnOrcs()
+
+
 Actor StrangeOrcActor01
 Actor StrangeOrcActor02
 Actor StrangeOrcActor03
 
+
 if !ActorRecycle()
 
 BaboEventOrcRevisit.setvalue(0)
+	(BaboSexController as BaboSexControllerManager).FindSOSAddon()
 	if BaboEventGiantOrc.getvalue() == 1
 		StrangeOrcActor01 = SpawnPlace.PlaceActorAtMe(BaboBigGuyOrcVisitor01, 4)
 		StrangeOrcActor02 = SpawnPlace.PlaceActorAtMe(BaboBigGuyOrcVisitor02, 4)
 		StrangeOrcActor03 = SpawnPlace.PlaceActorAtMe(BaboBigGuyOrcVisitor03, 4)
+		(BaboSexController as BaboSexControllerManager).AssignSchlong(StrangeOrcActor01, 6, true)
+		(BaboSexController as BaboSexControllerManager).AssignSchlong(StrangeOrcActor02, 6, true)
+		(BaboSexController as BaboSexControllerManager).AssignSchlong(StrangeOrcActor03, 6, true)
 	else
 		StrangeOrcActor01 = SpawnPlace.PlaceActorAtMe(StrangeOrc01, 4)
 		StrangeOrcActor02 = SpawnPlace.PlaceActorAtMe(StrangeOrc02, 4)
@@ -104,8 +159,20 @@ BaboEventOrcRevisit.setvalue(0)
 	OrcRaper01.ForceRefTo(StrangeOrcActor01)
 	OrcRaper02.ForceRefTo(StrangeOrcActor02)
 	OrcRaper03.ForceRefTo(StrangeOrcActor03)
+	
+	StrangeOrcActor01.addtofaction(BaboEventWhiterunOrcVisitors)
+	StrangeOrcActor02.addtofaction(BaboEventWhiterunOrcVisitors)
+	StrangeOrcActor03.addtofaction(BaboEventWhiterunOrcVisitors)
+	(BaboSexController as BaboSexControllerManager).SetChracterRank(StrangeOrcActor01, 3)
+	(BaboSexController as BaboSexControllerManager).SetChracterRank(StrangeOrcActor02, 3)
+	(BaboSexController as BaboSexControllerManager).SetChracterRank(StrangeOrcActor03, 3)
 else
 	BaboEventOrcRevisit.setvalue(1)
+	if CalcKidnapChance(OrcRaper01.getreference() as actor)
+		BaboEventOrcRevisitKidnapChance.setvalue(1)
+	else
+		BaboEventOrcRevisitKidnapChance.setvalue(0)
+	endif
 endif
 
 if BaboDialogueSEGlobal.getvalue() == 1
@@ -377,6 +444,25 @@ endif
 	OrcRaper03.Clear()
 EndFunction
 
+bool Function CalcKidnapChance(Actor akactor)
+int ichance = 0
+int randomi
+if akactor.isinfaction(BaboEventWhiterunOrcVisitorsAgain)
+	ichance += 30 * (akactor.getfactionrank(BaboEventWhiterunOrcVisitorsAgain) + 1)
+else
+	return false
+endif
+
+randomi = Utility.randomint(0, 100)
+
+if ichance >= randomi
+	return true
+else
+	return false
+endif
+
+EndFunction
+
 Bool Function ActorRecycle()
 int listsize
 
@@ -531,6 +617,7 @@ Scene Property BaboEventWhiterunOrcVisitiorsSceneBG02 Auto
 
 Faction Property OrcRaperMild Auto
 Faction Property OrcRaperHot Auto
+Faction Property BaboEventWhiterunOrcVisitors Auto
 Faction Property BaboEventWhiterunOrcVisitorsAgain Auto
 SexLabFramework Property SexLab  Auto
 Idle property OrgasmAfter01 auto
@@ -571,3 +658,17 @@ ReferenceAlias Property OrcRapist03Marker Auto
 ReferenceAlias Property LydiaMarker Auto
 ReferenceAlias Property ChildMarker Auto
 
+GlobalVariable Property BaboEventOrcRevisitKidnapChance Auto
+
+ActorBase Property BaboDefeatedSlaveF Auto
+ActorBase Property BaboBigGuyOrc01 Auto
+ActorBase Property BaboBigGuyOrc02 Auto
+ActorBase Property BaboBigGuyOrc03 Auto
+ActorBase Property BaboBigGuyOrc04 Auto
+ActorBase Property BaboOrc01 Auto
+ActorBase Property BaboOrc02 Auto
+ActorBase Property BaboOrc03 Auto
+ActorBase Property BaboOrc04 Auto
+Actor[] Property OrcActors Auto Hidden
+Actor[] Property Victims Auto Hidden
+Quest Property BaboKidnapEvent Auto

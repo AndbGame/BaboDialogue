@@ -130,10 +130,11 @@ Event OnBeginState()
 		AttachedActor.removeallitems()
 		EquipCollar(AttachedActor)
 	Endif
-	;Rope.ApplyHavokImpulse(1.0, 0.0, 0.0, 10.0)
+	Rope.ApplyHavokImpulse(1.0, 0.0, 0.0, 10.0)
 	Utility.wait(2.0)
 	AttachedActor.setunconscious(true)
-	AttachedActor.PushActorAway(AttachedActor, 0.1)
+	;AttachedActor.PushActorAway(AttachedActor, 0.1);WIP. One of the nemesis mods altered this one. Need another way to make an actor enter ragdoll state.
+	Debug.SendAnimationEvent(AttachedActor, "Ragdoll")
 	AttachedActor.SetActorValue("Paralysis", 1)
 	AttachActorBone(rope, NeckAttachNode)
 	if nonLethal

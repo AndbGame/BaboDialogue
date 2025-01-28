@@ -19,16 +19,27 @@ Event OnInit()
 EndEvent
 
 Function UpdateVersion()
-	(BaboDialogueMCMRestart as BaboMCMRestart).Updatetofour()
+	(BaboDialogueMCMRestart as BaboMCMRestart).Updatetofive()
+	(BaboSexController as BaboSexControllerManager).SOSSize()
+	;BaboDialogueConfigMCM.PageReset()
 	Debug.notification("$BaboDialogueOnLoadUpdate")
 EndFunction
+
+Function UpdateVersionPatch()
+	(BaboSexController as BaboSexControllerManager).SOSSize()
+	Debug.notification("$BaboDialogueOnLoadUpdate")
+EndFunction
+
 
 Function Maintenance()
 CheckingVersion()
 If version == 5
-	if versiondecimal > 0
+	if versiondecimal == 0
 		CheckingVersionDecimal()
 		UpdateVersion()
+	elseif versiondecimal == 8
+		CheckingVersionDecimal()
+		UpdateVersionPatch()
 	endif
 Debug.notification("$BaboDialogueOnLoad")
 endif
@@ -54,6 +65,7 @@ Event OnPlayerLoadGame()
 	BaboDialogueConfigMCM.OrganizeFaction()
 	BaboDialogueConfigMCM.RegisterUpdate(24)
 	(BaboSexController as BaboSexControllerManager).RegisterSexlabHooks()
+	(BaboSexController as BaboSexControllerManager).SOSSize()
 EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
@@ -66,7 +78,7 @@ int Function CheckingVersion()
 EndFunction
 
 int Function CheckingVersionDecimal()
-	VersionDecimal = 0
+	VersionDecimal = 81
 	Return VersionDecimal
 EndFunction
 

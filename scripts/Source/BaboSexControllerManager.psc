@@ -11,7 +11,7 @@ Quest Property BaboSpectatorScript Auto
 Quest Property BaboEventAnimalCare Auto
 Quest Property BaboEventAnimalCareMarkarth Auto
 Quest Property BaboSpectatorWOEnemyScript Auto
-
+Quest Property BaboWidgetTextController Auto
 
 Quest Property BaboEventWhiterunOrcVisitiors Auto
 Quest Property BaboEventWindhelmNewgnisis Auto
@@ -179,6 +179,11 @@ Scene Property BaboEventMarkarthGuardScene00a Auto
 Scene Property BaboEventMarkarthGuardScene00b Auto
 Scene Property BaboEventMarkarthGuardScene01 Auto
 Scene Property BaboEventMarkarthGuardScene02 Auto
+Scene Property BaboKidnapEventYouAreTrappedSnareRopeIMCAfterSex Auto
+
+Scene Property BaboEventAnimalCareMarkarthSceneStart Auto
+Scene Property BaboEventAnimalCareMarkarthScene01 Auto
+Scene Property BaboEventAnimalCareMarkarthScene02 Auto
 
 Scene Property BaboChangeLocationEvent02Scene01 Auto
 Scene Property BaboChangeLocationEvent02Scene02 Auto
@@ -242,6 +247,8 @@ Location Property BaboKidnapperLocation03 Auto
 Location Property BaboKidnapperLocation04 Auto
 Location Property BaboKidnapperLocationCave Auto
 Location Property BaboKidnapperLocationCave02 Auto
+Location Property BaboKidnapperLocationCave03 Auto
+Location Property BaboKidnapperLocationTower01 Auto
 MiscObject Property Gold001 Auto
 Armor Property BaboBountyRingSerialKiller Auto
 
@@ -249,6 +256,9 @@ Message Property BaboQTEAtkMess Auto
 Message Property BaboQTEStrafeMess Auto
 
 SOS_API Property SOSAPIQuest Auto Hidden
+SOS_SetupQuest_Script Property SOS_Quest Auto Hidden
+SOS_AddonQuest_Script Property SOS_Addon_VectorPlexusRegular_Quest Auto Hidden
+SOS_AddonQuest_Script Property SOS_Addon_VectorPlexusMuscular_Quest Auto Hidden
 Race Property BakaGiantOrcRace Auto
 
 
@@ -304,6 +314,8 @@ GlobalVariable Property BaboChangeLocation08FraudMIsc Auto
 faction property SLAX_AggressiveFaction auto
 faction property BaboChangeLocationEvent08FanFaction auto
 faction property BaboChangeLocationEvent08Faction auto
+faction property BaboHadSexwithPlayerFaction auto
+faction property BaboHadRapedPlayerFaction auto
 
 
 actorbase property BaboEventChangeLocation08Visitor01 auto
@@ -337,6 +349,28 @@ GlobalVariable Property BaboPrecisionGlobal Auto
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ;\\\\\\\\\\\\\\\\\ Sex Setting Area \\\\\\\\\\\\\\\\\\
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Function AddHadSexFaction(actor[] akactorArray, Bool brape = false)
+int i = akactorArray.length
+while i > 1;to exclude player
+i -= 1
+	if brape
+		if akactorArray[i].isinfaction(BaboHadRapedPlayerFaction)
+			akactorArray[i].setfactionrank(BaboHadRapedPlayerFaction, akactorArray[i].getfactionrank(BaboHadRapedPlayerFaction) + 1)
+		else
+			akactorArray[i].addtofaction(BaboHadRapedPlayerFaction)
+		endif
+	else
+		if akactorArray[i].isinfaction(BaboHadSexwithPlayerFaction)
+			akactorArray[i].setfactionrank(BaboHadSexwithPlayerFaction, akactorArray[i].getfactionrank(BaboHadSexwithPlayerFaction) + 1)
+		else
+			akactorArray[i].addtofaction(BaboHadSexwithPlayerFaction)
+		endif
+	endif
+EndWhile
+EndFunction
+
+
 
 Event Onint()
 	RegisterSexlabHooks()
@@ -417,6 +451,9 @@ Function SexCustomActor(Actor Actor01, Actor Actor02, Actor Actor03, Actor Actor
 			SexLab.StartSex(sexActors, anims)
 		endif
 	EndIf
+	if sexActors[0] == playerref
+		AddHadSexFaction(sexActors, Rape)
+	endif
 EndFunction
 
 Function SexCustom(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, ReferenceAlias ActorRef03, ReferenceAlias ActorRef04, ReferenceAlias ActorRef05, String Tag01, String Tag02, String Tag03, Bool NextScene, String EventRegisterDummy, String EventName, Bool Rape)
@@ -445,6 +482,9 @@ Function SexCustom(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, Referen
 			SexLab.StartSex(sexActors, anims)
 		endif
 	EndIf
+	if sexActors[0] == playerref
+		AddHadSexFaction(sexActors, Rape)
+	endif
 EndFunction
 
 Function SexCustomActorTag(Actor Actor01, Actor Actor02, Actor Actor03, Actor Actor04, Actor Actor05, String Tag, String SuppressTag, Bool NextScene, String EventRegisterDummy, String EventName, Bool Rape)
@@ -468,6 +508,9 @@ Function SexCustomActorTag(Actor Actor01, Actor Actor02, Actor Actor03, Actor Ac
 			SexLab.StartSex(sexActors, anims)
 		endif
 	EndIf
+	if sexActors[0] == playerref
+		AddHadSexFaction(sexActors, Rape)
+	endif
 EndFunction
 
 Function SexCustomTag(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, ReferenceAlias ActorRef03, ReferenceAlias ActorRef04, ReferenceAlias ActorRef05, String Tag, String SuppressTag, Bool NextScene, String EventRegisterDummy, String EventName, Bool Rape)
@@ -496,6 +539,9 @@ Function SexCustomTag(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, Refe
 			SexLab.StartSex(sexActors, anims)
 		endif
 	EndIf
+	if sexActors[0] == playerref
+		AddHadSexFaction(sexActors, Rape)
+	endif
 EndFunction
 
 Function SexCustombyName(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, ReferenceAlias ActorRef03, ReferenceAlias ActorRef04, ReferenceAlias ActorRef05, String SLName, Bool NextScene, String EventRegisterDummy, String EventName, Bool Rape)
@@ -525,9 +571,10 @@ Function SexCustombyName(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, R
 			SexLab.StartSex(sexActors, anims)
 		endif
 	EndIf
+	if sexActors[0] == playerref
+		AddHadSexFaction(sexActors, Rape)
+	endif
 EndFunction
-
-
 
 Actor[] Function MakeActorArray(Actor Actor1, Actor Actor2, Actor Actor3, Actor Actor4, Actor Actor5)
 	Actor[] sexActors
@@ -662,6 +709,71 @@ Function UnEquipCumItem(actor akactor)
 	akactor.RemoveItem(BaboCumUpperBodyPlayable, 1, false)
 	akactor.RemoveItem(BaboCumUpperBodyPlayable, 1, false)
 	akactor.RemoveItem(BaboTearsMesh1Playable, 1, false)
+EndFunction
+
+Function TrapSetCoordinates(Actor akactor, Objectreference akTrap)
+;TrapType 0 Basic 1 BearTrap 2 WormVore 3 SnareRope
+	ClearActorState(akactor)
+	Restrained(akactor, true)
+	BaboPosPCRef.moveto(akTrap)
+	akactor.SetAngle(BaboPosPCRef.GetAngleX(), BaboPosPCRef.GetAngleY(), BaboPosPCRef.GetAngleZ())
+	akactor.SplineTranslateToRef(BaboPosPCRef, 1.3, 150.0)
+	akactor.SetVehicle(BaboPosPCRef)
+EndFunction
+
+Idle Property StaggerStart Auto
+
+Function TrapResetCoordinates(Actor akactor, Bool bStaggerMotion = false)
+	if akactor == PlayerRef
+		Game.SetPlayerAIDriven(false)
+		akactor.SetHeadTracking(true)
+		akactor.SetVehicle(None)
+		if bStaggerMotion
+			akActor.playidle(StaggerStart)
+		endif
+	else
+		akActor.SetRestrained(False)
+		akActor.SetDontMove(False)
+		ActorUtil.RemovePackageOverride(akActor, BaboDoNothing)
+		if bStaggerMotion
+			akActor.playidle(StaggerStart)
+		endif
+	endif
+EndFunction
+
+Function ClearActorState(Actor akActor)
+  akActor.StopCombat()
+  akActor.SheatheWeapon();test need
+	If (akActor.IsSneaking())
+		akActor.StartSneaking()
+	EndIf
+  akActor.ClearKeepOffsetFromActor()
+EndFunction
+
+Function Restrained(Actor akActor, bool abRestrain)
+if abRestrain
+	If(akActor == PlayerRef)
+		Game.SetPlayerAIDriven(true)
+		akactor.SetHeadTracking(false)
+	Else
+		ActorUtil.AddPackageOverride(akActor, BaboDoNothing, 100, 1)
+		akActor.EvaluatePackage()
+		akActor.SetRestrained(true)
+		akActor.SetDontMove(true)
+	EndIf
+else
+	if akactor == PlayerRef
+		Game.SetPlayerAIDriven(false)
+		akactor.SetHeadTracking(true)
+		akactor.SetVehicle(None)
+		;akActor.playidle(StaggerStart)
+	else
+		akActor.SetRestrained(False)
+		akActor.SetDontMove(False)
+		ActorUtil.RemovePackageOverride(akActor, BaboDoNothing)
+		;akActor.playidle(StaggerStart)
+	endif
+endif
 EndFunction
 
 Function LosingControl()
@@ -938,7 +1050,7 @@ Function SpectatorActivate(Actor pTarget, Actor pTargetFriend = None)
 	EndIf
 endFunction
 
-Function KidnapQuestStart(Actor pTarget, Actor pTargetFriend = None, int LocationNum = 0, Location KidnapLocation)
+Bool Function KidnapQuestStart(Actor pTarget, Actor pTargetFriend = None, int LocationNum = 0, Location KidnapLocation)
 	if LocationNum == 4
 		KidnapLocation = BaboKidnapperLocation01
 	elseif LocationNum == 5
@@ -951,6 +1063,10 @@ Function KidnapQuestStart(Actor pTarget, Actor pTargetFriend = None, int Locatio
 		KidnapLocation = BaboKidnapperLocationCave;Bandits
 	elseif LocationNum == 11
 		KidnapLocation = BaboKidnapperLocationCave02
+	elseif LocationNum == 12
+		KidnapLocation = BaboKidnapperLocationCave03
+	elseif LocationNum == 13
+		KidnapLocation = BaboKidnapperLocationTower01
 	elseif LocationNum == 20
 		KidnapLocation = BaboSlaverLocation01
 	elseif LocationNum == 21
@@ -965,11 +1081,13 @@ Function KidnapQuestStart(Actor pTarget, Actor pTargetFriend = None, int Locatio
 	elseif LocationNum == 25
 		KidnapLocation = BaboSlaverNobleHouseLocation01
 	else
-		if !KidnapLocation
-			Return
+		if KidnapLocation == None
+			Return false
 		endif
 	endif
 	BaboKidnapKeyword.SendStoryEvent(KidnapLocation, pTarget, pTargetFriend)
+	Utility.wait(5.0);For the quest to start
+	return true
 endFunction
 
 Function SpectatorChangeStatus(int stage)
@@ -1081,7 +1199,6 @@ String msg
 	Debug.messagebox(msg)
 EndFunction
 
-
 Function WhiterunOrcVisitMessagebox(int num)
 String msg
 	if num == 1
@@ -1114,6 +1231,8 @@ String msg
 		msg = JsonUtil.getstringvalue(file, "baboeventwhiterunorcvisitiors14")
 	elseif num == 15
 		msg = JsonUtil.getstringvalue(file, "baboeventwhiterunorcvisitiors15")
+	elseif num == 16
+		msg = JsonUtil.getstringvalue(file, "baboeventwhiterunorcvisitiors16")
 	endif
 	Debug.messagebox(msg)
 EndFunction
@@ -1634,6 +1753,31 @@ String msg
 	Debug.messagebox(msg)
 EndFunction
 
+Function AnimalCareMarkarthEventMessagebox(int num)
+String msg
+	if num == 1
+		msg = JsonUtil.getstringvalue(file, "baboanimalcaremarkarthevent01_01")
+	elseif num == 2
+		msg = JsonUtil.getstringvalue(file, "baboanimalcareevent01_02")
+	elseif num == 3
+		msg = JsonUtil.getstringvalue(file, "baboanimalcareevent01_03")
+	elseif num == 4
+		msg = JsonUtil.getstringvalue(file, "baboanimalcareevent01_04")
+	elseif num == 5
+		msg = JsonUtil.getstringvalue(file, "baboanimalcareevent01_05")
+	elseif num == 6
+		msg = JsonUtil.getstringvalue(file, "baboanimalcareevent01_06")
+	elseif num == 7
+		msg = JsonUtil.getstringvalue(file, "baboanimalcareevent01_07")
+	elseif num == 8
+		msg = JsonUtil.getstringvalue(file, "baboanimalcareevent01_08")
+	elseif num == 9
+		msg = JsonUtil.getstringvalue(file, "baboanimalcareevent01_09")
+	endif
+	
+	Debug.messagebox(msg)
+EndFunction
+
 Function KidnapEvent01Messagebox(int num)
 String msg
 	if num == 1
@@ -1684,6 +1828,12 @@ String msg
 	elseif num == 16
 		msg = JsonUtil.getstringvalue(file, "babokidnapevent01_16")
 		Debug.notification(msg)
+	elseif num == 17
+		msg = JsonUtil.getstringvalue(file, "babokidnapevent01_17")
+		Debug.messagebox(msg)
+	elseif num == 18
+		msg = JsonUtil.getstringvalue(file, "babokidnapevent01_18")
+		Debug.messagebox(msg)
 	endif
 EndFunction
 
@@ -2121,9 +2271,9 @@ Function NPCPairedAnim(Actor Victim, Actor Aggressor, Bool Animate = True, strin
 		ActorUtil.RemovePackageOverride(Victim, BaboDoNothing)
 		
 		if Aggressor.haskeyword(ActorTypeNPC)
-			Debug.SendAnimationEvent(Aggressor, "IdleStop")
-		else
 			Debug.SendAnimationEvent(Aggressor, "IdleForceDefaultState")
+		else
+			Debug.SendAnimationEvent(Aggressor, "IdleStop")
 		endif
 		
 		Debug.SendAnimationEvent(Victim, "IdleForceDefaultState")
@@ -2149,12 +2299,53 @@ EndFunction
 Function SOSSize()
 	if  Quest.GetQuest("SOS_Misc")
 		SOSAPIQuest = Game.GetFormFromFile(0x1eda4, "Schlongs of Skyrim.esp") as SOS_API
+		SOS_Quest = Game.GetFormFromFile(0x000D62, "Schlongs of Skyrim.esp") as SOS_SetupQuest_Script
 	else
 		return
 	endif
 	SOSAPIQuest.AddRace(BakaGiantOrcRace)
 EndFunction
 
+Function FindSOSAddon()
+if Quest.GetQuest("SOS_Addon_VectorPlexusRegular_Quest")
+	SOS_Addon_VectorPlexusRegular_Quest = Game.GetFormFromFile(0x000D62, "SOS - VectorPlexus Regular Addon.esp") as SOS_AddonQuest_Script
+endif
+if Quest.GetQuest("SOS_Addon_VectorPlexusMuscular_Quest")
+	SOS_Addon_VectorPlexusMuscular_Quest = Game.GetFormFromFile(0x000D62, "SOS - VectorPlexus Muscular Addon.esp") as SOS_AddonQuest_Script
+endif
+EndFunction
+
+Function AssignSchlong(Actor akActor, int idSize = 6, bool bforce = true)
+Form newAddon
+	if SOS_Addon_VectorPlexusRegular_Quest
+		newAddon = SOS_Addon_VectorPlexusRegular_Quest
+	elseif SOS_Addon_VectorPlexusMuscular_Quest
+		newAddon = SOS_Addon_VectorPlexusMuscular_Quest
+	else
+		newAddon = SOS_Data.GetAddon(0)
+	endif
+	If !newAddon
+		Return
+	EndIf
+
+	bool addonCompatible = IsSchlongCompatible(newAddon, akActor, akActor.GetLeveledActorBase().GetSex())
+		If addonCompatible || bforce
+			SOS_Quest.SetSchlong(akActor, newAddon, true)
+			SchlongSizeSliderAccept(akActor, idSize)
+		EndIf
+EndFunction
+
+Function SchlongSizeSliderAccept(Actor akActor, int size)
+	Form addon = SOS_Quest.GetActiveAddon(akActor)
+	If addon
+		SOS_Quest.SetSchlongSize(addon, akActor, size)
+	EndIf
+EndFunction
+
+bool Function IsSchlongCompatible(Form addon, Actor akActor, Int sex)
+	bool addonCompatible = SOS_Quest.IsSchlongRaceCompatible(addon, akActor) && SOS_Quest.IsSchlongGenderAllowed(addon, sex)
+	return addonCompatible
+EndFunction
 
 Function BaboEvent11ScenePlay(int i);Because of an unknown bug, play scene code doesn't operate through Quest tif script.
 	if i == 1
@@ -2167,8 +2358,6 @@ Function BaboEvent11ScenePlay(int i);Because of an unknown bug, play scene code 
 		BaboEncounter11Scene04.forcestart()
 	endif
 EndFunction
-
-
 
 Function BCLEvent05ScenePlay(int i)
 	if i == 2
@@ -2225,6 +2414,15 @@ Function BCLEvent07ScenePlay(int i);Because of an unknown bug, play scene code d
 	endif
 EndFunction
 
+Function BEventAnimalCareMarkarthScenePlay(int i)
+	if i == 0
+		BaboEventAnimalCareMarkarthSceneStart.forcestart()
+	elseif i == 1
+		BaboEventAnimalCareMarkarthScene01.forcestart()
+	elseif i == 2
+		BaboEventAnimalCareMarkarthScene02.forcestart()
+	endif
+EndFunction
 
 Function BCLEvent08ScenePlay(int i);Because of an unknown bug, play scene code doesn't operate through Quest tif script.
 EndFunction
@@ -2947,6 +3145,32 @@ Event KidnapEvent06A(string eventName, string argString, float argNum, form send
 	(BaboKidnapEvent as BaboKidnapEvenScript).YouGotSpotted(1)
 EndEvent
 
+Event KidnapEvent06B(string eventName, string argString, float argNum, form sender)
+	CorruptionExp(1.0)
+	Utility.wait(2.0)
+	LosingControl()
+	;(BaboKidnapEvent as BaboKidnapEvenScript).AfterKidnapEvent(2)
+	(BaboKidnapEvent as BaboKidnapEvenScript).StartUptheEvent(1)
+	(BaboKidnapEvent as BaboKidnapEvenScript).YouGotSpotted(1)
+EndEvent
+
+Event KidnapEvent06C(string eventName, string argString, float argNum, form sender)
+	LewdnessExp(6.0)
+	CorruptionExp(8.0)
+	TraumaExp(2.0)
+	AddSexCount(6)
+	AddGroupSexCount(3)
+	Debug.sendanimationevent(PlayerRef, "BaboExhaustedFront01")
+	Utility.wait(1.0)
+	BaboKidnapEventYouAreTrappedSnareRopeIMCAfterSex.forcestart()
+EndEvent
+
+Event KidnapEvent06D(string eventName, string argString, float argNum, form sender)
+	Debug.sendanimationevent(PlayerRef, "BaboExhaustedFront01")
+	Utility.wait(1.0)
+	(BaboKidnapEvent as BaboKidnapEvenScript).YouGotSpotted(0);You are going to be hanged
+EndEvent
+
 Event KidnapEvent06F(string eventName, string argString, float argNum, form sender)
 	CorruptionExp(1.0)
 	Utility.wait(2.0)
@@ -2955,6 +3179,35 @@ Event KidnapEvent06F(string eventName, string argString, float argNum, form send
 	Debug.sendanimationevent(PlayerRef, "Babo_DeathStart")
 	Utility.wait(2.0)
 	(BaboKidnapEvent as BaboKidnapEvenScript).YouGotSpotted(0)
+EndEvent
+
+Event BaboKidnapPunishment06A(string eventName, string argString, float argNum, form sender);PunishmentSex
+	CorruptionExp(1.0)
+	Utility.wait(2.0)
+	(BaboKidnapEvent as BaboKidnapEvenScript).Nocollision(None)
+	;Game.DisablePlayerControls( true, true, false, false, true, false, true, false )
+	Debug.sendanimationevent(PlayerRef, "BaboExhaustedFront01")
+	Utility.wait(2.0)
+	(BaboKidnapEvent as BaboKidnapEvenScript).YouGotSpotted(0)
+EndEvent
+
+Event KidnapEvent10A(string eventName, string argString, float argNum, form sender)
+	CorruptionExp(1.0)
+	AddGroupSexCount(2)
+	Utility.wait(2.0)
+	(BaboKidnapEvent as BaboKidnapEvenScript).Nocollision(None)
+	RandomExhaustionIdle(PlayerRef)
+	Utility.wait(2.0)
+	(BaboKidnapEvent as BaboKidnapEvenScript).YouGotSpotted(1)
+EndEvent
+
+Event KidnapEvent10B(string eventName, string argString, float argNum, form sender);Snuck in in the middle of night
+	CorruptionExp(1.0)
+	Utility.wait(2.0)
+	(BaboKidnapEvent as BaboKidnapEvenScript).Nocollision(None)
+	RandomExhaustionIdle(PlayerRef)
+	Utility.wait(2.0)
+	(BaboKidnapEvent as BaboKidnapEvenScript).YouGotSpotted(1)
 EndEvent
 
 Event KidnapEvent20A(string eventName, string argString, float argNum, form sender)
@@ -3467,6 +3720,47 @@ endif
 
 EndFunction
 
+
+;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ Utils \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+Function DeleteWhenAbleWithTimeout(Actor[] actors, float afSeconds = 30.0)
+	Int i = 0
+	bool wait = false
+	While afSeconds > 0
+		i = 0
+		wait = false
+		While (i < actors.Length)
+			If actors[i]
+				If actors[i].GetParentCell() && actors[i].GetParentCell().IsAttached()
+					wait = true
+				Else
+					debug.trace(self + " DeleteWhenAbleWithTimeout " + actors[i] + " in un attached cell - delete")
+					actors[i].Delete()
+					actors[i] = None
+				Endif
+			Endif
+			i += 1
+		EndWhile
+		If wait
+			Utility.Wait(5)
+			afSeconds -= 5
+		Else
+			return
+		EndIf
+	EndWhile
+
+	i = 0
+	While (i < actors.Length)
+		If actors[i]
+			debug.trace(self + " DeleteWhenAbleWithTimeout " + actors[i] + " is timeouted - delete")
+			actors[i].Delete()
+		Endif
+		i += 1
+	EndWhile
+EndFunction
+
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ;\\\\\\\\\\\\\\\\\\\\\\\ State \\\\\\\\\\\\\\\\\\\\\
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -3491,9 +3785,48 @@ GlobalVariable Property BaboChangeLocation07Variable Auto
 GlobalVariable Property BaboAssaultAttemptCountInstance Auto
 String DamagevalueString
 String DamagevalueString02
+Bool bQTETextAbort
 
 Function StateChange(String StateString)
 	GotoState(StateString)
+EndFunction
+
+Function QTETextAbort()
+	bQTETextAbort = true
+	BaboWidgetTextController.stop()
+	(BaboWidgetTextController as BaboQTETextWidgetEx).turnoff()
+	(BaboKidnapEvent as BaboKidnapEvenScript).QTESnareTrapFail()
+EndFunction
+
+Function QTETextStart()
+	bQTETextAbort = false
+	Bool IsSuccess = StartQTEText(BDMCM.BaboQTELimitTime, BDMCM.BaboQTEDifficulty)
+	if bQTETextAbort
+		return
+	endif
+	if IsSuccess
+		BaboWidgetTextController.stop()
+		(BaboWidgetTextController as BaboQTETextWidgetEx).turnoff()
+	else
+		BaboWidgetTextController.stop()
+		(BaboWidgetTextController as BaboQTETextWidgetEx).turnoff()
+	endif
+EndFunction
+
+bool Function StartQTEText(float limitTime, float fdifficulty)
+	string msg = JsonUtil.getstringvalue(file, "baboqtetextfire")
+	(BaboWidgetTextController as BaboQTETextWidgetEx).start()
+	Utility.Wait(0.5)
+	(BaboWidgetTextController as BaboQTETextWidgetEx).SetParameter(msg, fdifficulty)
+	(BaboWidgetTextController as BaboQTETextWidgetEx).UpdateWidgetsAsync()
+	float qteStartTime = Utility.GetCurrentRealTime()
+	float qteElapsed = 0.0
+	while (qteElapsed < limitTime && !(BaboWidgetTextController as BaboQTETextWidgetEx).IsSuccess)
+		qteElapsed = Utility.GetCurrentRealTime() - qteStartTime
+		Utility.Wait(0.01)
+	endWhile
+	bool ret = (BaboWidgetTextController as BaboQTETextWidgetEx).IsSuccess
+	return ret
 EndFunction
 
 Function DefineStruggleActor(referencealias Aggressor)
@@ -3648,6 +3981,7 @@ State BaboKidnapState
 Function ResistSuccess(actor akactor)
 	QTESoloAnimation(PlayerRef, false, "BaboRopeFall", true)
 	KidnapEvent01Messagebox(9)
+	(BaboKidnapEvent as BaboKidnapEvenScript).CurrentlyCaptured(false)
 	(BaboKidnapEvent as BaboKidnapEvenScript).OnLOSRegister()
 	if !RecoverControl(false)
 		(BaboKidnapEvent as BaboKidnapEvenScript).YesCollision(None, "")
@@ -3716,6 +4050,33 @@ Function Restore()
 	StruggleBarDisplay(False)
 	GotoState("")
 EndFunction
+
+EndState
+
+State BaboKidnapQTETextState
+
+	Event OnBeginState()
+		QTETextStart()
+	EndEvent
+
+	Function QTETextStart()
+		bQTETextAbort = false
+		Bool IsSuccess = StartQTEText(BDMCM.BaboQTELimitTime, BDMCM.BaboQTEDifficulty)
+		if bQTETextAbort
+			return
+		endif
+		if IsSuccess
+			BaboWidgetTextController.stop()
+			(BaboWidgetTextController as BaboQTETextWidgetEx).turnoff()
+			(BaboKidnapEvent as BaboKidnapEvenScript).QTESnareTrapSuccess()
+			GotoState("")
+		else
+			BaboWidgetTextController.stop()
+			(BaboWidgetTextController as BaboQTETextWidgetEx).turnoff()
+			(BaboKidnapEvent as BaboKidnapEvenScript).QTESnareTrapFail()
+			GotoState("")
+		endif
+	EndFunction
 
 EndState
 
@@ -3907,7 +4268,6 @@ Function Restore()
 EndFunction
 
 EndState
-
 
 State ConstantPainExpression
 

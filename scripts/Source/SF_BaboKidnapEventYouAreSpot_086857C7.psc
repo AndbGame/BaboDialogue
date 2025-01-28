@@ -2,6 +2,14 @@
 ;NEXT FRAGMENT INDEX 5
 Scriptname SF_BaboKidnapEventYouAreSpot_086857C7 Extends Scene Hidden
 
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
+;BEGIN CODE
+(Getowningquest() as BaboKidnapEvenScript).YouGotSpotted(2);Player gets beaten
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
@@ -16,22 +24,6 @@ stop()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
-;BEGIN CODE
-(Getowningquest() as BaboKidnapEvenScript).YouGotSpotted(2);Player gets beaten
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-(Getowningquest() as BaboKidnapEvenScript).StartUptheEvent(5)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_3
 Function Fragment_3()
 ;BEGIN CODE
@@ -39,6 +31,14 @@ Function Fragment_3()
 actor akactor = (Kidnapper01.getreference() as actor)
 int arousal = akactor.getfactionrank(sla_arousal) as int
 (BaboSexController as BaboSexControllerManager).SetSLAArousal(akactor, arousal + 15)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+(Getowningquest() as BaboKidnapEvenScript).StartUptheEvent(3)
 ;END CODE
 EndFunction
 ;END FRAGMENT

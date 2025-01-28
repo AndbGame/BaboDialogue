@@ -4,15 +4,10 @@ Event OnInit()
 	Debug.notification("BaboMCMReset System Rebooting...")
 EndEvent
 
-Function Updatetofour()
-	;BaboEventWhiterunOrcVisitiors.stop()
-	;BaboDialogueWhiterun.stop()
-	;BaboSexController.stop()
-	;BaboEventWhiterunOrcVisitiors.start()
-	;BaboDialogueWhiterun.start()
-	;BaboSexController.start()
-	BaboEventMarkarthGuard.stop()
-	BaboEventMarkarthGuard.start()
+Function Updatetofive()
+	;(BaboDialogueMCM as BaboDialogueConfigMenu).PageReset()
+	BaboDialogueMCM.stop()
+	BaboDialogueMCM.start()
 EndFunction
 
 Function UpdateWhiterunOrcQuest()

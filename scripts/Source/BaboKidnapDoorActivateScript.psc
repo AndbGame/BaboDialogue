@@ -7,6 +7,7 @@ if BaboKidnapEvent.getstage() >= ConditionalStage
 	if (choice == 0)
 		(BaboKidnapEvent as BaboKidnapEvenScript).MoveActortoPiont(PlayerRef, RecoverMarker)
 		(BaboKidnapEvent as BaboKidnapEvenScript).RemovealltheKey()
+		PlayerRef.removeitem(BaboKidnapperKey, 99)
 		if NextStageSwitch
 			if CumRemove
 				(BaboSexController as BaboSexControllerManager).UnEquipCumItem(PlayerRef)
@@ -63,3 +64,5 @@ Bool Property NextStageSwitch = true Auto
 Int Property NextStage Auto
 
 Int Property ConditionalStage Auto
+
+Key Property BaboKidnapperKey Auto

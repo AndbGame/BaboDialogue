@@ -26,6 +26,143 @@ Function PageReset()
 	PubicHairString[3] = "$BaboPubicHairStyle03"
 	PubicHairString[4] = "$BaboPubicHairStyle04"
 	PubicHairString[5] = "$BaboPubicHairStyle05"
+	
+	_hAnchorList = new string[3]
+	_hAnchorList[0] = "left"
+	_hAnchorList[1] = "center"
+	_hAnchorList[2] = "right"
+
+	_vAnchorList = new string[3]
+	_vAnchorList[0] = "top"
+	_vAnchorList[1] = "center"
+	_vAnchorList[2] = "bottom"
+	
+	_characterTypes = new string[3]
+	_characterTypes[0] = "A(down) B(right) X(left) Y(up)"
+	_characterTypes[1] = "B(down) A(right) Y(left) X(up)"
+	_characterTypes[2] = "Custom(For Keyboard)"
+
+	_characterTypeABXY = new string[4]
+	_characterTypeABXY[0] = "Y "
+	_characterTypeABXY[1] = "A "
+	_characterTypeABXY[2] = "X "
+	_characterTypeABXY[3] = "B "
+
+	_characterTypeBAYX = new string[4]
+	_characterTypeBAYX[0] = "X "
+	_characterTypeBAYX[1] = "B "
+	_characterTypeBAYX[2] = "Y "
+	_characterTypeBAYX[3] = "A "
+
+	_characterTypeCustom = new string[4]
+	_characterTypeCustom[0] = QTECustomKeyToString(BaboQTECustomKeyUp)
+	_characterTypeCustom[1] = QTECustomKeyToString(BaboQTECustomKeyDown)
+	_characterTypeCustom[2] = QTECustomKeyToString(BaboQTECustomKeyLeft)
+	_characterTypeCustom[3] = QTECustomKeyToString(BaboQTECustomKeyRight)
+EndFunction
+
+string[] Function GetCharacterTypeArray()
+	int index = BaboQTECharacterType
+	if index == QTE_CHARACTER_TYPE_ABXY
+		return _characterTypeABXY
+	elseif index == QTE_CHARACTER_TYPE_BAYX
+		return _characterTypeBAYX
+	else
+		return _characterTypeCustom
+	endif
+EndFunction
+
+string Function QTECustomKeyToString(int keyCode)
+	string ret = ""
+	if keyCode == 16
+		ret = "Q"
+	elseif keyCode == 17
+		ret = "W"
+	elseif keyCode == 18
+		ret = "E"
+	elseif keyCode == 19
+		ret = "R"
+	elseif keyCode == 20
+		ret = "T"
+	elseif keyCode == 21
+		ret = "Y"
+	elseif keyCode == 22
+		ret = "U"
+	elseif keyCode == 23
+		ret = "I"
+	elseif keyCode == 24
+		ret = "O"
+	elseif keyCode == 25
+		ret = "P"
+	elseif keyCode == 30
+		ret = "A"
+	elseif keyCode == 31
+		ret = "S"
+	elseif keyCode == 32
+		ret = "D"
+	elseif keyCode == 33
+		ret = "F"
+	elseif keyCode == 34
+		ret = "G"
+	elseif keyCode == 35
+		ret = "H"
+	elseif keyCode == 36
+		ret = "J"
+	elseif keyCode == 37
+		ret = "K"
+	elseif keyCode == 38
+		ret = "L"
+	elseif keyCode == 44
+		ret = "Z"
+	elseif keyCode == 45
+		ret = "X"
+	elseif keyCode == 46
+		ret = "C"
+	elseif keyCode == 47
+		ret = "V"
+	elseif keyCode == 48
+		ret = "B"
+	elseif keyCode == 49
+		ret = "N"
+	elseif keyCode == 50
+		ret = "M"
+	else
+		ret = "!"
+	endif
+	return ret + " "
+EndFunction
+
+
+bool Function IsValidQTECustomKey(int keyCode)
+	if (16 <= keyCode && keyCode <= 25) || (30 <= keyCode && keyCode <= 38) || (44 <= keyCode && keyCode <= 50)
+		return true
+	endif
+	return false
+EndFunction
+
+int Function GetHAnchorIndex(string hAnchor)
+	if hAnchor == _hAnchorList[1]
+		return 1
+	elseif hAnchor == _hAnchorList[2]
+		return 2
+	endif
+	return 0
+EndFunction
+
+int Function GetVAnchorIndex(string vAnchor)
+	if vAnchor == _vAnchorList[1]
+		return 1
+	elseif vAnchor == _vAnchorList[2]
+		return 2
+	endif
+	return 0
+EndFunction
+
+Function TestTextQTE()
+	string msg = "$QTETextMsg"
+	(BaboSexController as BaboSexControllerManager).QTETextStart()
+	;TextQTE.SetParameter(msg, BaboQTELimitTime)
+	;TextQTE.UpdateWidgetsAsync()
 EndFunction
 
 Event OnConfigClose()
@@ -149,6 +286,13 @@ Function VerifyMods()
 		BaboSexlabApproach.setvalue(0)
 	Endif
 
+	If Quest.Getquest("PAF_MainQuest")
+		PeeAndFart_Installed = true
+		BaboPeeAndFart.setvalue(1)
+	Else
+		PeeAndFart_Installed = false
+		BaboPeeAndFart.setvalue(0)
+	Endif
 
 	If Quest.GetQuest("_BF_MCMQuest")
 		BattleFuck_Installed = true
@@ -341,21 +485,19 @@ event OnPageReset(string page)
 		OID_BaboSexualHarassmentGlobal = AddToggleOption("$BaboSexualHarassmentComment", BaboSexualHarassmentGlobal.GetValue())
 		
 		SetCursorPosition(1) ; Move cursor to top right position
+		AddEmptyOption()
 		AddHeaderOption("$BaboUniqueNPCDialogue")
-		
 		OID_BaboUniqueNPCRiverwoodGlobal = AddToggleOption("$BaboRiverwoodNPCDialogue", BaboUniqueNPCRiverwoodGlobal.getvalue())
 		OID_BaboDialoguePercentageRiverwood = AddSliderOption("$BaboRiverwoodNPCDialogueChance", BaboDialoguePercentageRiverwood.GetValue(), "{0}")
 		OID_BaboUniqueNPCWhiterunGlobal = AddToggleOption("$BaboWhiterunNPCDialogue", BaboUniqueNPCWhiterunGlobal.getvalue())
 		OID_BaboDialoguePercentageWhiterun = AddSliderOption("$BaboWhiterunNPCDialogueChance", BaboDialoguePercentageWhiterun.GetValue(), "{0}")
 		OID_BaboUniqueNPCWindhelmGlobal = AddToggleOption("$BaboWindhelmNPCDialogue", BaboUniqueNPCWindhelmGlobal.getvalue())
 		OID_BaboDialoguePercentageWindhelm = AddSliderOption("$BaboWindhelmNPCDialogueChance", BaboDialoguePercentageWindhelm.GetValue(), "{0}")
-		
+		AddEmptyOption()
 		AddHeaderOption("$BaboNPCXNPCDialogue")
-		
 		OID_BaboActorDialogueEventPercentage = AddSliderOption("$BaboActorDialoguePercentage", BaboActorDialogueEventPercentage.GetValue(), "{0}")
-		
+		AddEmptyOption()
 		AddHeaderOption("$BaboMonologue")
-		
 		OID_BaboSoliloquyOnLocationChange = AddToggleOption("$BaboLocationChangeMonologue", BaboSoliloquyOnLocationChange.getvalue())
 		OID_BaboSoliloquyOnStartGlobal = AddToggleOption("$BaboOnStartMonologue", BaboSoliloquyOnStartGlobal.getvalue())
 		OID_BaboSoliloquySelfCommenteGlobal = AddToggleOption("$BaboConstantMonologue", BaboSoliloquySelfCommentGlobal.getvalue())
@@ -363,9 +505,27 @@ event OnPageReset(string page)
 		OID_BaboSoliloquyUpdateGameTimeInterval = AddSliderOption("$BaboMonologueInterval", BaboSoliloquyUpdateGameTimeInterval.GetValue(), "{0}")
 		OID_BaboSoliloquyUpdateInterval = AddSliderOption("$BaboSoliloquyIntervalMminimum", BaboSoliloquyUpdateInterval.GetValue(), "{0}")
 		OID_BaboSoliloquyUpdateIntervalMax = AddSliderOption("$BaboSoliloquyIntervalMaximum", BaboSoliloquyUpdateIntervalMax.GetValue(), "{0}")
-
-		AddHeaderOption("$BaboQTEBar")
+		AddEmptyOption()
+		AddHeaderOption("$BaboQTEText")
+		OID_BaboQTELimitTime = AddSliderOption("$BaboQTELimitTime", BaboQTELimitTime, "{1}sec");TNTR
+		OID_BaboQTEDifficulty = AddSliderOption("$BaboQTEDifficulty", BaboQTEDifficulty, "{1}");TNTR
+		OID_BaboQTEFontSize = AddSliderOption("$BaboQTEFontSize", BaboQTEFontSize, "{0}")
+		OID_BaboQTEHAnchor = AddMenuOption("$BaboQTEHAnchor", BaboQTEHAnchor)
+		OID_BaboQTEVAnchor = AddMenuOption("$BaboQTEVAnchor", BaboQTEVAnchor)
+		OID_BaboQTEOffsetX = AddSliderOption("$BaboQTEOffsetX", BaboQTEOffsetX, "{0}")
+		OID_BaboQTEOffsetY = AddSliderOption("$BaboQTEOffsetY", BaboQTEOffsetY, "{0}")
+		OID_BaboQTECharacterType = AddMenuOption("$BaboQTECharacterType", _characterTypes[BaboQTECharacterType])
+		if BaboQTECharacterType == QTE_CHARACTER_TYPE_CUSTOM
+			OID_BaboQTECustomKeyUp = AddKeyMapOption("$BaboQTECustomKeyUp", BaboQTECustomKeyUp)
+			OID_BaboQTECustomKeyDown = AddKeyMapOption("$BaboQTECustomKeyDown", BaboQTECustomKeyDown)
+			OID_BaboQTECustomKeyLeft = AddKeyMapOption("$BaboQTECustomKeyLeft", BaboQTECustomKeyLeft)
+			OID_BaboQTECustomKeyRight = AddKeyMapOption("$BaboQTECustomKeyRight", BaboQTECustomKeyRight)
+		endif
 		
+		OID_BaboTestQTEText = AddToggleOption("$BaboTestQTEText", TestQTEEnabled)
+		
+		AddEmptyOption()
+		AddHeaderOption("$BaboQTEBar")
 		OID_BaboResistType = AddTextOption("$ResistHotkey", BaboResistType)
 		OID_BaboQTEColorBar = AddColorOption("$BaboQTEBarcolor", BaboQTEColorBar)
 		OID_BaboQTEMeterWidth = AddSliderOption("$BaboQTEBarWidth", BaboQTEMeterWidth, "{0}")
@@ -400,6 +560,11 @@ event OnPageReset(string page)
 			BaboSexlabApproachIntegrationOID = AddToggleOption("$BaboSexlabApproachIntegration", true)
 		Else
 			BaboSexlabApproachIntegrationOID = AddToggleOption("$BaboSexlabApproachIntegration", false, OPTION_FLAG_DISABLED)
+		Endif
+		If PeeAndFart_Installed
+			BaboPeeAndFartIntegrationOID = AddToggleOption("$BaboPeeAndFartIntegration", true)
+		Else
+			BaboPeeAndFartIntegrationOID = AddToggleOption("$BaboPeeAndFartIntegration", false, OPTION_FLAG_DISABLED)
 		Endif
 		If BattleFuck_Installed
 			BaboBFIntegrationOID = AddToggleOption("$BaboBFIntegration", true)
@@ -645,6 +810,21 @@ Event OnOptionMenuAccept(Int OptionID, Int MenuItemIndex)
 			PubicHairint = MenuItemIndex
 			PubicHairValue.SetValue(PubicHairint)
 		EndIf
+	elseif OptionID == OID_BaboQTEHAnchor
+		BaboQTEHAnchor = _hAnchorList[MenuItemIndex]
+		SetMenuOptionValue(OptionID, BaboQTEHAnchor)
+		TextQTE.HAnchor = BaboQTEHAnchor
+	elseif OptionID == OID_BaboQTEVAnchor
+		BaboQTEVAnchor = _vAnchorList[MenuItemIndex]
+		SetMenuOptionValue(OptionID, BaboQTEVAnchor)
+		TextQTE.VAnchor = BaboQTEVAnchor
+	elseif OptionID == OID_BaboQTECharacterType
+		int prev = BaboQTECharacterType
+		BaboQTECharacterType = MenuItemIndex
+		SetMenuOptionValue(OptionID, _characterTypes[MenuItemIndex])
+		if BaboQTECharacterType != prev && (BaboQTECharacterType == QTE_CHARACTER_TYPE_CUSTOM || prev == QTE_CHARACTER_TYPE_CUSTOM)
+			ForcePageReset()
+		endif
 	Endif
 Endevent
 
@@ -652,6 +832,18 @@ Event OnOptionMenuOpen(Int OptionID)
 	if OptionID == OID_PubicHair
 		SetMenuDialogOptions(PubicHairString)
 		SetMenuDialogStartIndex(PubicHairint)
+		SetMenuDialogDefaultIndex(0)
+	elseif OptionID == OID_BaboQTEHAnchor
+		SetMenuDialogOptions(_hAnchorList)
+		SetMenuDialogStartIndex(GetHAnchorIndex(BaboQTEHAnchor))
+		SetMenuDialogDefaultIndex(1)
+	elseif OptionID == OID_BaboQTEVAnchor
+		SetMenuDialogOptions(_vAnchorList)
+		SetMenuDialogStartIndex(GetVAnchorIndex(BaboQTEVAnchor))
+		SetMenuDialogDefaultIndex(0)
+	elseif OptionID == OID_BaboQTECharacterType
+		SetMenuDialogOptions(_characterTypes)
+		SetMenuDialogStartIndex(BaboQTECharacterType)
 		SetMenuDialogDefaultIndex(0)
 	Endif
 EndEvent
@@ -988,6 +1180,31 @@ ElseIf option == OID_DetectSpectator
 	SetSliderDialogDefaultValue(0.1)
 	SetSliderDialogRange(0.10, 3.00)
 	SetSliderDialogInterval(0.1)
+ElseIf Option == OID_BaboQTELimitTime							
+	SetSliderDialogStartValue(BaboQTELimitTime)
+	SetSliderDialogDefaultValue(12.0)
+	SetSliderDialogRange(1.0, 40.0)
+	SetSliderDialogInterval(1.0)
+ElseIf Option == OID_BaboQTEDifficulty
+	SetSliderDialogStartValue(BaboQTEDifficulty)
+	SetSliderDialogDefaultValue(12.0)
+	SetSliderDialogRange(1.0, 40.0)
+	SetSliderDialogInterval(1.0)
+ElseIf Option == OID_BaboQTEFontSize
+	SetSliderDialogStartValue(BaboQTEFontSize)
+	SetSliderDialogDefaultValue(32.0)
+	SetSliderDialogRange(10.0, 50.0)
+	SetSliderDialogInterval(1.0)
+ElseIf Option == OID_BaboQTEOffsetX
+	SetSliderDialogStartValue(BaboQTEOffsetX)
+	SetSliderDialogDefaultValue(0.0)
+	SetSliderDialogRange(0.0, 1280.0)
+	SetSliderDialogInterval(1.0)
+ElseIf Option == OID_BaboQTEOffsetY
+	SetSliderDialogStartValue(BaboQTEOffsetY)
+	SetSliderDialogDefaultValue(240.0)
+	SetSliderDialogRange(0.0, 720.0)
+	SetSliderDialogInterval(1.0)
 ElseIf Option == OID_BaboQTEMeterWidth							
 	SetSliderDialogStartValue(BaboQTEMeterWidth)
 	SetSliderDialogDefaultValue(250.0)
@@ -1012,25 +1229,76 @@ EndIf
 EndEvent
 
 event OnOptionKeyMapChange(int option, int keyCode, string conflictControl, string conflictName)
-	bool continue = true
-	; Check for conflict
-	if conflictControl != ""
-		string msg
-		if conflictName != ""
-			msg = "This key is already mapped to:\n'" + conflictControl + "'\n(" + conflictName + ")\n\nAre you sure you want to continue?"
-		else
-			msg = "This key is already mapped to:\n'" + conflictControl + "'\n\nAre you sure you want to continue?"
+	if Option == OID_NotificationKey
+		bool continue = true
+		; Check for conflict
+		if conflictControl != ""
+			string msg
+			if conflictName != ""
+				msg = "This key is already mapped to:\n'" + conflictControl + "'\n(" + conflictName + ")\n\nAre you sure you want to continue?"
+			else
+				msg = "This key is already mapped to:\n'" + conflictControl + "'\n\nAre you sure you want to continue?"
+			endIf
+			continue = ShowMessage(msg, true, "Yes", "No")
 		endIf
-		continue = ShowMessage(msg, true, "Yes", "No")
-	endIf
-	; Set allowed key change
-	if continue
-		if option == OID_NotificationKey
-			NotificationKey = keyCode			
+		; Set allowed key change
+		if continue
+			if option == OID_NotificationKey
+				NotificationKey = keyCode			
+			endIf
+			; Set MCM value
+			SetKeymapOptionValue(option, keyCode)
 		endIf
-		; Set MCM value
+	elseif Option == OID_BaboQTECustomKeyUp
+		if !IsValidQTECustomKey(keyCode)
+			ShowMessage("$TNTR_ALPHABET_ONLY", false)
+			return
+		endif
+		if keyCode == BaboQTECustomKeyDown || keyCode == BaboQTECustomKeyLeft || keyCode == BaboQTECustomKeyRight
+			ShowMessage("$TNTR_KEY_IS_ALREADY_MAPPED", false)
+			return
+		endif
+		BaboQTECustomKeyUp = keyCode
 		SetKeymapOptionValue(option, keyCode)
-	endIf
+		_characterTypeCustom[0] = QTECustomKeyToString(keyCode)
+		
+	elseif Option == OID_BaboQTECustomKeyDown
+		if !IsValidQTECustomKey(keyCode)
+			ShowMessage("$TNTR_ALPHABET_ONLY", false)
+			return
+		endif
+		if keyCode == BaboQTECustomKeyUp || keyCode == BaboQTECustomKeyLeft || keyCode == BaboQTECustomKeyRight
+			ShowMessage("$TNTR_KEY_IS_ALREADY_MAPPED", false)
+			return
+		endif
+		BaboQTECustomKeyDown = keyCode
+		SetKeymapOptionValue(option, keyCode)
+		_characterTypeCustom[1] = QTECustomKeyToString(keyCode)
+	elseif Option == OID_BaboQTECustomKeyLeft
+		if !IsValidQTECustomKey(keyCode)
+			ShowMessage("$TNTR_ALPHABET_ONLY", false)
+			return
+		endif
+		if keyCode == BaboQTECustomKeyUp || keyCode == BaboQTECustomKeyDown || keyCode == BaboQTECustomKeyRight
+			ShowMessage("$TNTR_KEY_IS_ALREADY_MAPPED", false)
+			return
+		endif
+		BaboQTECustomKeyLeft = keyCode
+		SetKeymapOptionValue(option, keyCode)
+		_characterTypeCustom[2] = QTECustomKeyToString(keyCode)
+	elseif Option == OID_BaboQTECustomKeyRight
+		if !IsValidQTECustomKey(keyCode)
+			ShowMessage("$TNTR_ALPHABET_ONLY", false)
+			return
+		endif
+		if keyCode == BaboQTECustomKeyUp || keyCode == BaboQTECustomKeyDown || keyCode == BaboQTECustomKeyLeft
+			ShowMessage("$TNTR_KEY_IS_ALREADY_MAPPED", false)
+			return
+		endif
+		BaboQTECustomKeyRight = keyCode
+		SetKeymapOptionValue(option, keyCode)
+		_characterTypeCustom[3] = QTECustomKeyToString(keyCode)
+	endif
 endEvent
 
 Event OnOptionSliderAccept(Int Option, Float Value)
@@ -1418,7 +1686,24 @@ Event OnOptionSliderAccept(Int Option, Float Value)
 		BaboDetectSpectatorSpeedfloat = Value
 		BaboDetectSpectatorUpdateInterval.SetValue(BaboDetectSpectatorSpeedfloat)
 		SetSliderOptionValue(option, BaboDetectSpectatorSpeedfloat, "{0.0}")
-		
+	ElseIf Option == OID_BaboQTELimitTime
+		BaboQTELimitTime = Value
+		SetSliderOptionValue(OID_BaboQTELimitTime, BaboQTELimitTime, "{0}")
+	ElseIf Option == OID_BaboQTEDifficulty
+		BaboQTEDifficulty = Value
+		SetSliderOptionValue(OID_BaboQTEDifficulty, BaboQTEDifficulty, "{0}")
+	ElseIf Option == OID_BaboQTEFontSize
+		BaboQTEFontSize = Value
+		TextQTE.FontSize = value as int
+		SetSliderOptionValue(OID_BaboQTEFontSize, BaboQTEFontSize, "{0}")
+	ElseIf Option == OID_BaboQTEOffsetX
+		BaboQTEOffsetX = Value
+		TextQTE.OffsetX = value
+		SetSliderOptionValue(OID_BaboQTEOffsetX, BaboQTEOffsetX, "{0}")
+	ElseIf Option == OID_BaboQTEOffsetY
+		BaboQTEOffsetY = Value
+		TextQTE.OffsetY = value
+		SetSliderOptionValue(OID_BaboQTEOffsetY, BaboQTEOffsetY, "{0}")
 	ElseIf Option == OID_BaboQTEMeterWidth											
 		BaboQTEMeterWidth = Value
 		QTEWidget.Width = Value
@@ -1577,7 +1862,7 @@ Event OnOptionSelect(Int Option)
 			SetToggleOptionValue(OID_BaboSoliloquySelfCommenteGlobal, 1)
 		EndIf
 
-		ElseIf (option == OID_BaboSoliloquySelfFreeCommenteGlobal)
+	ElseIf (option == OID_BaboSoliloquySelfFreeCommenteGlobal)
 		If BaboSoliloquySelfFreeCommentGlobal.getvalue() == 1
 			BaboSoliloquySelfFreeCommentGlobal.setvalue(0)
 			SetToggleOptionValue(OID_BaboSoliloquySelfFreeCommenteGlobal, 0)
@@ -1586,6 +1871,15 @@ Event OnOptionSelect(Int Option)
 			SetToggleOptionValue(OID_BaboSoliloquySelfFreeCommenteGlobal, 1)
 		EndIf
 		
+	ElseIf (option == OID_BaboTestQTEText)
+			TestQTEEnabled != TestQTEEnabled
+			ShowMessage("$ClosetheMenu") 
+			;self.DisplayBar()
+			TextQTE.start()
+			Utility.Wait(1.0)
+			self.TestTextQTE()
+			SetToggleOptionValue(OID_BaboTestQTEText, TestQTEEnabled)
+	
 	ElseIf (option == OID_BaboSexualHarassmentGlobal)
 		If BaboSexualHarassmentGlobal.getvalue() == 1
 			BaboSexualHarassmentGlobal.setvalue(0)
@@ -1914,6 +2208,8 @@ ElseIf (option == OID_BaboSoliloquySelfCommenteGlobal)
 		SetInfoText("$BaboConstantMonologueInfo")
 ElseIf (option == OID_BaboSoliloquySelfFreeCommenteGlobal)
 		SetInfoText("$BaboFreeMonologueInfo")
+ElseIf (option == OID_BaboQTELimitTime)
+		SetInfoText("$BaboQTELimitTimeInfo")
 ElseIf (option == LewdnessOID)
 		SetInfoText("$BaboLewdnessInfo")
 ElseIf (option == CorruptionOID)
@@ -2933,6 +3229,7 @@ Bool EFFStatus = False
 Bool SLSStatus = False
 
 Bool SexlabApproach_Installed
+Bool PeeAndFart_Installed
 Bool SkoomaWhore_Installed
 Bool DeviousDevicesIntegration_Installed
 Bool SimpleSlavery_Installed
@@ -2948,12 +3245,28 @@ Bool EFF_Installed
 Bool NFF_Installed
 Bool Precision_Installed
 
+int OID_BaboQTELimitTime
+int OID_BaboQTEDifficulty
+int OID_BaboQTEFontSize
+int OID_BaboQTEHAnchor
+int OID_BaboQTEVAnchor
+int OID_BaboQTEOffsetX
+int OID_BaboQTEOffsetY
+int OID_BaboQTECharacterType
+
+int OID_BaboQTECustomKeyUp
+int OID_BaboQTECustomKeyDown
+int OID_BaboQTECustomKeyLeft
+int OID_BaboQTECustomKeyRight
+
 int OID_BaboQTEColorBar
 int OID_BaboQTEMeterWidth
 int OID_BaboQTEMeterHeight
 int OID_BaboQTEAxisX
 int OID_BaboQTEAxisY
 int OID_BaboQTEDisplayBar
+
+int OID_BaboTestQTEText
 
 Int Property BaboQTEColorBar = 0xFFFFFF Auto Hidden
 Float Property BaboQTEMeterWidth = 350.0 Auto Hidden
@@ -2965,6 +3278,7 @@ int BaboDDIIntegrationOID
 int BaboFHUIntegrationOID
 int BaboSkoomaWhoreIntegrationOID
 int BaboSexlabApproachIntegrationOID
+int BaboPeeAndFartIntegrationOID
 int BaboBFIntegrationOID
 int BaboYameteIntegrationOID
 int BaboFertIntegrationOID
@@ -3075,6 +3389,7 @@ int BaboTraumaint
 float BaboDetectSpectatorSpeedfloat
 
 GlobalVariable Property BaboSexlabApproach auto
+GlobalVariable Property BaboPeeAndFart auto
 GlobalVariable Property BaboYamete auto
 GlobalVariable Property BaboSkoomaWhore auto
 GlobalVariable Property BaboDDI auto
@@ -3187,7 +3502,37 @@ BaboReputationMasterScript Property BRMQuest Auto
 BaboStealingArmorScript Property BSAQuest Auto
 Quest Property BaboEventMarkarthGuard Auto
 Quest Property BaboBadEnd Auto
+Quest Property BaboSexController Auto
 
 BaboQTEWidget Property QTEWidget Auto
 String Property BaboResistType = "$Strafe" Auto Hidden
 Int OID_BaboResistType
+
+float Property BaboQTELimitTime Auto
+float Property BaboQTEDifficulty Auto
+float Property BaboQTEFontSize Auto
+string Property BaboQTEHAnchor Auto
+string Property BaboQTEVAnchor Auto
+float Property BaboQTEOffsetX Auto
+float Property BaboQTEOffsetY Auto
+int Property BaboQTECharacterType Auto
+
+int Property BaboQTECustomKeyUp Auto
+int Property BaboQTECustomKeyDown Auto
+int Property BaboQTECustomKeyLeft Auto
+int Property BaboQTECustomKeyRight Auto
+bool TestQTEEnabled
+
+string[] _hAnchorList
+string[] _vAnchorList
+string[] _characterTypes
+string[] _characterTypeABXY
+string[] _characterTypeBAYX
+string[] _characterTypeArrow
+string[] _characterTypeCustom
+
+int Property QTE_CHARACTER_TYPE_ABXY = 0 AutoReadOnly
+int Property QTE_CHARACTER_TYPE_BAYX = 1 AutoReadOnly
+int Property QTE_CHARACTER_TYPE_CUSTOM = 2 AutoReadOnly
+
+BaboQTETextWidgetEx Property TextQTE Auto

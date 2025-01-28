@@ -1,0 +1,7 @@
+Scriptname BaboKidnapConfiscateChestScript extends ReferenceAlias  
+
+;Quest Property BaboKidnapEvent Auto
+GlobalVariable Property BaboKidnapConfiscateChestAccessGlobal Auto
+Event Onactivate(ObjectReference akActionRef)
+	BaboKidnapConfiscateChestAccessGlobal.setvalue(1)
+EndEvent

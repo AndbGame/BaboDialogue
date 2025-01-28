@@ -30,7 +30,7 @@ Faction Property PlayerHorseFaction Auto
 Faction Property BaboPlayerHorseFaction Auto
 Faction Property PlayerFaction Auto
 Faction Property CrimeFactionReach  Auto
-Faction Property BaboFactionStallionSkewerTitle  Auto
+Faction Property BaboFactionDoggyWaifuTitle  Auto
 
 ObjectReference Property BaboTalkingActivatorCreatureRef Auto
 ObjectReference Property BaboMiscCellXmarker Auto
@@ -42,7 +42,7 @@ EndFunction
 
 Function Initial()
 	MolestedStack = 0
-	HorseArousal()
+	CreatureArousal()
 	BaboAnimalCareOwnerOfferedGlobal.setvalue(0)
 	BaboAnimalCareWanttoMatePlayerGlobal.setvalue(0)
 EndFunction
@@ -86,14 +86,17 @@ Function HorseTalk()
 	endif
 EndFunction
 
-Function HorseArousal()
+Function CreatureArousal()
 	(BaboSexController as BaboSexControllerManager).SetSLAArousal(CreatureRef.getreference() as actor, 100)
 EndFunction
 
-Function HorseDied()
-	(BaboSexController as BaboSexControllerManager).ReputationDecrease(30, 15)
-	CrimeFactionReach.modcrimegold(500)
-	;BaboEventAnimalCareMarkarth.setstage(255)
+Function PetDied()
+	(BaboSexController as BaboSexControllerManager).ReputationDecrease(15, 0)
+	CrimeFactionReach.modcrimegold(50)
+EndFunction
+
+Function PetDiedPermit()
+	(BaboSexController as BaboSexControllerManager).ReputationDecrease(5, 0)
 EndFunction
 
 Function MyHorse()
@@ -107,8 +110,8 @@ CreatureRef.clear()
 EndFunction
 
 Function AddTitle()
-(BaboReputationScript as BaboReputationMasterScript).AddingTitletoPlayerRef(BaboFactionStallionSkewerTitle)
-(BaboReputationScript as BaboReputationMasterScript).SetTitleGlobal(BaboGlobalStallionSkewerTitle, 1)
+(BaboReputationScript as BaboReputationMasterScript).AddingTitletoPlayerRef(BaboFactionDoggyWaifuTitle)
+(BaboReputationScript as BaboReputationMasterScript).SetTitleGlobal(BaboFactionDoggyWaifuTitle, 1)
 EndFunction
 
 Function FinalInspection()
@@ -141,7 +144,7 @@ int choice = BaboAnimalCareDiagnosis01.Show()
 
 EndFunction
 
-Function InspectHorse()
+Function Whattodowithpet;InspectHorse()
 BaboTalkingActivatorCreatureRef.moveto(BaboMiscCellXmarker)
 int choice = BaboAnimalCareCheckup.Show()
 CreatureActor = CreatureRef.getreference() as actor
@@ -221,10 +224,13 @@ UpdateKeyRegistery(true)
 
 EndFunction
 
-Function MatewithHorse(String SexTag)
-	Actor HorseActor = CreatureRef.getreference() as actor
-	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, HorseActor, None, None, None, SexTag, None, None, true, "AnimalCareEventMarkarthAS", "AnimalCareEventMarkarthAfterSex", false)
+Function MatewithPet(String SexTag)
+	Actor PetActor = CreatureRef.getreference() as actor
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, PetActor, None, None, None, SexTag, None, None, true, "AnimalCareEventMarkarthAS", "AnimalCareEventMarkarthAfterSex", false)
 	(BaboSexController as BaboSexControllerManager).SpectatorWOEnemyActivate(PlayerRef, None)
+	if (OwnerRef.getereference() as actor).HasLos(PlayerRef)
+		(BaboSexController as BaboSexControllerManager).BEventAnimalCareMarkarthScenePlay(2)
+	endif
 EndFunction
 
 Function UpdateKeyRegistery(bool register)

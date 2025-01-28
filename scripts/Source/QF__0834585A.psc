@@ -2,26 +2,6 @@
 ;NEXT FRAGMENT INDEX 26
 Scriptname QF__0834585A Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY myHoldLocation
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldLocation Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Scene_Marker2
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Scene_Marker2 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Scene_Marker1
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Scene_Marker1 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY PlayerAlias
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PlayerAlias Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY myHoldSons
 ;ALIAS PROPERTY TYPE LocationAlias
 LocationAlias Property Alias_myHoldSons Auto
@@ -32,14 +12,19 @@ LocationAlias Property Alias_myHoldSons Auto
 LocationAlias Property Alias_myHoldContested Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY CenterMarker
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_CenterMarker Auto
+;BEGIN ALIAS PROPERTY myHoldImperial
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldImperial Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY SerialKiller
+;BEGIN ALIAS PROPERTY myHoldLocation
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldLocation Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Scene_Marker1
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SerialKiller Auto
+ReferenceAlias Property Alias_Scene_Marker1 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY TRIGGER
@@ -47,9 +32,24 @@ ReferenceAlias Property Alias_SerialKiller Auto
 ReferenceAlias Property Alias_TRIGGER Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY myHoldImperial
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldImperial Auto
+;BEGIN ALIAS PROPERTY SerialKiller
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_SerialKiller Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY PlayerAlias
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerAlias Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY CenterMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_CenterMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Scene_Marker2
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Scene_Marker2 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_21
@@ -77,6 +77,29 @@ kmyQuest.PacifyAlias(Alias_SerialKiller)
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_22
+Function Fragment_22()
+;BEGIN AUTOCAST TYPE BaboDiaQuest
+Quest __temp = self as Quest
+BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.CompatiblityCheck(True)
+kmyQuest.ChallengeStart(Alias_SerialKiller)
+(BaboSexController as BaboSexControllerManager).EncounterEvent05Messagebox(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_24
+Function Fragment_24()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).EncounterEvent05Messagebox(2)
+setstage(255)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_12
 Function Fragment_12()
 ;BEGIN AUTOCAST TYPE BaboDiaQuest
@@ -100,40 +123,11 @@ Function Fragment_25()
 (BaboSexController as BaboSexControllerManager).EncounterEvent05Messagebox(3)
 Actor Kidnapper = Alias_SerialKiller.Getreference() as actor
 Alias_SerialKiller.clear()
-if BaboKidnapEvent.isrunning()
-BaboKidnapEvent.setstage(255)
-BaboKidnapEvent.stop()
-Utility.wait(1.0)
-(BaboSexController as BaboSexControllerManager).KidnapQuestStart(Kidnapper, none, Utility.randomint(4, 6), None)
-else
-(BaboSexController as BaboSexControllerManager).KidnapQuestStart(Kidnapper, none, Utility.randomint(4, 6), None)
-endif
-Utility.wait(7.0)
+
+if (BaboSexController as BaboSexControllerManager).KidnapQuestStart(Kidnapper, none, Utility.randomint(4, 6), None)
 (BaboKidnapEvent as BaboKidnapEvenScript).StartUptheEvent(4)
+endif
 setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_24
-Function Fragment_24()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EncounterEvent05Messagebox(2)
-setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_22
-Function Fragment_22()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.CompatiblityCheck(True)
-kmyQuest.ChallengeStart(Alias_SerialKiller)
-(BaboSexController as BaboSexControllerManager).EncounterEvent05Messagebox(1)
 ;END CODE
 EndFunction
 ;END FRAGMENT

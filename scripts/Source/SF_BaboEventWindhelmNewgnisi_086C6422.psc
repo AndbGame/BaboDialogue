@@ -6,6 +6,7 @@ Scriptname SF_BaboEventWindhelmNewgnisi_086C6422 Extends Scene Hidden
 Function Fragment_0()
 ;BEGIN CODE
 getowningquest().setstage(20)
+stop()
 ;END CODE
 EndFunction
 ;END FRAGMENT

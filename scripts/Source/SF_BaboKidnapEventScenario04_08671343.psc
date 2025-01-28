@@ -2,19 +2,19 @@
 ;NEXT FRAGMENT INDEX 4
 Scriptname SF_BaboKidnapEventScenario04_08671343 Extends Scene Hidden
 
-;BEGIN FRAGMENT Fragment_3
-Function Fragment_3()
-;BEGIN CODE
-(getowningquest() as BaboKidnapEvenScript).PlayerTalkXmarkerReturn()
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1()
 ;BEGIN CODE
 (Getowningquest() as BaboKidnapEvenScript).StartUptheEvent(BaboKidnapScenarioe.getvalue() as int)
 stop()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_3
+Function Fragment_3()
+;BEGIN CODE
+(getowningquest() as BaboKidnapEvenScript).PlayerTalkXmarkerReturn()
 ;END CODE
 EndFunction
 ;END FRAGMENT

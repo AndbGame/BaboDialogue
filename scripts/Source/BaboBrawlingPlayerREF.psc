@@ -24,8 +24,6 @@ Bool Property BacktoNormal = false Auto
 
 Bool Property Yeskeyword = false Auto
 Bool Property InitialEssential = true Auto
-
-Bool Property InitialEssential = true Auto
 {This toggle needs to be set if you want to designate a certain enemy type with keywords.}
 
 Referencealias property Foe01 Auto

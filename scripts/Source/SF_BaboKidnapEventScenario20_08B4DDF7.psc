@@ -8,22 +8,22 @@ Function Fragment_1()
 if BaboKidnapEscapeAttempts.getvalue() == 1
 	(Getowningquest() as BaboKidnapEvenScript).SlaveTrust(-4)
 	if BaboKidnapEscapeResponse.getvalue() == 0
-		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(5);Violence
+		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(5, Kidnapper01.getreference() as actor);Violence
 	elseif BaboKidnapEscapeResponse.getvalue() == 1
-		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(4);Violence + Drug
+		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(4, Kidnapper01.getreference() as actor);Violence + Drug
 	elseif BaboKidnapEscapeResponse.getvalue() == 2
-		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(2);Sex
+		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(2, Kidnapper01.getreference() as actor);Sex
 	else
-		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(2);Sex
+		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(2, Kidnapper01.getreference() as actor);Sex
 	endif
 	
 elseif BaboKidnapEscapeAttempts.getvalue() >= 2
 	(Getowningquest() as BaboKidnapEvenScript).SlaveTrust(-10)
 	if BaboPlayerYoke.getvalue() == 0 && BaboSlaverTrust.getvalue() <= 30
-		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(6);DDI
+		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(6, Kidnapper01.getreference() as actor);DDI
 	else
 		BaboKidnapEscapeResponse.setvalue(2)
-		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(4);Violence + Drug + Sex
+		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(4, Kidnapper01.getreference() as actor);Violence + Drug + Sex
 		;Violence and sex
 	endif
 	
@@ -32,9 +32,9 @@ else; no BaboKidnapEscapeAttempts
 	(Getowningquest() as BaboKidnapEvenScript).SlaveTrust(-2)
 	
 	if BaboKidnapEscapeResponse.getvalue() == 0
-		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(1);blowjob
+		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(1, Kidnapper01.getreference() as actor);blowjob
 	elseif BaboKidnapEscapeResponse.getvalue() == 1
-		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(2);Sex
+		(Getowningquest() as BaboKidnapEvenScript).GivePunishment(2, Kidnapper01.getreference() as actor);Sex
 	elseif BaboKidnapEscapeResponse.getvalue() == 2
 		(Getowningquest() as BaboKidnapEvenScript).StartUptheEvent(1);No punishment
 	endif
@@ -72,4 +72,6 @@ GlobalVariable Property BaboSlaverTrust  Auto
 
 GlobalVariable Property BaboPlayerYoke  Auto  
 
-GlobalVariable Property BaboKidnapEscapeResponse  Auto  
+GlobalVariable Property BaboKidnapEscapeResponse  Auto 
+
+ReferenceAlias Property Kidnapper01 Auto

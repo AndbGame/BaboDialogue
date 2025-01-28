@@ -2,51 +2,6 @@
 ;NEXT FRAGMENT INDEX 30
 Scriptname QF_BaboEventWindhelmNewgnisi_086B7103 Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY ArgonianH02
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ArgonianH02 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Citizen05Ref
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Citizen05Ref Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Citizen04Ref
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Citizen04Ref Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY ArgonianH01
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ArgonianH01 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY PlayerRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PlayerRef Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Citizen01Ref
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Citizen01Ref Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY InnKeeperRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_InnKeeperRef Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY ArgonianH03
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ArgonianH03 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Citizen06Ref
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Citizen06Ref Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY ArgonianH01Copy
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_ArgonianH01Copy Auto
@@ -55,6 +10,26 @@ ReferenceAlias Property Alias_ArgonianH01Copy Auto
 ;BEGIN ALIAS PROPERTY BrunwulfREF
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_BrunwulfREF Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Citizen05Ref
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Citizen05Ref Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY PlayerRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerRef Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY ArgonianH01
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ArgonianH01 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY ArgonianH03
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ArgonianH03 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Citizen02Ref
@@ -66,6 +41,70 @@ ReferenceAlias Property Alias_Citizen02Ref Auto
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_Citizen03Ref Auto
 ;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY ArgonianH02
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ArgonianH02 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY InnKeeperRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_InnKeeperRef Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Citizen01Ref
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Citizen01Ref Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Citizen04Ref
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Citizen04Ref Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Citizen06Ref
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Citizen06Ref Auto
+;END ALIAS PROPERTY
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+(BaboEventCornerClubStageTriggerBox as BaboDefaultOnEnterTriggerScript).ReArmTrigger()
+BMQuest.RecoverControl(true)
+(Alias_ArgonianH01.getRef() as Actor).EvaluatePackage()
+(Alias_ArgonianH02.getRef() as Actor).EvaluatePackage()
+(Alias_ArgonianH03.getRef() as Actor).EvaluatePackage()
+(Alias_InnKeeperRef.getRef() as Actor).EvaluatePackage()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_23
+Function Fragment_23()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.GoStateBefore()
+setstage(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_29
+Function Fragment_29()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.TriggerBoxReset()
+;After killing the argonians. Stand by for another spin.
+;END CODE
+EndFunction
+;END FRAGMENT
 
 ;BEGIN FRAGMENT Fragment_28
 Function Fragment_28()
@@ -79,6 +118,21 @@ Utility.wait(5.0)
 sendModEvent("SSLV Entry")
 BMQuest.CorruptionExp(3.0)
 Setstage(245)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.SendingSexEvent(Alias_PlayerRef, Alias_ArgonianH01)
+BRMQuest.SexCount(2)
+BMQuest.CorruptionExp(1.0)
+;{After rape, It goes to Stage 65}
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -107,68 +161,6 @@ BRMQuest.SetTitleGlobal(BaboGlobalArgonianDisplayedFuckToyTitle, 1)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_5
-Function Fragment_5()
-;BEGIN CODE
-Scene02.Stop()
-BMQuest.SexCustom(Alias_PlayerRef, Alias_ArgonianH01, None, None, None, Conquering, Vaginal, MF, True, "WNAS01", "WindhelmNewgnisisAfterSex01", true)
-BRMQuest.SexCount(2)
-BMQuest.CorruptionExp(1.0)
-;{I am defeated. After sex twice, It goes to Stage 55}
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_12
-Function Fragment_12()
-;BEGIN CODE
-BMQuest.LosingControl()
-(Alias_InnKeeperRef.getRef() as Actor).Moveto(BaboEventNewGnisisInnkeeperXmarker)
-Utility.wait(1.0)
-(Alias_InnKeeperRef.getRef() as Actor).EvaluatePackage()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_23
-Function Fragment_23()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.GoStateBefore()
-setstage(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_24
-Function Fragment_24()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.GoStateBefore()
-kmyQuest.TriggerBoxReset()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_29
-Function Fragment_29()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.TriggerBoxReset()
-;After killing the argonians. Stand by for another spin.
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_3
 Function Fragment_3()
 ;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
@@ -182,51 +174,6 @@ BMQuest.ChallengeStart(Alias_ArgonianH02)
 BMQuest.ChallengeStart(Alias_ArgonianH03)
 TheDoorRef.Lock(True, False)
 kmyQuest.Messagebox(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_19
-Function Fragment_19()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-BRMQuest.DecreaseReputation(-15, 0)
-BRMQuest.AddingTitletoPlayerRef(BaboFactionArgonianDefeatedTitle)
-BRMQuest.SetTitleGlobal(BaboGlobalArgonianDefeatedTitle, 1)
-kmyQuest.Messagebox(5)
-Setstage(100)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_11
-Function Fragment_11()
-;BEGIN CODE
-(Alias_ArgonianH01.getRef() as Actor).EvaluatePackage()
-(Alias_ArgonianH02.getRef() as Actor).EvaluatePackage()
-(Alias_ArgonianH03.getRef() as Actor).EvaluatePackage()
-TheDoorRef.Lock(False, False)
-Utility.wait(20)
-Setstage(92)
-;{After Sex they leave}
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_22
-Function Fragment_22()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.GoState()
-kmyQuest.RegisterUpdate(1)
-;{this will return it to stage 5}
-BMQuest.CompatiblityCheck(False)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -264,30 +211,128 @@ kmyQuest.Messagebox(4)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_18
-Function Fragment_18()
+;BEGIN FRAGMENT Fragment_22
+Function Fragment_22()
 ;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
 Quest __temp = self as Quest
 BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
 ;END AUTOCAST
 ;BEGIN CODE
-;{Finally Damn Argonians are all dead. Now Everything is back to normal. I wish...}
-kmyQuest.VisitAgainToggle(False)
+kmyQuest.GoState()
+kmyQuest.RegisterUpdate(1)
+;{this will return it to stage 5}
+BMQuest.CompatiblityCheck(False)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+BMQuest.CompatiblityCheck(True)
+kmyQuest.SpawnArgonians()
+kmyQuest.TriggerCountPlus(1)
+BMQuest.LosingControl()
+Scene01.Start()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_12
+Function Fragment_12()
+;BEGIN CODE
+BMQuest.LosingControl()
+(Alias_InnKeeperRef.getRef() as Actor).Moveto(BaboEventNewGnisisInnkeeperXmarker)
+Utility.wait(1.0)
+(Alias_InnKeeperRef.getRef() as Actor).EvaluatePackage()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_27
+Function Fragment_27()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+;(Alias_PlayerRef as BaboBrawlingPlayerREF).CheckEssential()
+BMQuest.ChallengeStart(Alias_ArgonianH01Copy)
+kmyQuest.Messagebox(3)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_11
+Function Fragment_11()
+;BEGIN CODE
+(Alias_ArgonianH01.getRef() as Actor).EvaluatePackage()
+(Alias_ArgonianH02.getRef() as Actor).EvaluatePackage()
+(Alias_ArgonianH03.getRef() as Actor).EvaluatePackage()
+TheDoorRef.Lock(False, False)
+Utility.wait(20)
+Setstage(92)
+;{After Sex they leave}
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_16
+Function Fragment_16()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+sendModEvent("SSLV Entry")
+BMQuest.CorruptionExp(3.0)
+BMQuest.RecoverControl(true)
+kmyQuest.PlayPantingAnim()
+kmyQuest.UnEquipZazItem()
+Setstage(245)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
+;BEGIN CODE
+(Alias_ArgonianH01.getRef() as Actor).EvaluatePackage()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_13
+Function Fragment_13()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+;{Argonians are all dead. Now Everything is back to normal.}
 BMQuest.DisableEssential()
-BMQuest.PacifyAlias(Alias_ArgonianH01)
 BMQuest.Recovercontrol(true)
 kmyQuest.GoState()
+kmyQuest.VisitAgainToggle(False)
 kmyQuest.RegisterUpdate(168)
-Alias_ArgonianH01.GetReference().DeleteWhenAble()
-Alias_ArgonianH01Copy.GetReference().DeleteWhenAble()
-Alias_ArgonianH02.GetReference().DeleteWhenAble()
-Alias_ArgonianH03.GetReference().DeleteWhenAble()
+TheDoorRef.Lock(False, False)
+BRMQuest.AddingTitletoPlayerRef(BaboFactionArgonianDefeatTitle)
+BRMQuest.IncreaseReputation(10, 3)
 Alias_InnKeeperRef.Clear()
+
+Actor[] actors = New Actor[3]
+actors[0] = (Alias_ArgonianH01.getreference() as actor)
+actors[1] = (Alias_ArgonianH02.getreference() as actor)
+actors[2] = (Alias_ArgonianH03.getreference() as actor)
+BMQuest.DeleteWhenAbleWithTimeout(actors, 60)
+
 Alias_ArgonianH01.Clear()
-Alias_ArgonianH01Copy.Clear()
 Alias_ArgonianH02.Clear()
 Alias_ArgonianH03.Clear()
-
 Alias_BrunwulfRef.Clear()
 Alias_Citizen01Ref.Clear()
 Alias_Citizen02Ref.Clear()
@@ -296,6 +341,23 @@ Alias_Citizen04Ref.Clear()
 Alias_Citizen05Ref.Clear()
 Alias_Citizen06Ref.Clear()
 BMQuest.CompatiblityCheck(False)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+BMQuest.pacifyAlias(Alias_ArgonianH01)
+BMQuest.pacifyAlias(Alias_ArgonianH02)
+BMQuest.pacifyAlias(Alias_ArgonianH03)
+(Alias_PlayerRef as BaboBrawlingPlayerREF).ClearEssential()
+Utility.wait(1.0)
+Scene02.Start()
+Utility.wait(1.0)
+BMQuest.LosingControl()
+Utility.wait(1.0)
+TheDoorRef.Lock(False, False)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -313,31 +375,55 @@ kmyQuest.SpawnCopyArgonian()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
+;BEGIN FRAGMENT Fragment_24
+Function Fragment_24()
 ;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
 Quest __temp = self as Quest
 BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.SendingSexEvent(Alias_PlayerRef, Alias_ArgonianH01)
-BRMQuest.SexCount(2)
-BMQuest.CorruptionExp(1.0)
-;{After rape, It goes to Stage 65}
+kmyQuest.GoStateBefore()
+kmyQuest.TriggerBoxReset()
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_27
-Function Fragment_27()
+;BEGIN FRAGMENT Fragment_20
+Function Fragment_20()
 ;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
 Quest __temp = self as Quest
 BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
 ;END AUTOCAST
 ;BEGIN CODE
-;(Alias_PlayerRef as BaboBrawlingPlayerREF).CheckEssential()
-BMQuest.ChallengeStart(Alias_ArgonianH01Copy)
-kmyQuest.Messagebox(3)
+;{I am a slave now... My reputation hit the bottom...}
+kmyQuest.DisableTorturePole()
+BMQuest.DisableEssential()
+BMQuest.Recovercontrol()
+BRMQuest.DecreaseReputation(-25, 0)
+kmyQuest.GoState()
+kmyQuest.RegisterUpdate(168)
+
+Actor[] actors = New Actor[4]
+actors[0] = (Alias_ArgonianH01.getreference() as actor)
+actors[1] = (Alias_ArgonianH02.getreference() as actor)
+actors[2] = (Alias_ArgonianH03.getreference() as actor)
+actors[2] = (Alias_ArgonianH01Copy.getreference() as actor)
+BMQuest.DeleteWhenAbleWithTimeout(actors, 60)
+
+Alias_InnKeeperRef.Clear()
+Alias_ArgonianH01.Clear()
+Alias_ArgonianH01Copy.Clear()
+Alias_ArgonianH02.Clear()
+Alias_ArgonianH03.Clear()
+
+Alias_BrunwulfRef.Clear()
+Alias_Citizen01Ref.Clear()
+Alias_Citizen02Ref.Clear()
+Alias_Citizen03Ref.Clear()
+Alias_Citizen04Ref.Clear()
+Alias_Citizen05Ref.Clear()
+Alias_Citizen06Ref.Clear()
+BMQuest.CompatiblityCheck(False)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -362,10 +448,14 @@ kmyQuest.PlayPantingAnim()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
+;BEGIN FRAGMENT Fragment_5
+Function Fragment_5()
 ;BEGIN CODE
-(Alias_ArgonianH01.getRef() as Actor).EvaluatePackage()
+Scene02.Stop()
+BMQuest.SexCustom(Alias_PlayerRef, Alias_ArgonianH01, None, None, None, Conquering, Vaginal, MF, True, "WNAS01", "WindhelmNewgnisisAfterSex01", true)
+BRMQuest.SexCount(2)
+BMQuest.CorruptionExp(1.0)
+;{I am defeated. After sex twice, It goes to Stage 55}
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -386,23 +476,6 @@ kmyQuest.PlayPantingAnim()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-sendModEvent("SSLV Entry")
-BMQuest.CorruptionExp(3.0)
-BMQuest.RecoverControl(true)
-kmyQuest.PlayPantingAnim()
-kmyQuest.UnEquipZazItem()
-Setstage(245)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_21
 Function Fragment_21()
 ;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
@@ -415,9 +488,13 @@ BMQuest.Recovercontrol()
 kmyQuest.RegisterUpdate(24)
 TheDoorRef.Lock(False, False)
 Alias_InnKeeperRef.Clear()
-Alias_ArgonianH01.GetReference().DeleteWhenAble()
-Alias_ArgonianH02.GetReference().DeleteWhenAble()
-Alias_ArgonianH03.GetReference().DeleteWhenAble()
+
+Actor[] actors = New Actor[3]
+actors[0] = (Alias_ArgonianH01.getreference() as actor)
+actors[1] = (Alias_ArgonianH02.getreference() as actor)
+actors[2] = (Alias_ArgonianH03.getreference() as actor)
+BMQuest.DeleteWhenAbleWithTimeout(actors, 60)
+
 Alias_ArgonianH01.Clear()
 Alias_ArgonianH02.Clear()
 Alias_ArgonianH03.Clear()
@@ -435,24 +512,58 @@ BMQuest.CompatiblityCheck(False)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_20
-Function Fragment_20()
+;BEGIN FRAGMENT Fragment_15
+Function Fragment_15()
 ;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
 Quest __temp = self as Quest
 BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
 ;END AUTOCAST
 ;BEGIN CODE
-;{I am a slave now... My reputation hit the bottom...}
-kmyQuest.DisableTorturePole()
+NMScript.BaboEventWindhelmNewgnisisScene05.Stop()
+;{Argonian took me...}
+kmyQuest.DraggingtoSexMarketWithPossibility()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_19
+Function Fragment_19()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+BRMQuest.DecreaseReputation(-15, 0)
+BRMQuest.AddingTitletoPlayerRef(BaboFactionArgonianDefeatedTitle)
+BRMQuest.SetTitleGlobal(BaboGlobalArgonianDefeatedTitle, 1)
+kmyQuest.Messagebox(5)
+Setstage(100)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_18
+Function Fragment_18()
+;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
+Quest __temp = self as Quest
+BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
+;END AUTOCAST
+;BEGIN CODE
+;{Finally Damn Argonians are all dead. Now Everything is back to normal. I wish...}
+kmyQuest.VisitAgainToggle(False)
 BMQuest.DisableEssential()
-BMQuest.Recovercontrol()
-BRMQuest.DecreaseReputation(-25, 0)
+BMQuest.PacifyAlias(Alias_ArgonianH01)
+BMQuest.Recovercontrol(true)
 kmyQuest.GoState()
 kmyQuest.RegisterUpdate(168)
-Alias_ArgonianH01.GetReference().DeleteWhenAble()
-Alias_ArgonianH01Copy.GetReference().DeleteWhenAble()
-Alias_ArgonianH02.GetReference().DeleteWhenAble()
-Alias_ArgonianH03.GetReference().DeleteWhenAble()
+
+Actor[] actors = New Actor[4]
+actors[0] = (Alias_ArgonianH01.getreference() as actor)
+actors[1] = (Alias_ArgonianH02.getreference() as actor)
+actors[2] = (Alias_ArgonianH03.getreference() as actor)
+actors[2] = (Alias_ArgonianH01Copy.getreference() as actor)
+BMQuest.DeleteWhenAbleWithTimeout(actors, 60)
+
 Alias_InnKeeperRef.Clear()
 Alias_ArgonianH01.Clear()
 Alias_ArgonianH01Copy.Clear()
@@ -471,53 +582,15 @@ BMQuest.CompatiblityCheck(False)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
+;BEGIN FRAGMENT Fragment_6
+Function Fragment_6()
 ;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
 Quest __temp = self as Quest
 BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
 ;END AUTOCAST
 ;BEGIN CODE
-BMQuest.CompatiblityCheck(True)
-kmyQuest.SpawnArgonians()
-kmyQuest.TriggerCountPlus(1)
-BMQuest.LosingControl()
-Scene01.Start()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_13
-Function Fragment_13()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-;{Argonians are all dead. Now Everything is back to normal.}
-BMQuest.DisableEssential()
-BMQuest.Recovercontrol(true)
-kmyQuest.GoState()
-kmyQuest.VisitAgainToggle(False)
-kmyQuest.RegisterUpdate(168)
-TheDoorRef.Lock(False, False)
-BRMQuest.AddingTitletoPlayerRef(BaboFactionArgonianDefeatTitle)
-BRMQuest.IncreaseReputation(10, 3)
-Alias_InnKeeperRef.Clear()
-Alias_ArgonianH01.GetReference().DeleteWhenAble()
-Alias_ArgonianH02.GetReference().DeleteWhenAble()
-Alias_ArgonianH03.GetReference().DeleteWhenAble()
-Alias_ArgonianH01.Clear()
-Alias_ArgonianH02.Clear()
-Alias_ArgonianH03.Clear()
-Alias_BrunwulfRef.Clear()
-Alias_Citizen01Ref.Clear()
-Alias_Citizen02Ref.Clear()
-Alias_Citizen03Ref.Clear()
-Alias_Citizen04Ref.Clear()
-Alias_Citizen05Ref.Clear()
-Alias_Citizen06Ref.Clear()
-BMQuest.CompatiblityCheck(False)
+kmyQuest.BaboEventWindhelmNewgnisisScene03.Start()
+;{After the Scene, It goes to Stage 60(If killed one of them) or 85(failed to kill even one)}
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -533,64 +606,6 @@ kmyQuest.BaboEventWindhelmNewgnisisScene03.Stop()
 Utility.wait(1.0)
 kmyQuest.BaboEventWindhelmNewgnisisScene04.Start()
 ;{After the Scene, It goes to Stage 85}
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_6
-Function Fragment_6()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.BaboEventWindhelmNewgnisisScene03.Start()
-;{After the Scene, It goes to Stage 60(If killed one of them) or 85(failed to kill even one)}
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-Scene01.Stop()
-(BaboEventCornerClubStageTriggerBox as BaboDefaultOnEnterTriggerScript).ReArmTrigger()
-BMQuest.RecoverControl(true)
-(Alias_ArgonianH01.getRef() as Actor).EvaluatePackage()
-(Alias_ArgonianH02.getRef() as Actor).EvaluatePackage()
-(Alias_ArgonianH03.getRef() as Actor).EvaluatePackage()
-(Alias_InnKeeperRef.getRef() as Actor).EvaluatePackage()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-BMQuest.pacifyAlias(Alias_ArgonianH01)
-BMQuest.pacifyAlias(Alias_ArgonianH02)
-BMQuest.pacifyAlias(Alias_ArgonianH03)
-BMQuest.DisableEssential()
-Utility.wait(1.0)
-Scene02.Start()
-Utility.wait(1.0)
-BMQuest.LosingControl()
-Utility.wait(1.0)
-TheDoorRef.Lock(False, False)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_15
-Function Fragment_15()
-;BEGIN AUTOCAST TYPE BaboEventNewgnisisMasterScript
-Quest __temp = self as Quest
-BaboEventNewgnisisMasterScript kmyQuest = __temp as BaboEventNewgnisisMasterScript
-;END AUTOCAST
-;BEGIN CODE
-NMScript.BaboEventWindhelmNewgnisisScene05.Stop()
-;{Argonian took me...}
-kmyQuest.DraggingtoSexMarketWithPossibility()
 ;END CODE
 EndFunction
 ;END FRAGMENT

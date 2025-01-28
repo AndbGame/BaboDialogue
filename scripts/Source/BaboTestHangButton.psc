@@ -3,7 +3,7 @@ Scriptname BaboTestHangButton extends ObjectReference
 Actor Property PlayerRef Auto
 Quest Property BaboSexController Auto
 objectreference property BaboTestRopeRef auto
-
+Actorbase Property BaboDefeatedSlaveF Auto
 
 event onCellAttach()
 	self.blockActivation(false)
@@ -11,7 +11,7 @@ endevent
 
 event onActivate(objectReference akActivator)
 	Debug.notification("Hanging Event Test")
-	(BaboSexController as BaboSexControllerManager).HangingActor(PlayerRef, BaboTestRopeRef, True, False)
+	(BaboSexController as BaboSexControllerManager).HangingActor(PlayerRef.placeactoratme(BaboDefeatedSlaveF), BaboTestRopeRef, True, false)
 	gotostate("QR")
 endevent
 

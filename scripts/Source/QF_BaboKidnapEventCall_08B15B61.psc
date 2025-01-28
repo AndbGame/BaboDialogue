@@ -2,15 +2,35 @@
 ;NEXT FRAGMENT INDEX 5
 Scriptname QF_BaboKidnapEventCall_08B15B61 Extends Quest Hidden
 
+;BEGIN ALIAS PROPERTY KidnapperA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapperA Auto
+;END ALIAS PROPERTY
+
 ;BEGIN ALIAS PROPERTY KidnapperB
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_KidnapperB Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY KidnapperA
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_KidnapperA Auto
-;END ALIAS PROPERTY
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+if BaboKidnapEvent.isrunning()
+Debug.notification("Kidnap event is already running")
+else
+setstage(20)
+endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+stop()
+;END CODE
+EndFunction
+;END FRAGMENT
 
 ;BEGIN FRAGMENT Fragment_3
 Function Fragment_3()
@@ -28,42 +48,16 @@ else
 akactor2 = BaboFollowerStandbyMarkerRef.placeactoratme(BaboKidnapperGuardBossChar0, 4)
 endif
 
+actor guard01 = BaboFollowerStandbyMarkerRef.placeactoratme(BaboKidnapperGuard, 4)
+actor guard02 = BaboFollowerStandbyMarkerRef.placeactoratme(BaboKidnapperGuard, 4)
+actor guard03 = BaboFollowerStandbyMarkerRef.placeactoratme(BaboKidnapperGuard, 4)
+
 int iscenario = Utility.randomint(20, 25)
-while !BaboKidnapEvent.isrunning()
-(BaboSexController as BaboSexControllerManager).KidnapQuestStart(akactor, akactor2, iscenario, None)
-Utility.wait(10.0)
-endwhile
+if (BaboSexController as BaboSexControllerManager).KidnapQuestStart(akactor, akactor2, iscenario, None)
+(BaboKidnapEvent as BaboKidnapEvenScript).FillKidnapperActors(None, None, guard01, guard02, guard03, None, None, None)
 (BaboKidnapEvent as BaboKidnapEvenScript).StartUptheEvent(20)
-setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
-;BEGIN CODE
-if BaboKidnapEvent.isrunning()
-Debug.notification("Kidnap event is already running")
-else
-
-setstage(20)
-
-;int ichance = Utility.randomint(0, 1)
-
-;if ichance == 1
-;setstage(20)
-;else
-;setstage(10);Not now
-;endif
 endif
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-stop()
+setstage(255)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -95,3 +89,5 @@ ActorBase Property BaboKidnapperGuardBossChar0  Auto
 ActorBase Property BaboKidnapperGuardBossChar1  Auto  
 ActorBase Property BaboKidnapperGuardBossChar2  Auto  
 ActorBase Property BaboKidnapperGuardBossChar3  Auto  
+
+ActorBase Property BaboKidnapperGuard  Auto  

@@ -2,10 +2,10 @@
 ;NEXT FRAGMENT INDEX 15
 Scriptname SF_BaboChangeLocationEvent07_0841A08A Extends Scene Hidden
 
-;BEGIN FRAGMENT Fragment_12
-Function Fragment_12()
+;BEGIN FRAGMENT Fragment_14
+Function Fragment_14()
 ;BEGIN CODE
-GetOwningQuest().SetStage(70)
+(BaboSexController as BaboSexControllerManager).QTEAnimation(PlayerRef, GuestRef01.getreference() as actor, true, "Babo_Drunk_SBD_A01Start", "Babo_Drunk_SBD_A02Start", false)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -36,14 +36,6 @@ endif
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_14
-Function Fragment_14()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).QTEAnimation(PlayerRef, GuestRef01.getreference() as actor, true, "Babo_Drunk_SBD_A01Start", "Babo_Drunk_SBD_A02Start", false)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_13
 Function Fragment_13()
 ;BEGIN CODE
@@ -52,10 +44,10 @@ Debug.sendanimationevent(PlayerRef, "BaboFaintFEnd")
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_10
-Function Fragment_10()
+;BEGIN FRAGMENT Fragment_12
+Function Fragment_12()
 ;BEGIN CODE
-;GetOwningQuest().SetStage(70)
+GetOwningQuest().SetStage(70)
 ;END CODE
 EndFunction
 ;END FRAGMENT

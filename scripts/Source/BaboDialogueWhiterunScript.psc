@@ -64,21 +64,6 @@ Function PreparethesceneB(int Stage)
 	endif
 EndFunction
 
-Function AllotDuelMarker(int Stage)
-	if Stage == 1
-		DuelMarkerPlayer.forcerefto(BaboEventWhiterunVCDuel02Ref)
-		DuelMarkerFoe.forcerefto(BaboEventWhiterunVCDuel03Ref)
-		DuelMarkerJudge.forcerefto(BaboEventWhiterunVCDuel01Ref)
-	endif
-EndFunction
-
-Function PrepareDuelActors()
-	ViceCaptainActor = ViceCaptainRef.getreference() as actor
-	CaptainActor = CaptainRef.getreference() as actor
-	ViceCaptainRef.clear()
-	ViceCaptainDuelRef.forcerefto(ViceCaptainActor)
-EndFunction
-
 Function BacktoNormalDuelActors()
 	ViceCaptainDuelRef.clear()
 	ViceCaptainRef.forcerefto(ViceCaptainActor)
@@ -95,7 +80,8 @@ endif
 EndFunction
 
 Function StartDuel()
-	(BaboSexController as BaboSexControllerManager).RecoverControl(true)
+	;(BaboSexController as BaboSexControllerManager).RecoverControl(true)
+	Game.SetPlayerAIDriven(false)
 	ViceCaptainActor.RemoveFromFaction(CrimeFactionWhiterun)
 	(BaboSexController as BaboSexControllerManager).ChallengeStart(ViceCaptainDuelRef)
 EndFunction
@@ -117,15 +103,28 @@ EndFunction
 
 Function PreparethesceneVC07()
 	PrepareDuelActors()
-	AllotDuelMarker(1)
+	AllotDuelMarker()
 	BaboEventWhiterunViceCaptainDuelXmakerRef.enable()
-	(BaboSexController as BaboSexControllerManager).LosingControl()
-;PrepDuelwithBF(1, Alias_ViceCaptainDuelRef.getactorreference(), CaptainActor, none, SelfQuest, 47)
+	;(BaboSexController as BaboSexControllerManager).LosingControl()
+	Game.SetPlayerAIDriven(true)
 	PlayerRef.moveto(DuelMarkerPlayer.getreference())
 	ViceCaptainActor.moveto(DuelMarkerFoe.getreference())
 	CaptainActor.moveto(DuelMarkerJudge.getreference())
 	Utility.wait(5.0)
 	BaboDialogueWhiterunSceneVC07.forcestart()
+EndFunction
+
+Function AllotDuelMarker()
+	DuelMarkerPlayer.forcerefto(BaboEventWhiterunVCDuel02Ref)
+	DuelMarkerFoe.forcerefto(BaboEventWhiterunVCDuel03Ref)
+	DuelMarkerJudge.forcerefto(BaboEventWhiterunVCDuel01Ref)
+EndFunction
+
+Function PrepareDuelActors()
+	ViceCaptainActor = ViceCaptainRef.getreference() as actor
+	CaptainActor = CaptainRef.getreference() as actor
+	ViceCaptainRef.clear()
+	ViceCaptainDuelRef.forcerefto(ViceCaptainActor)
 EndFunction
 
 Function BacktoBreezehome()

@@ -1,4 +1,4 @@
-Scriptname BaboKidnapEvenScript extends Quest  
+Scriptname BaboKidnapEvenScript extends Quest Conditional
 
 Actor Property PlayerRef Auto
 ActorBase Property BaboBadEndGuardM Auto
@@ -6,9 +6,15 @@ ActorBase Property BaboBadEndHelperM Auto
 Actorbase Property Player Auto
 Actor SurrogateActor
 
+Bool bKeyPressed
 Bool bReadytoRest
 Bool bCanTalkwithGuards
+Bool bCaptured
+Bool bwearingcollar
+Bool bSnareTrapped
 int CurrentDDI
+
+Key Property BaboKidnapperKey Auto
 
 Cell Property BaboKidnapperHouse01 Auto
 Cell Property BaboKidnapperHouse02 Auto
@@ -44,8 +50,20 @@ Referencealias Property PlayerAlias Auto
 Referencealias Property Kidnapper01 Auto
 Referencealias Property Kidnapper02 Auto
 Referencealias Property Kidnapper03 Auto
+Referencealias Property Kidnapper01Combat Auto
+Referencealias Property Kidnapper02Combat Auto
+Referencealias Property Kidnapper03Combat Auto
 Referencealias Property Kidnapper04 Auto
+Referencealias Property Kidnapper04Combat Auto
 Referencealias Property Kidnapper05 Auto
+Referencealias Property Kidnapper05Combat Auto
+Referencealias Property Kidnapper06 Auto
+Referencealias Property Kidnapper06Combat Auto
+Referencealias Property Kidnapper07 Auto
+Referencealias Property Kidnapper07Combat Auto
+Referencealias Property Kidnapper08 Auto
+Referencealias Property Kidnapper08Combat Auto
+
 Referencealias Property Follower01 Auto
 Referencealias Property Follower02 Auto
 Referencealias Property Follower03 Auto
@@ -53,11 +71,16 @@ Referencealias Property Follower04 Auto
 Referencealias Property Follower05 Auto
 Referencealias Property Helper01 Auto
 Referencealias Property Helper02 Auto
+
 Referencealias Property KidnapperMarker01 Auto
 Referencealias Property KidnapperMarker02 Auto
 Referencealias Property KidnapperMarker03 Auto
 Referencealias Property KidnapperMarker04 Auto
 Referencealias Property KidnapperMarker05 Auto
+Referencealias Property KidnapperMarker06 Auto
+Referencealias Property KidnapperMarker07 Auto
+Referencealias Property KidnapperMarker08 Auto
+
 Referencealias Property KidnapperVictimMarkerA Auto
 Referencealias Property KidnapperVictimMarkerB Auto
 Referencealias Property KidnapperVictimMarkerC Auto
@@ -84,6 +107,10 @@ ReferenceAlias Property RestraintEquipment Auto
 ReferenceAlias Property SweepAreaA Auto
 ReferenceAlias Property SweepAreaB Auto
 ReferenceAlias Property SweepAreaC Auto
+ReferenceAlias Property BaboTrapMarker Auto
+ReferenceAlias Property BaboTrapXMarker01 Auto
+ReferenceAlias Property BaboTrapXMarker02 Auto
+ReferenceAlias Property BaboTrapXMarker03 Auto
 
 ReferenceAlias Property CageDoorA Auto
 ReferenceAlias Property FoodMarkerA Auto
@@ -93,6 +120,8 @@ LeveledItem Property BaboListTribalClothes Auto
 
 Quest Property BaboKidnapEvent Auto
 Quest Property BaboMonitorScript Auto
+
+String Property EXPEL_SWITCH = "sr.inflater.expel.switch" autoreadonly hidden
 
 Float Property StartGameHour Auto
 Float Property EndGameHour Auto
@@ -109,7 +138,11 @@ GlobalVariable Property BaboSlaverTrust Auto
 GlobalVariable Property BaboPlayerYoke Auto
 GlobalVariable Property BaboKidnapLastFoodTime Auto
 GlobalVariable Property BaboKidnapTiedUp Auto
+GlobalVariable Property BaboPlayerDetected Auto
 GlobalVariable Property BaboDebugging Auto
+GlobalVariable Property BaboKidnapConfiscateChestAccessGlobal Auto
+GlobalVariable Property BaboKidnapPlayerGotTrappedGlobal Auto
+{0 - Not yer accessed 1 - Player accessed to the chest}
 GlobalVariable Property BaboKidnapGuardHelpPlayer Auto;0 Default 1 Escape Plan 2 Put off Escape Plan
 GlobalVariable Property BaboKidnapGuardHelpPlayerMethod Auto;0 Kill Master 1 Kill Master and bring Player as slave 2 Bring the Key 3 not get in the way 4 Knock Master off  WIP
 
@@ -123,12 +156,15 @@ ImageSpaceModifier Property BaboFadeToBlackBackImod  Auto
 ImageSpaceModifier Property BaboFadeToBlackBackImodFast  Auto  
 
 Package Property BaboDoNothing Auto
+Package Property DefaultSandboxEditorLocation512 Auto
+Package Property BaboKidnapEventForcedGreetMiscDialogue Auto
 
 Scene Property BaboKidnapEventDrunkPlayerScene01 Auto
 Scene Property BaboKidnapEventDrunkPlayerScene02 Auto
 Scene Property BaboKidnapEventDrunkPlayerSceneEnd Auto
 Scene Property BaboKidnapEventDrunkPlayerSceneNormalEnd Auto
 Scene Property BaboKidnapEventDrunkPlayerSceneNormalScene01 Auto
+Scene Property BaboKidnapEventScenario10Misc Auto
 
 Scene Property BaboKidnapEventScenario10A Auto
 Scene Property BaboKidnapEventScenario04A Auto;Start Scene
@@ -137,6 +173,7 @@ Scene Property BaboKidnapEventScenario04C Auto
 Scene Property BaboKidnapEventScenario04D Auto
 Scene Property BaboKidnapEventScenario04E Auto
 Scene Property BaboKidnapEventScenario04EB Auto
+Scene Property BaboKidnapEventScenario10Sex Auto
 Scene Property BaboKidnapEventScenario20A Auto
 Scene Property BaboKidnapEventScenario20B Auto
 Scene Property BaboKidnapEventScenario20BAfter Auto
@@ -157,8 +194,10 @@ Scene Property BaboKidnapEventYouAreSpotted Auto
 Scene Property BaboKidnapEventYouAreSpottedA02 Auto
 Scene Property BaboKidnapEventYouAreSpottedA03 Auto
 Scene Property BaboKidnapEventYouAreSpottedA04 Auto
+Scene Property BaboKidnapEventYouAreTrappedSnareRope Auto
 Scene Property BaboKidnapEventScenarioRescue Auto
 Scene Property BaboKidnapEventFollowersStandBy Auto
+Scene Property BaboKidnapEventYouAreTrappedSnareRopeIMC Auto
 
 formlist Property BaboPantiesFormList auto
 formlist Property BaboSkirtFormList auto
@@ -177,6 +216,8 @@ Formlist Property BaboEdibleSuspiciousFormList Auto
 Formlist Property BaboEscapeToolFormList Auto
 
 Faction Property SLAX_RapistFaction Auto
+Faction Property BaboKidnapperOverlookFaction Auto
+Faction Property BaboBigGuySLFaction Auto
 
 ObjectReference Property BaboRecoverMarkerRef  Auto  
 ObjectReference Property BaboFollowerRecoverMarkerRef  Auto  
@@ -206,7 +247,9 @@ GlobalVariable Property BaboPlayerDetectorGlobal Auto
 GlobalVariable Property BaboActorDetectorGlobal Auto
 GlobalVariable Property BaboPrisonerDetectorGlobal Auto
 GlobalVariable Property BaboKidnapEscapeAttempts Auto
+GlobalVariable Property BaboKidnapTrappedCount Auto
 GlobalVariable Property BaboKidnapbFoodTime Auto
+GlobalVariable Property BaboKidnapperKilledCount Auto
 
 GlobalVariable Property BaboDDI Auto
 
@@ -231,17 +274,21 @@ Armor Property BaboTribalClotheTop Auto
 
 Sound Property zbfSoundGagFrustrated Auto
 
-actor akactor01
-actor akactor02
-actor akactor03
-actor akactor04
-actor akactor05
+actor Property akactor01 Auto Hidden
+actor Property akactor02 Auto Hidden
+actor Property akactor03 Auto Hidden
+actor Property akactor04 Auto Hidden
+actor Property akactor05 Auto Hidden
+actor Property akactor06 Auto Hidden
+actor Property akactor07 Auto Hidden
+actor Property akactor08 Auto Hidden
 
 Perk Property BaboDia_WeaktoAdventurerPerk Auto
 
 int property kidnapperKill Auto
 int property kidnapperNum Auto
 int property VictimNum Auto
+int Property BaboKidnapMiscEventNum Auto Conditional
 
 Location Property BaboSlaverLocation01 Auto
 Location Property BaboSlaverLocation02 Auto
@@ -263,13 +310,38 @@ Objectreference Property BaboEventAbductionRoomMarker02 Auto
 Quest Property BaboReputationScript Auto
 
 Topic Property BaboKidnapEventBranchGuardSayT01 Auto
+Topic Property BaboKidnapEventBranchResponseSneakT Auto
+
+Scene Property BaboKidnapEventCalling02 AUto
+Scene Property BaboKidnapEventCalling03 AUto
+Scene Property BaboKidnapEventCalling04 AUto
+Topic Property BaboKidnapEventBranchResponseOverlookT Auto
 
 string HeadAttachNode ="NPC Head [Head]"
 string NeckAttachNode = "npc neck [neck]"
 string RopeAttachNode = "Vert05"
 string RopeAttachNode2 = "Vert06"
 
+String Property SLKeywordA = "MF" Auto Hidden
+String Property SLKeywordB = "Aggressvie" Auto Hidden
+String Property SLKeywordC = "Rape" Auto Hidden
+
 float LockDurability
+Float EventCoolTime
+Int Property EventChance Auto Hidden
+
+Faction Property BaboKidnapperFaction Auto
+Actor[] Property KidnapperActors Auto Hidden
+ReferenceAlias[] Property KidnappersCombatAliases Auto Hidden
+ReferenceAlias[] Property KidnappersAliases Auto Hidden
+
+Bool bMiscEvent
+
+Function CheckConfiscate()
+	if BaboKidnapConfiscateChestAccessGlobal.getvalue() == 1
+		ConfiscateAllItems()
+	endif
+EndFunction
 
 Function PlaceSlaveOutfit()
 	FoodMarkerA.getreference().PlaceAtMe(BaboListTribalClothes)
@@ -293,6 +365,15 @@ Function KidnapperAddPerk()
 	if Kidnapper05
 		(Kidnapper05.getreference() as actor).addperk(BaboDia_WeaktoAdventurerPerk)
 	endif
+	if Kidnapper06
+		(Kidnapper06.getreference() as actor).addperk(BaboDia_WeaktoAdventurerPerk)
+	endif
+	if Kidnapper07
+		(Kidnapper07.getreference() as actor).addperk(BaboDia_WeaktoAdventurerPerk)
+	endif
+	if Kidnapper08
+		(Kidnapper08.getreference() as actor).addperk(BaboDia_WeaktoAdventurerPerk)
+	endif
 endfunction
 
 Bool Function FollowersStandby()
@@ -309,7 +390,45 @@ Bool Function FollowersStandby()
 EndFunction
 
 Function SettheStage()
-;Nothing
+EventCoolTime = 24.0
+EventChance = 10
+kidnapperKill = 0
+
+	if (Kidnapper01.getreference() as actor).isinfaction(BaboBigGuySLFaction)
+		SLKeywordB = "Bigguy"
+	else
+		SLKeywordB = "Aggressive"
+	endif
+
+	if Kidnapper03.getreference() as actor
+		(Kidnapper03.getreference() as actor).moveto(KidnapperMarker03.getreference())
+	endif
+	if Kidnapper04.getreference() as actor
+		(Kidnapper04.getreference() as actor).moveto(KidnapperMarker04.getreference())
+	endif
+	if Kidnapper05.getreference() as actor
+		(Kidnapper05.getreference() as actor).moveto(KidnapperMarker05.getreference())
+	endif
+	if Kidnapper06.getreference() as actor
+		(Kidnapper06.getreference() as actor).moveto(KidnapperMarker06.getreference())
+	endif
+	if Kidnapper07.getreference() as actor
+		(Kidnapper07.getreference() as actor).moveto(KidnapperMarker07.getreference())
+	endif
+	if Kidnapper08.getreference() as actor
+		(Kidnapper08.getreference() as actor).moveto(KidnapperMarker08.getreference())
+	endif
+	
+	if OtherVictimA.getreference() as actor
+		(OtherVictimA.getreference() as actor).moveto(KidnapperVictimMarkerA.getreference())
+	endif
+	if OtherVictimB.getreference() as actor
+		(OtherVictimB.getreference() as actor).moveto(KidnapperVictimMarkerB.getreference())
+	endif
+	if OtherVictimC.getreference() as actor
+		(OtherVictimC.getreference() as actor).moveto(KidnapperVictimMarkerC.getreference())
+	endif
+
 endfunction
 
 Function StartUptheEvent(int Scenarioe)
@@ -397,6 +516,9 @@ akactor02 = Kidnapper02.getreference() as actor
 akactor03 = Kidnapper03.getreference() as actor
 akactor04 = Kidnapper04.getreference() as actor
 akactor05 = Kidnapper05.getreference() as actor
+akactor06 = Kidnapper06.getreference() as actor
+akactor07 = Kidnapper07.getreference() as actor
+akactor08 = Kidnapper08.getreference() as actor
 
 	if akactor01 && !akactor01.isdead()
 		BaboDrunkRapistNPCList.addform(akactor01)
@@ -413,6 +535,15 @@ akactor05 = Kidnapper05.getreference() as actor
 	if akactor05 && !akactor05.isdead()
 		BaboDrunkRapistNPCList.addform(akactor05)
 	endif
+	if akactor06 && !akactor06.isdead()
+		BaboDrunkRapistNPCList.addform(akactor06)
+	endif
+	if akactor07 && !akactor07.isdead()
+		BaboDrunkRapistNPCList.addform(akactor07)
+	endif
+	if akactor08 && !akactor08.isdead()
+		BaboDrunkRapistNPCList.addform(akactor08)
+	endif
 EndFunction
 
 Function AliasSlaverGuardAddList()
@@ -421,6 +552,9 @@ akactor02 = Kidnapper02.getreference() as actor
 akactor03 = Kidnapper03.getreference() as actor
 akactor04 = Kidnapper04.getreference() as actor
 akactor05 = Kidnapper05.getreference() as actor
+akactor06 = Kidnapper06.getreference() as actor
+akactor07 = Kidnapper07.getreference() as actor
+akactor08 = Kidnapper08.getreference() as actor
 
 
 	if akactor02 && !akactor02.isdead()
@@ -430,21 +564,39 @@ akactor05 = Kidnapper05.getreference() as actor
 		endif
 	endif
 	if akactor03 && !akactor03.isdead()
-		if akactor02.isinfaction(BaboAnonymousSlaverGuardFaction)
+		if akactor03.isinfaction(BaboAnonymousSlaverGuardFaction)
 			BaboKidnapSlaverGuardList.addform(akactor03)
 			Kidnapper03.clear()
 		endif
 	endif
 	if akactor04 && !akactor04.isdead()
-		if akactor02.isinfaction(BaboAnonymousSlaverGuardFaction)
+		if akactor04.isinfaction(BaboAnonymousSlaverGuardFaction)
 			BaboKidnapSlaverGuardList.addform(akactor04)
 			Kidnapper04.clear()
 		endif
 	endif
 	if akactor05 && !akactor05.isdead()
-		if akactor02.isinfaction(BaboAnonymousSlaverGuardFaction)
+		if akactor05.isinfaction(BaboAnonymousSlaverGuardFaction)
 			BaboKidnapSlaverGuardList.addform(akactor05)
 			Kidnapper05.clear()
+		endif
+	endif
+	if akactor06 && !akactor06.isdead()
+		if akactor06.isinfaction(BaboAnonymousSlaverGuardFaction)
+			BaboKidnapSlaverGuardList.addform(akactor06)
+			Kidnapper06.clear()
+		endif
+	endif
+	if akactor07 && !akactor07.isdead()
+		if akactor07.isinfaction(BaboAnonymousSlaverGuardFaction)
+			BaboKidnapSlaverGuardList.addform(akactor07)
+			Kidnapper07.clear()
+		endif
+	endif
+	if akactor08 && !akactor08.isdead()
+		if akactor08.isinfaction(BaboAnonymousSlaverGuardFaction)
+			BaboKidnapSlaverGuardList.addform(akactor08)
+			Kidnapper08.clear()
 		endif
 	endif
 EndFunction
@@ -456,6 +608,9 @@ akactor02 = Kidnapper02.getreference() as actor
 akactor03 = Kidnapper03.getreference() as actor
 akactor04 = Kidnapper04.getreference() as actor
 akactor05 = Kidnapper05.getreference() as actor
+akactor06 = Kidnapper06.getreference() as actor
+akactor07 = Kidnapper07.getreference() as actor
+akactor08 = Kidnapper08.getreference() as actor
 
 	if akactor01 && !akactor01.isdead()
 		BaboKidnapNPCList.addform(akactor01)
@@ -477,6 +632,18 @@ akactor05 = Kidnapper05.getreference() as actor
 		BaboKidnapNPCList.addform(akactor05)
 		Kidnapper05.clear()
 	endif
+	if akactor06 && !akactor06.isdead()
+		BaboKidnapNPCList.addform(akactor06)
+		Kidnapper06.clear()
+	endif
+	if akactor07 && !akactor07.isdead()
+		BaboKidnapNPCList.addform(akactor07)
+		Kidnapper07.clear()
+	endif
+	if akactor08 && !akactor08.isdead()
+		BaboKidnapNPCList.addform(akactor08)
+		Kidnapper08.clear()
+	endif
 EndFunction
 
 Function AliasKidnapperRemoveList()
@@ -497,6 +664,9 @@ Function Clearallthealiases()
 	Kidnapper03.clear()
 	Kidnapper04.clear()
 	Kidnapper05.clear()
+	Kidnapper06.clear()
+	Kidnapper07.clear()
+	Kidnapper08.clear()
 	
 	Helper01.clear()
 	Helper02.clear()
@@ -510,6 +680,9 @@ Function Clearallthealiases()
 	KidnapperMarker03.clear()
 	KidnapperMarker04.clear()
 	KidnapperMarker05.clear()
+	KidnapperMarker06.clear()
+	KidnapperMarker07.clear()
+	KidnapperMarker08.clear()
 	
 	HelperMarker01.clear()
 	HelperMarker02.clear()
@@ -519,33 +692,81 @@ Function Clearallthealiases()
 	RestrainCenterMarker03.clear()
 EndFunction
 
-Function FillKidnapperActors(Actor KidnapperRef01, Actor KidnapperRef02 = None, Actor KidnapperRef03 = None, Actor KidnapperRef04 = None, Actor KidnapperRef05 = None)
-	if KidnapperRef01
-		Kidnapper01.forcerefto(KidnapperRef01)
+Function DisposeofCombatActors()
+	(Kidnapper01Combat.getreference() as actor).delete()
+	(Kidnapper02Combat.getreference() as actor).delete()
+	(Kidnapper03Combat.getreference() as actor).delete()
+	(Kidnapper04Combat.getreference() as actor).delete()
+	(Kidnapper05Combat.getreference() as actor).delete()
+	(Kidnapper06Combat.getreference() as actor).delete()
+	(Kidnapper07Combat.getreference() as actor).delete()
+	(Kidnapper08Combat.getreference() as actor).delete()
+	Kidnapper01Combat.clear()
+	Kidnapper02Combat.clear()
+	Kidnapper03Combat.clear()
+	Kidnapper04Combat.clear()
+	Kidnapper05Combat.clear()
+	Kidnapper06Combat.clear()
+	Kidnapper07Combat.clear()
+	Kidnapper08Combat.clear()
+EndFunction
+
+Function FillKidnapperActors(Actor KidnapperRef01, Actor KidnapperRef02 = None, Actor KidnapperRef03 = None, Actor KidnapperRef04 = None, Actor KidnapperRef05 = None, Actor KidnapperRef06 = None, Actor KidnapperRef07 = None, Actor KidnapperRef08 = None)
+;For external scripts
+kidnapperNum = 0
+	if Kidnapper01.ForceRefIfEmpty(KidnapperRef01) == false
+		kidnapperNum += 1
 	endif
-	if KidnapperRef02
-		Kidnapper02.forcerefto(KidnapperRef02)
+	if Kidnapper02.ForceRefIfEmpty(KidnapperRef02) == false
+		kidnapperNum += 1
 	endif
+
 	if KidnapperRef03
 		Kidnapper03.forcerefto(KidnapperRef03)
+		akactor03 = KidnapperRef03
+		kidnapperNum += 1
 	endif
 	if KidnapperRef04
 		Kidnapper04.forcerefto(KidnapperRef04)
+		akactor04 = KidnapperRef04
+		kidnapperNum += 1
 	endif
 	if KidnapperRef05
 		Kidnapper05.forcerefto(KidnapperRef05)
+		akactor05 = KidnapperRef05
+		kidnapperNum += 1
 	endif
+	if KidnapperRef06
+		Kidnapper06.forcerefto(KidnapperRef06)
+		akactor06 = KidnapperRef06
+		kidnapperNum += 1
+	endif
+	if KidnapperRef07
+		Kidnapper07.forcerefto(KidnapperRef07)
+		akactor07 = KidnapperRef07
+		kidnapperNum += 1
+	endif
+	if KidnapperRef08
+		Kidnapper08.forcerefto(KidnapperRef08)
+		akactor08 = KidnapperRef08
+		kidnapperNum += 1
+	endif
+	;Debug.Notification("Current kidnapper number is " + kidnapperNum)
 EndFunction
 
 Function FillVictimActors(Actor VictimA, Actor VictimB, Actor VictimC)
+VictimNum = 0
 	if VictimA
 		OtherVictimA.forcerefto(VictimA)
+		VictimNum += 1
 	endif
 	if VictimB
 		OtherVictimB.forcerefto(VictimB)
+		VictimNum += 1
 	endif
 	if VictimC
 		OtherVictimC.forcerefto(VictimC)
+		VictimNum += 1
 	endif
 EndFunction
 
@@ -606,6 +827,15 @@ Function Dumptheactors()
 	endif
 	if Kidnapper05
 		(Kidnapper05.getreference() as actor).moveto(BaboDumpsterRef)
+	endif
+	if Kidnapper06
+		(Kidnapper06.getreference() as actor).moveto(BaboDumpsterRef)
+	endif
+	if Kidnapper07
+		(Kidnapper07.getreference() as actor).moveto(BaboDumpsterRef)
+	endif
+	if Kidnapper08
+		(Kidnapper08.getreference() as actor).moveto(BaboDumpsterRef)
 	endif
 EndFunction
 
@@ -745,6 +975,14 @@ Function RemoveProperty(int Menu, int count, bool Tsound)
 	PlayerRef.RemoveItem(BaboRemoveItemFormList.getat(Menu), count, Tsound)
 EndFunction
 
+Function SetAlignActor(actor akactor1, actor akactor2, int angle = 180, int Xaxis = 0, int Yaxis = 90);akactor1: Player akactor2: NPC
+	Float AngleZ = akactor1.GetAngleZ()
+	Float rMoveX = (Math.sin(AngleZ) * Yaxis) + (Math.cos(AngleZ) * Xaxis)
+	Float rMoveY = (Math.cos(AngleZ) * Yaxis) - (Math.sin(AngleZ) * Xaxis)
+	akactor2.MoveTo(akactor1, rMoveX, rMoveY)
+	akactor2.setangle(0, 0, AngleZ + angle)
+EndFunction
+
 Function SetScenarioe(int Style)
 	BaboKidnapScenarioe.setvalue(Style)
 	;1 = Two travellers kidnap Player
@@ -756,6 +994,8 @@ Function SetAllSetstoDefault()
 	BaboKidnapEscapeResponse.setvalue(0)
 	BaboKidnapScenarioe.setvalue(0)
 	BaboKidnapEscapeAttempts.setvalue(0)
+	BaboKidnapTrappedCount.setvalue(0)
+	BaboKidnapConfiscateChestAccessGlobal.setvalue(0)
 EndFunction
 
 Function PlayBaboAnimation(Referencealias akactorRef, string AnimationName)
@@ -929,20 +1169,34 @@ Function ConfiscateAllItems()
 	PlayerRef.removeallitems(ConfiscateChest.getreference(), false, false)
 EndFunction
 
+Function CurrentlyCaptured(Bool Captured)
+	bCaptured = Captured
+	BaboKidnapTiedUp.setvalue(Captured as int)
+	if Captured
+		StorageUtil.SetintValue(PlayerRef, EXPEL_SWITCH, 2);FillHerUp You are not able to expel the cum now.
+	else
+		StorageUtil.SetintValue(PlayerRef, EXPEL_SWITCH, 0)
+	endif
+EndFunction
+
 Function BaboKidnapScenePlay(int Callstage)
 	Debug.trace("BaboKidnapScenePlay failed to play. No State allocated.")
 EndFunction
 
 Function KidnapQuestStopCheck()
-;Blank
+	BaboKidnapEvent.stop()
 EndFunction
 
 Function OnUpdateRegister()
 	RegisterForSingleUpdate(1.0)
 EndFunction
 
-Function LOSRegister(actor akViewer, ObjectReference akTarget)
+Function LOSSingleRegister(actor akViewer, ObjectReference akTarget)
 	RegisterForSingleLOSGain(akViewer, akTarget)
+EndFunction
+
+Function LOSRegister(actor akViewer, ObjectReference akTarget)
+	RegisterForLOS(akViewer, akTarget)
 EndFunction
 
 Function LOSUnRegister(actor akViewer, ObjectReference akTarget)
@@ -952,6 +1206,7 @@ EndFunction
 Function TimeLapse(Bool OneHour, Bool Standby)
 if OneHour
 	SetGameHourCustom(true, 1.0)
+	PlayerRef.RestoreActorValue("Stamina", 5)
 Endif
 EndFunction
 
@@ -966,6 +1221,11 @@ EndFunction
 Function EscapeAttemptsCount(int Num)
 	BaboKidnapEscapeAttempts.setvalue(BaboKidnapEscapeAttempts.getvalue() + Num)
 EndFunction
+
+Function TrappedCount(int Num)
+	BaboKidnapTrappedCount.setvalue(BaboKidnapTrappedCount.getvalue() + Num)
+EndFunction
+
 
 Function KidnapEventStringOut(int num)
 	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(num)
@@ -1037,14 +1297,14 @@ Function EquipRestraintsCheck(Actor akactor)
 		akactor.EquipItem(BaboWristRopePlayable)
 	endif
 	
-	if BaboDDI.getvalue() == 1
-		(BaboMonitorScript as BaboDiaMonitorScript).ForceEquipDDIDevice(akActor, 2, true)
-	else
+	;if BaboDDI.getvalue() == 1
+		;(BaboMonitorScript as BaboDiaMonitorScript).ForceEquipDDIDevice(akActor, 2, true) Not wearing again. This constantly put it on her.
+	;else
 		if !akactor.IsEquipped(BaboCollarRopePlayable)
 			akactor.additem(BaboCollarRopePlayable, 1)
 			akactor.EquipItem(BaboCollarRopePlayable)
 		endif
-	endif
+	;endif
 		
 	if !akactor.IsEquipped(BaboAnkleRopePlayable)
 		akactor.additem(BaboAnkleRopePlayable, 1)
@@ -1054,29 +1314,31 @@ EndFunction
 
 Function EquipRestraints(Actor akactor, Bool Equip)
 if Equip
-	if BaboDDI.getvalue() == 1
-		(BaboMonitorScript as BaboDiaMonitorScript).ForceEquipDDIDevice(akActor, 2, true)
-	else
+	;if BaboDDI.getvalue() == 1 ; When you equip DDI, it forcibly set motion to default.
+	;	(BaboMonitorScript as BaboDiaMonitorScript).ForceEquipDDIDevice(akActor, 2, true)
+	;else
 		akactor.additem(BaboCollarRopePlayable, 1)
 		akactor.EquipItem(BaboCollarRopePlayable)
-	endif
+	;endif
 	akactor.additem(BaboWristRopePlayable, 1)
 	akactor.additem(BaboAnkleRopePlayable, 1)
 
 	akactor.EquipItem(BaboWristRopePlayable)	
 	akactor.EquipItem(BaboAnkleRopePlayable)
+	bwearingcollar = true
 Else
-	if BaboDDI.getvalue() == 1
-		(BaboMonitorScript as BaboDiaMonitorScript).ForceUnequipDDIDevice(akActor, 2, false)
-	else
+	;if BaboDDI.getvalue() == 1
+	;	(BaboMonitorScript as BaboDiaMonitorScript).ForceUnequipDDIDevice(akActor, 2, false)
+	;else
 		akactor.UnequipItem(BaboCollarRopePlayable)
 		akactor.Removeitem(BaboCollarRopePlayable, 1)
-	endif
+	;endif
 	akactor.UnequipItem(BaboWristRopePlayable)
 	akactor.UnequipItem(BaboAnkleRopePlayable)
 	
 	akactor.Removeitem(BaboAnkleRopePlayable, 1)
 	akactor.Removeitem(BaboAnkleRopePlayable, 1)
+	bwearingcollar = false
 Endif
 EndFunction
 
@@ -1085,7 +1347,7 @@ Function YouAreRescued()
 	PlayerRef.moveto(RecoverMarker.getreference())
 EndFunction
 
-Function KidnapperDied()
+Function KidnapperDied(int iactor)
 EndFunction
 
 Function AddFatigue(actor akactor, Bool PerkAdd)
@@ -1116,7 +1378,7 @@ Function KidnapperMovetoPoint(int Marker)
 	if Marker == 1
 		MoveReftoPiont(Kidnapper01, KidnapperMarker01)
 	elseif Marker == 2
-		MoveReftoPiont(Kidnapper01, KidnapperMarker02)
+		MoveReftoPiont(Kidnapper02, KidnapperMarker02)
 	endif
 EndFunction
 
@@ -1190,6 +1452,7 @@ Function ResetSetRoom()
 		SweepAreaB.getreference().disable()
 		SweepAreaC.getreference().disable()
 	endif
+	ClearSnareTrap()
 	LockDurability = 100
 EndFunction
 
@@ -1226,34 +1489,61 @@ Function RemovealltheKey()
 	PlayerRef.removeitem(BaboSlaverNobleHouse01Key, 1)
 EndFunction
 
-Function OnLOSRegister()
+Function AssignActors()
 	akactor01 = Kidnapper01.getreference() as actor
-	LOSRegister(akactor01, PlayerRef)
-	BaboKidnapTiedUp.setvalue(0);You are not tied
-	if Kidnapper02
-		akactor02 = Kidnapper02.getreference() as actor
-		LOSRegister(akactor02, PlayerRef)
+	akactor02 = Kidnapper02.getreference() as actor
+	akactor03 = Kidnapper03.getreference() as actor
+	;Debug.Notification("Akactor03 is " + akactor03.GetBaseObject().GetName())
+	akactor04 = Kidnapper04.getreference() as actor
+	;Debug.Notification("Akactor04 is " + akactor04.GetBaseObject().GetName())
+	akactor05 = Kidnapper05.getreference() as actor
+	akactor06 = Kidnapper06.getreference() as actor
+	akactor07 = Kidnapper07.getreference() as actor
+	akactor08 = Kidnapper08.getreference() as actor
+EndFunction
+
+Function AssignCharacter()
+	(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor01);Give a character
+	if akactor02
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor02)
 	endif
-	if Kidnapper03
-		akactor03 = Kidnapper03.getreference() as actor
-		LOSRegister(akactor03, PlayerRef)
+	if akactor03
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor03)
 	endif
-	if Kidnapper04
-		akactor04 = Kidnapper04.getreference() as actor
-		LOSRegister(akactor04, PlayerRef)
+	if akactor04
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor04)
 	endif
-	if Kidnapper05
-		akactor05 = Kidnapper05.getreference() as actor
-		LOSRegister(akactor05, PlayerRef)
+	if akactor05
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor05)
+	endif
+	if akactor06
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor06)
+	endif
+	if akactor07
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor07)
+	endif
+	if akactor08
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor08)
 	endif
 EndFunction
 
-Function GivePunishment(int istage)
+Function OnLOSRegister()
+	;LOSRegister(akactor01, PlayerRef)
+	BaboKidnapTiedUp.setvalue(0);You are not tied
+	int i = kidnappernum
+		While i >= 0;Needs Fix WIP
+		i -= 1
+			LOSSingleRegister(KidnapperActors[i], PlayerRef)
+		EndWhile
+	;Debug.Notification("Kidnapper LOS " + kidnappernum)
+EndFunction
+
+Function GivePunishment(int istage, actor akactor)
 
 if istage == 1;blowjob
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Blowjob", True, "", "", True)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerAlias.getreference() as actor, akactor, None, None, None, "MF", "Aggressive", "Blowjob", True, "", "", True)
 elseif istage == 2;sex
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "", "", True)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerAlias.getreference() as actor, akactor, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "", "", True)
 elseif istage == 3;sex
 
 elseif istage == 4;drug
@@ -1439,6 +1729,128 @@ if (choice == 0);Call the guard
 endif
 EndFunction
 
+Function CallSex()
+;int ichance = Utility.randomint(1, kidnappernum)
+	int i = kidnappernum
+	if i == 1
+		(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, KidnapperActors[0], None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE10A", "KidnapEvent10A", True)
+	elseif i == 2
+		(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, KidnapperActors[0], KidnapperActors[1], None, None, "MMF", SLKeywordB, SLKeywordC, True, "KidnapE10A", "KidnapEvent10A", True)
+	elseif i == 3
+		(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, KidnapperActors[0], KidnapperActors[1], KidnapperActors[2], None, "MMMF", SLKeywordB, SLKeywordC, True, "KidnapE10A", "KidnapEvent10A", True)
+	elseif i >= 4
+		(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, KidnapperActors[0], KidnapperActors[1], KidnapperActors[2], KidnapperActors[3], "MMMMF", SLKeywordB, SLKeywordC, True, "KidnapE10A", "KidnapEvent10A", True)
+	endif
+EndFunction
+
+Function GetTrapped(bool bTrapped)
+	bSnareTrapped = bTrapped
+	BaboKidnapPlayerGotTrappedGlobal.setvalue(bTrapped as float)
+EndFunction
+
+Function QTESnareTrapAbort()
+	(BaboSexController as BaboSexControllerManager).QTETextAbort()
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).ManageState("OpenStandby")
+EndFunction
+
+Function QTESnareTrapSuccess()
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).QTESuccess()
+EndFunction
+
+Function QTESnareTrapFail()
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).QTEFail()
+EndFunction
+
+Function SetSnareTrap()
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).GetReady()
+	ReplaceSnareTrap()
+EndFunction
+
+Function ReSetSnareTrap()
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).resettrap()
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).GetReady()
+	ReplaceSnareTrap()
+EndFunction
+
+Function ReplaceSnareTrap()
+	ObjectReference TrapXmarker
+	int randomi = Utility.randomint(0, 2)
+	if randomi == 1
+		TrapXmarker = BaboTrapXMarker02.getreference()
+	elseif randomi == 2
+		TrapXmarker = BaboTrapXMarker03.getreference()
+	else
+		TrapXmarker = BaboTrapXMarker01.getreference()
+	endif
+	
+	BaboTrapMarker.getreference().moveto(TrapXmarker)
+EndFunction
+
+Function ClearSnareTrap()
+	BaboTrapMarker.getreference().moveto(KidnapperSafeMarkerA.getreference())
+EndFunction
+
+Function SetKidnapperAliasArray()
+	;int Arrayactors = TrappedActors.length;10
+	KidnapperActors = new Actor[8]
+	KidnapperActors[0] = akactor01
+	KidnapperActors[1] = akactor02
+	KidnapperActors[2] = akactor03
+	KidnapperActors[3] = akactor04
+	KidnapperActors[4] = akactor05
+	KidnapperActors[5] = akactor06
+	KidnapperActors[6] = akactor07
+	KidnapperActors[7] = akactor08
+	
+	KidnappersAliases = new ReferenceAlias[8]
+	KidnappersAliases[0] = Kidnapper01
+	KidnappersAliases[1] = Kidnapper02
+	KidnappersAliases[2] = Kidnapper03
+	KidnappersAliases[3] = Kidnapper04
+	KidnappersAliases[4] = Kidnapper05
+	KidnappersAliases[5] = Kidnapper06
+	KidnappersAliases[6] = Kidnapper07
+	KidnappersAliases[7] = Kidnapper08	
+
+	KidnappersCombatAliases = new ReferenceAlias[8]
+	KidnappersCombatAliases[0] = Kidnapper01Combat
+	KidnappersCombatAliases[1] = Kidnapper02Combat
+	KidnappersCombatAliases[2] = Kidnapper03Combat
+	KidnappersCombatAliases[3] = Kidnapper04Combat
+	KidnappersCombatAliases[4] = Kidnapper05Combat
+	KidnappersCombatAliases[5] = Kidnapper06Combat
+	KidnappersCombatAliases[6] = Kidnapper07Combat
+	KidnappersCombatAliases[7] = Kidnapper08Combat
+EndFunction
+
+Function ReassignKidnapperAliasArray()
+	int i = 0
+	While i < 8
+		KidnappersAliases[i].clear()
+		if KidnapperActors[i] && !KidnapperActors[i].isdead()
+			KidnappersCombatAliases[i].forcerefto(KidnapperActors[i])
+		endif
+		i += 1
+	EndWhile
+EndFunction
+
+int Function CountKidnappersCombat()
+	int ilength = KidnappersCombatAliases.length
+	int iindex = 0
+	int i = 0
+	While i < ilength
+		if KidnappersCombatAliases[i].getreference() && !((KidnappersCombatAliases[i].getreference() as actor).isdead())
+			iindex += 1
+		endif
+		i += 1
+	EndWhile
+return iindex
+EndFunction
+
+Function FinalSex()
+
+EndFunction
+
 Function GuardHelpPlayer(int iscenario = 0)
 	BaboKidnapGuardHelpPlayer.setvalue(1);Guard will help Player escape.
 	BaboKidnapGuardHelpPlayerMethod.setvalue(iscenario)
@@ -1490,6 +1902,57 @@ Function GotoStateString(String StateString)
 	Gotostate(StateString)
 EndFunction
 
+Function MiscEventFire(bool bsex)
+int i = KidnapperActors.length
+int actori = Utility.randomint(0, i - 1)
+int ri = Utility.randomint(0, 100)
+
+if bsex
+	KidnapperActors[actori].moveto(PlayerRef)
+	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(17)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, KidnapperActors[actori], None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE10B", "KidnapEvent10B", True)
+else
+	if ri < 10
+		;gangbang
+		While i >= 0
+			i -= 1
+			KidnapperActors[i].moveto(KidnapperMarker01.getreference());in front of Player
+		endWhile
+		BaboKidnapEventScenario10Sex.forcestart()
+	elseif ri < 50
+		ActorUtil.AddPackageOverride(KidnapperActors[actori], BaboKidnapEventForcedGreetMiscDialogue, 100, 1)
+		KidnapperActors[actori].moveto(KidnapperMarker01.getreference())
+		KidnapperActors[actori].EvaluatePackage()
+		Utility.wait(10.0)
+		ActorUtil.RemovePackageOverride(KidnapperActors[actori], BaboKidnapEventForcedGreetMiscDialogue)
+	elseif ri < 70
+		PlayerRef.RestoreActorValue("Stamina", 5.0)
+		PlayerRef.RestoreActorValue("Magicka", 10.0)
+	else
+		;Nothing happened.
+	endif
+endif
+EndFunction
+
+bool Function CheckEscapeStruggleDetect()
+int i = kidnappernum
+bool bswitch = true
+actor akactor
+	While i >= 0 && bswitch
+		i -= 1
+		if KidnapperActors[i] && playerref.getdistance(KidnapperActors[i]) <= 1024
+			akactor = KidnapperActors[i]
+			bswitch = false
+			if akactor == KidnapperActors[0]
+			else
+				KidnapperActors[0].moveto(akactor)
+			endif
+			return true
+		endif
+	EndWhile
+return false
+EndFunction
+
 ;###############################################
 ;##################State Area###################
 ;###############################################
@@ -1514,10 +1977,6 @@ elseif Callstage == 3
 endif
 EndFunction
 
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
-EndFunction
-
 EndState
 
 ;##################Ririkstead Inn Drunken Event#2##################
@@ -1540,11 +1999,6 @@ elseif Callstage == 3
 endif
 EndFunction
 
-
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
-EndFunction
-
 EndState
 
 State BaboChangeLocationEvent07ScenarioRoriksteadWellRested
@@ -1561,10 +2015,6 @@ if Callstage == 1
 elseif Callstage == 2
 	BaboKidnapEventDrunkPlayerSceneNormalScene01.forcestart()
 endif
-EndFunction
-
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
 EndFunction
 
 EndState
@@ -1589,10 +2039,6 @@ elseif Callstage == 3
 endif
 EndFunction
 
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
-EndFunction
-
 EndState
 
 State BaboChangeLocationEvent07ScenarioDragonBridgeWellRested
@@ -1611,12 +2057,7 @@ elseif Callstage == 2
 endif
 EndFunction
 
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
-EndFunction
-
 EndState
-
 
 ;##################Kidnap Event#4##################
 
@@ -1643,6 +2084,11 @@ Event OnBeginState()
 		Utility.wait(5.0)
 		Debug.sendanimationevent(PlayerRef, "BaboRopeHit")
 		TransferAllItems()
+		SettheStage()
+		AssignActors()
+		AssignCharacter()
+		SetKidnapperAliasArray()
+		CurrentlyCaptured(true)
 		;FadeinMoveScene(PlayerAlias, CenterMarkerPlayer, 0, false, true, "BaboRopeHit")
 		BaboKidnapTiedUp.setvalue(1);You are tied
 		(Kidnapper01.getreference() as actor).moveto(KidnapperSafeMarkerA.getreference())
@@ -1660,6 +2106,7 @@ Event OnBeginState()
 		SetvehicleRef(None, None)
 		EquipRestraintsCheck(PlayerRef)
 		BaboKidnapTiedUp.setvalue(1);You are tied
+		CurrentlyCaptured(true)
 		;EquipRestraints(PlayerRef, false)
 		;EquipRestraints(PlayerRef, true)
 	endif
@@ -1681,18 +2128,15 @@ elseif Callstage == 6
 endif
 EndFunction
 
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
-EndFunction
-
 Function TimeLapse(Bool OneHour, Bool Standby)
 
-if GameHour.value >= 21.0 && GameHour.value < 8.0
+;if GameHour.value >= 21.0 && GameHour.value < 8.0
 
-endif
+;endif
 
 if OneHour
 	SetGameHourCustom(true, 1.0)
+	PlayerRef.RestoreActorValue("Stamina", 5)
 Endif
 
 if Standby
@@ -1702,6 +2146,7 @@ if Standby
 		;SetGameHourCustom(false, 8.0)
 	elseif (GameHour.value >= 12.0 && GameHour.value < 18.0) && BaboActorDetectorGlobal.getvalue() == 1
 		SetGameHourCustom(false, 18.0)
+		PlayerRef.RestoreActorValue("Stamina", 5)
 	endif
 else
 
@@ -1893,14 +2338,14 @@ elseif Scenario == 2;hit
 elseif Scenario == 3;hitrope
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 2, false)
 elseif Scenario == 4;
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04A", "KidnapEvent04A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04A", "KidnapEvent04A", True)
 else;BadEnd / Kill
 	AddTitle(4)
 	GotoState("BaboKidnapHangedReady")
 endif
 EndFunction
 
-Function KidnapperDied()
+Function KidnapperDied(int iactor)
 	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(12)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcCorruptionExpLoss(35.0)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcTraumaExpLoss(6.0)
@@ -1941,13 +2386,13 @@ if Scenario == 1;Sex Time
 	FadeinMoveScene(PlayerAlias, KidnapperMarker03, 0, false, false, "")
 	(Kidnapper01.Getreference() as actor).moveto(KidnapperMarker03.getreference())
 	Utility.Wait(5.0)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04", "KidnapEvent04", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04", "KidnapEvent04", True)
 elseif Scenario == 2;hit
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 1, false)
 elseif Scenario == 3;hitrope
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 2, false)
 elseif Scenario == 4;Sex and rope
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04A", "KidnapEvent04A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04A", "KidnapEvent04A", True)
 else;BadEnd / Kill
 endif
 EndFunction
@@ -1972,7 +2417,7 @@ Function YouGotSpotted(int Scenario)
 if Scenario == 1;Sex Time
 	FadeinMoveScene(PlayerAlias, KidnapperMarker03, 0, false, false, "")
 	Utility.Wait(5.0)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04", "KidnapEvent04", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04", "KidnapEvent04", True)
 elseif Scenario == 2;hit
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 1, false)
 elseif Scenario == 3;hitrope
@@ -1980,7 +2425,7 @@ elseif Scenario == 3;hitrope
 elseif Scenario == 4;Sex and rope
 	FadeinMoveScene(PlayerAlias, KidnapperMarker03, 0, false, false, "")
 	Utility.Wait(5.0)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04A", "KidnapEvent04A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04A", "KidnapEvent04A", True)
 else;BadEnd / Kill
 
 endif
@@ -2000,27 +2445,22 @@ Function YouAreRescued()
 	KidnapQuestStopCheck()
 EndFunction
 
-Function KidnapperDied()
+Function KidnapperDied(int iactor)
 	BaboKidnapEventScenarioRescue.forcestart()
 EndFunction
 
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
-EndFunction
-
 EndState
-
 
 ;##################Bandit Cave Event#6##################
 
 State BaboKidnapBanditCave
 
 Event OnBeginState()
-
 	(BaboSexController as BaboSexControllerManager).StateChange("ConstantPainExpression")
 	if !(BaboKidnapScenarioe.getvalue() == 10)
 		ResetSetRoom()
 		PlaceSubWeapon()
+		SetSnareTrap()
 		Debug.sendanimationevent(PlayerRef, "IdleForceDefaultState")
 		UnequipWeapons(PlayerRef)
 		Utility.wait(2.0)
@@ -2036,23 +2476,42 @@ Event OnBeginState()
 		;FadeinMoveScene(PlayerAlias, CenterMarkerPlayer, 0, false, true, "BaboRopeHit")
 		(Kidnapper01.getreference() as actor).moveto(KidnapperMarker01.getreference())
 		(Kidnapper02.getreference() as actor).moveto(KidnapperMarker02.getreference())
+		SettheStage()
+		AssignActors()
+		AssignCharacter()
+		SetKidnapperAliasArray()
 		StartGameHour = GameHour.value
 		EndGameHour = StartGameHour + ((Utility.randomint(1, 4)) * 24) as float
-
 		SetScenarioe(10)
 		BaboKidnapEvent.setstage(7)
 		AddFatigue(PlayerRef, True)
 		FadeOutScene(true)
+		CurrentlyCaptured(true)
 		(BaboMonitorScript as BaboDiaMonitorScript).CalcCorruptionExpGain(20.0)
 		(BaboMonitorScript as BaboDiaMonitorScript).CalcTraumaExpGain(3.0)
+		(Kidnapper01.getreference() as actor).additem(BaboKidnapperKey, 1)
+		BaboKidnapTiedUp.setvalue(1)
 	else
 		;Game.DisablePlayerControls( true, true, false, false, true, false, true, false )
 		;SetvehicleRef(None, None)
 		(BaboSexController as BaboSexControllerManager).StuckControl()
+		ReSetSnareTrap()
 		EquipRestraintsCheck(PlayerRef)
+		BaboPlayerDetected.setvalue(0)
+		BaboKidnapPlayerGotTrappedGlobal.setvalue(0)
+		CurrentlyCaptured(true); just in case
 	endif
-
 EndEvent
+
+Function OnLOSRegister()
+	;LOSRegister(akactor01, PlayerRef)
+	BaboKidnapTiedUp.setvalue(0);You are not tied
+	int i = kidnappernum
+		While i >= 0
+		i -= 1
+			LOSRegister(KidnapperActors[i], PlayerRef)
+		EndWhile
+EndFunction
 
 Function BaboKidnapScenePlay(int Callstage)
 if Callstage == 1
@@ -2066,13 +2525,11 @@ elseif Callstage == 4
 endif
 EndFunction
 
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
-EndFunction
-
 Function TimeLapse(Bool OneHour, Bool Standby)
 if OneHour
 	SetGameHourCustom(true, 1.0)
+	PlayerRef.RestoreActorValue("Stamina", 5.0)
+	EventCoolTime -= 1.0
 Endif
 
 if Standby
@@ -2082,9 +2539,21 @@ if Standby
 		;SetGameHourCustom(false, 8.0)
 	elseif (GameHour.value >= 12.0 && GameHour.value < 18.0) && BaboActorDetectorGlobal.getvalue() == 1
 		SetGameHourCustom(false, 18.0)
+		PlayerRef.RestoreActorValue("Stamina", 5.0)
+		EventCoolTime -= 3.0
+		If EventChance <= Utility.randomint(0, 100)
+			MiscEventFire(false)
+		endif
+		if EventCoolTime <= 0.0
+			EventCoolTime = 12.0
+			EventChance += 20
+		endif
 	endif
 else
-
+	if EventCoolTime <= 0.0
+		EventCoolTime = 12.0
+		EventChance += 10
+	endif
 endif
 EndFunction
 
@@ -2093,14 +2562,68 @@ Event OnSleepStart(float afSleepStartTime, float afDesiredSleepEndTime)
 	if sleeptime > 8.0
 		sleeptime = 8.0
 	endif
-	Utility.WaitMenuMode(Sleeptime)
-	PlayerRef.MoveTo(PlayerRef)
+	EventCoolTime -= SleepTime
+	if EventCoolTime <= 0.0
+		EventCoolTime = 12.0
+		EventChance += 20
+	endif
+	If EventChance <= Utility.randomint(0, 100)
+		Utility.WaitMenuMode(Sleeptime / 2)
+		bMiscEvent = true
+	else
+		Utility.WaitMenuMode(Sleeptime)
+		PlayerRef.MoveTo(PlayerRef)
+	endif
 endEvent
+
+Event OnSleepStop(bool abInterrupted)
+	if bMiscEvent
+		MiscEventFire(true)
+		bMiscEvent = false
+		EventChance = 10
+	endif
+EndEvent
+
+Function MiscEventFire(bool bsex)
+int i = KidnapperActors.length
+int actori = Utility.randomint(0, i - 1)
+int ri = Utility.randomint(0, 100)
+
+if bsex && KidnapperActors[actori]
+	StartUptheEvent(0)
+	KidnapperActors[actori].moveto(PlayerRef)
+	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(17)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, KidnapperActors[actori], None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE10B", "KidnapEvent10B", True)
+elseif !bsex && KidnapperActors[actori]
+	if ri < 10
+		;gangbang
+		While i >= 0
+			i -= 1
+			KidnapperActors[i].moveto(KidnapperMarker01.getreference());in front of Player
+		endWhile
+		BaboKidnapEventScenario10Sex.forcestart()
+	elseif ri < 50;WIP Need Fix
+		BaboKidnapMiscEventNum = actori
+		KidnapperActors[actori].moveto(PlayerRef)
+		BaboKidnapEventScenario10Misc.forcestart()
+	elseif ri < 70
+		PlayerRef.RestoreActorValue("Stamina", 5.0)
+		PlayerRef.RestoreActorValue("Magicka", 10.0)
+	else
+		;Nothing happened.
+	endif
+endif
+EndFunction
 
 Bool Function KeyPress()
 ;	If (!Utility.IsInMenuMode() && (BaboDialogueMCM as BaboDialogueConfigMenu).NotificationKey == keyCode)
 ;		If BaboKidnapEvent.getstage() >= 8
 			;Debug.Notification("I press it!")
+		if !bKeyPressed
+			bKeyPressed = true
+			if !bCaptured
+				return true
+			endif
 			float itotal
 			float iSneak
 			float ir1
@@ -2135,10 +2658,14 @@ Bool Function KeyPress()
 						Utility.wait(2.0)
 						(BaboSexController as BaboSexControllerManager).UseSexlabVoice(PlayerRef, true)
 						Utility.wait(6.0)
-						BaboKidnapScenePlay(2);sound
+						if CheckEscapeStruggleDetect()
+							BaboKidnapScenePlay(2);Kidnapper comes
+						else
+							(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(18)
+						endif
 						Debug.sendanimationevent(PlayerRef, "BaboRopeHit")
 					endif
-
+					return false
 				elseif (choice == 1);Use Magic
 					itotal = (PlayerRef.getactorvalue("Destruction")) as int
 					itotal *= 0.0008
@@ -2156,8 +2683,14 @@ Bool Function KeyPress()
 						Utility.wait(2.0)
 						(BaboSexController as BaboSexControllerManager).UseSexlabVoice(PlayerRef, true)
 						Utility.wait(6.0)
-						BaboKidnapScenePlay(3);sound
+						if CheckEscapeStruggleDetect()
+							BaboKidnapScenePlay(3);Kidnapper comes
+						else
+							(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(18)
+						endif
+						;BaboKidnapScenePlay(3);sound
 					endif
+					return false
 				elseif (choice == 2);Talk to the kidnapper
 					;Scene Starts
 					if BaboPlayerGagged.getvalue() == 1
@@ -2165,15 +2698,45 @@ Bool Function KeyPress()
 						zbfSoundGagFrustrated.play(PlayerRef)
 						(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(16)
 					else
-						BaboKidnapScenePlay(4)
+						CalltheGuard()
 					endif
+					return false
 				elseif (choice == 3);Wait
 					TimeLapse(true, true)
 				endif
 			endif
-		;Endif
+		Endif
 ;	EndIf
+Utility.wait(3.0)
+bKeyPressed = false
 Return true
+EndFunction
+
+Function CalltheGuard()
+;int ichance = Utility.randomint(1, kidnappernum)
+	int i = kidnappernum
+	actor akactor
+	bool bswitch = true
+	While i >= 0 && bswitch
+		i -= 1
+		if KidnapperActors[i] && playerref.getdistance(KidnapperActors[i]) <= 1024
+			akactor = KidnapperActors[i]
+			BaboKidnapMiscEventNum = i
+			bswitch = false
+		endif
+	EndWhile
+	
+	if akactor == KidnapperActors[0]
+		BaboKidnapEventScenario04D.forcestart()
+	elseif akactor == KidnapperActors[1]
+		BaboKidnapEventCalling02.forcestart()
+	elseif akactor == KidnapperActors[2]
+		BaboKidnapEventCalling03.forcestart()
+	elseif (akactor == KidnapperActors[3]) || (akactor == KidnapperActors[4]) || (akactor == KidnapperActors[5]) || (akactor == KidnapperActors[6]) || (akactor == KidnapperActors[7])
+		BaboKidnapEventCalling04.forcestart()
+	else
+		(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(16)
+	endif
 EndFunction
 
 Event OnUpdate()
@@ -2188,23 +2751,26 @@ EndFunction
 
 Function YouGotSpotted(int Scenario)
 if Scenario == 1;
+	BaboKidnapConfiscateChestAccessGlobal.setvalue(0)
 	FadeinMoveScene(PlayerAlias, CenterMarkerPlayer, 0, false, true, "BaboRopeHit")
 	(Kidnapper01.getreference() as actor).evaluatepackage()
+	CurrentlyCaptured(true)
 elseif Scenario == 2;hit
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 1, false)
 elseif Scenario == 3;hitrope
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 2, false)
 elseif Scenario == 4;
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04A", "KidnapEvent04A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04A", "KidnapEvent04A", True)
 elseif Scenario == 5;Just Sex
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04A", "KidnapEvent04A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04A", "KidnapEvent04A", True)
 else;BadEnd / Kill
 	GotoState("BaboKidnapHangedReady")
 endif
 EndFunction
 
-Function KidnapperDied()
+Function KidnapperDied(int iactor)
 	kidnapperKill += 1
+	BaboKidnapperKilledCount.setvalue(kidnapperKill)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcCorruptionExpLoss(5.0)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcTraumaExpLoss(1.0)
 	
@@ -2219,6 +2785,9 @@ Function KidnapperDied()
 		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper03)
 		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper04)
 		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper05)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper06)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper07)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper08)
 	endif
 	;FrontDoor.Getreference().lock(false)
 EndFunction
@@ -2240,94 +2809,156 @@ Function YouAreRescued()
 	PlayerRef.moveto(RecoverMarker.getreference())
 EndFunction
 
+Function GetTrapped(bool bTrapped)
+	bSnareTrapped = bTrapped
+	BaboKidnapPlayerGotTrappedGlobal.setvalue(bTrapped as float)
+	if bTrapped
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper01)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper02)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper03)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper04)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper05)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper06)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper07)
+		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper08)
+		FadeinScene(true)
+		ReassignKidnapperAliasArray()
+		SetAlignActor(PlayerRef, KidnappersCombatAliases[0].getreference() as actor, 180, 0, 90)
+		SetAlignActor(PlayerRef, KidnappersCombatAliases[1].getreference() as actor, 180, 40, 90)
+		SetAlignActor(PlayerRef, KidnappersCombatAliases[2].getreference() as actor, 180, -40, 90)
+		FadeOutScene(true)
+		BaboKidnapEventYouAreTrappedSnareRopeIMC.forcestart()
+	endif
+EndFunction
+
 Event OnGainLOS(Actor akViewer, ObjectReference akTarget)
+int sneakav = playerref.getactorvalue("Sneak") as int
+int ichance = Utility.randomint(0, 100)
+Bool bweapondrawn = PlayerRef.IsWeaponDrawn()
+int i
 if akTarget == PlayerRef
-	if (akViewer == akactor01) || (akViewer == akactor02) || (akViewer == akactor03) || (akViewer == akactor04) || (akViewer == akactor05)
-	
+	if sneakav > ichance && PlayerRef.issneaking()
+		akViewer.say(BaboKidnapEventBranchResponseSneakT)
+		Utility.wait(2.0)
+		LOSRegister(akViewer, akTarget as actor)
+	elseif akViewer.isinfaction(BaboKidnapperFaction) && !akViewer.isinfaction(BaboKidnapperOverlookFaction);overlook wip
 		if akViewer.isincombat()
 			return
 		endif	
 		
 		if (akViewer.GetSleepState() == 3)
-			;nothing
+			return
 		else
-			Armor thisArmor = PlayerRef.GetWornForm(0x00000004) as Armor
-			if thisArmor;You retrieved your gear
+			;Armor thisArmor = PlayerRef.GetWornForm(0x00000004) as Armor
+			BaboPlayerDetected.setvalue(1)
+			if bweapondrawn && !bSnareTrapped;You unsheathed your weapon
 				if !PlayerRef.isincombat()
 					(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(13)
 				endif
+				;(BaboTrapMarker as BaboDiaSnareRopeTrap).ManageState("OpenStandby")
 				(BaboSexController as BaboSexControllerManager).ActorChallengeStart(akViewer);Battle
 				LOSUnRegister(akViewer, PlayerRef)
 				return
+			elseif bSnareTrapped
+				QTESnareTrapAbort()
+				i = kidnappernum
+				While i >= 0
+				i -= 1
+					LOSUnRegister(KidnapperActors[i], PlayerRef)
+				EndWhile
+				GetTrapped(true)
 			else
 				;Self.Nocollision(PlayerAlias)
 				(BaboSexController as BaboSexControllerManager).StuckControl()
 				if PlayerRef.IsSneaking()
 					PlayerRef.StartSneaking()
 				endif
-					LOSUnRegister(akactor01, PlayerRef)
-					LOSUnRegister(akactor02, PlayerRef)
-					LOSUnRegister(akactor03, PlayerRef)
-					LOSUnRegister(akactor04, PlayerRef)
-					LOSUnRegister(akactor05, PlayerRef)
-					if (akViewer == akactor01)
+					i = kidnappernum
+					While i >= 0
+					i -= 1
+						LOSUnRegister(KidnapperActors[i], PlayerRef)
+					EndWhile
+					if (akViewer == KidnapperActors[0])
 						BaboKidnapEventYouAreSpotted.forcestart()
-					elseif (akViewer == akactor02)
+					elseif (akViewer == KidnapperActors[1])
 						BaboKidnapEventYouAreSpottedA02.forcestart()
-					elseif (akViewer == akactor03)
+					elseif (akViewer == KidnapperActors[2])
 						BaboKidnapEventYouAreSpottedA03.forcestart()
-					elseif (akViewer == akactor04)
+					elseif (akViewer == KidnapperActors[3])
 						BaboKidnapEventYouAreSpottedA04.forcestart()
 					else
-						akactor01.moveto(PlayerRef);Just in case
+						KidnapperActors[0].moveto(PlayerRef);Just in case
 						Utility.wait(1.0)
 						BaboKidnapEventYouAreSpotted.forcestart()
 					endif
 				return
 			endif
 		endif
+	elseif akViewer.isinfaction(BaboKidnapperOverlookFaction)
+		akViewer.say(BaboKidnapEventBranchResponseOverlookT);say topic
+		Utility.wait(1.0)
 	endif
 endif
 Endevent
 
-Function SettheStage()
-kidnapperKill = 0
-kidnapperNum = 1
-VictimNum = 0
-	if Kidnapper02
-		kidnapperNum += 1
-	endif
-	if Kidnapper03
-		(Kidnapper03.getreference() as actor).moveto(KidnapperMarker03.getreference())
-		kidnapperNum += 1
-	endif
-	if Kidnapper04
-		(Kidnapper04.getreference() as actor).moveto(KidnapperMarker04.getreference())
-		kidnapperNum += 1
-	endif
-	if Kidnapper05
-		(Kidnapper05.getreference() as actor).moveto(KidnapperMarker05.getreference())
-		kidnapperNum += 1
-	endif
-	
-	if OtherVictimA
-		(OtherVictimA.getreference() as actor).moveto(KidnapperVictimMarkerA.getreference())
-		VictimNum += 1
-	endif
-	if OtherVictimB
-		(OtherVictimB.getreference() as actor).moveto(KidnapperVictimMarkerB.getreference())
-		VictimNum += 1
-	endif
-	if OtherVictimC
-		(OtherVictimC.getreference() as actor).moveto(KidnapperVictimMarkerC.getreference())
-		VictimNum += 1
-	endif
+Function StartUptheEvent(int Scenarioe)
+		;Clearallthealiases()
+		if Scenarioe == 1
+			Gotostate("BaboKidnapBanditCave")
+		elseif Scenarioe == 2
+			Gotostate("BaboKidnapStandby")
+		elseif Scenarioe == 3
+			Gotostate("BaboKidnapPunishment")
+		elseif Scenarioe == 10
+			Gotostate("BaboKidnapBanditCave")
+		else
+			Gotostate("BaboKidnapStandby")
+		endif
+EndFunction
 
+Function GivePunishment(int istage, actor akactor)
+
+if istage == 1;blowjob Rape
+	FadeinScene(true)
+	MoveActortoPiont(PlayerRef, KidnapperMarker01)
+	StartUptheEvent(2)
+	;if BaboPlayerYoke.getvalue() == 1
+	;	ShackleRestraint(false)
+	;endif
+	MoveActortoPiont(akactor, KidnapperMarker01)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, akactor, None, None, None, SLKeywordA, SLKeywordB, "Blowjob", True, "KidnapE06B", "KidnapEvent06B", True)
+	FadeOutScene(true)
+	
+elseif istage == 2;sex Rape
+	FadeinScene(true)
+	MoveActortoPiont(PlayerRef, KidnapperMarker01)
+	StartUptheEvent(2)
+	if BaboPlayerYoke.getvalue() == 1
+		ShackleRestraint(false)
+	endif
+	MoveActortoPiont(akactor, KidnapperMarker01)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, akactor, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE06B", "KidnapEvent06B", True)
+	FadeOutScene(true)
+endif
+
+endfunction
+
+
+Function QTESnareTrapSuccess()
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).QTESuccess()
+EndFunction
+
+Function QTESnareTrapFail()
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).QTEFail()
+	FadeinScene(true)
+	SetAlignActor(PlayerRef, KidnapperActors[0], 180, 0, 90)
+	BaboKidnapEventYouAreTrappedSnareRope.forcestart()
+	FadeoutScene(true)
 EndFunction
 
 EndState
 
-State BaboKidnapStandby
+State BaboKidnapStandby;You get this state when the scene starts
 
 Bool Function KeyPress()
 Return false
@@ -2342,6 +2973,10 @@ EndEvent
 
 Function YouGotSpottedOG(actor akactor, int Scenario)
 if scenario == 1
+	if BaboKidnapPlayerGotTrappedGlobal.getvalue() == 1
+		(BaboSexController as BaboSexControllerManager).TrapResetCoordinates(PlayerRef, true)
+		(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).GetReady();Reset the trap
+	endif
 	(BaboSexController as BaboSexControllerManager).SexCustomActorTag(PlayerRef, akactor, None, None, None, "MF, Rape", "Femdom", True, "KidnapE06A", "KidnapEvent06A", True)
 else;kill player
 	(BaboSexController as BaboSexControllerManager).SexCustomActorTag(PlayerRef, akactor, None, None, None, "MF, Necro", "Femdom", True, "KidnapE06F", "KidnapEvent06F", True)
@@ -2351,23 +2986,77 @@ EndFunction
 Function YouGotSpotted(int Scenario)
 if Scenario == 1;
 	FadeinMoveScene(PlayerAlias, CenterMarkerPlayer, 0, false, true, "BaboRopeHit")
-	StartUptheEvent(BaboKidnapScenarioe.getvalue() as int)
+	if BaboKidnapPlayerGotTrappedGlobal.getvalue() == 1;just in case
+		(BaboSexController as BaboSexControllerManager).TrapResetCoordinates(PlayerRef, true)
+		(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).GetReady();Reset the trap
+	endif
+	StartUptheEvent(1)
+	BaboKidnapConfiscateChestAccessGlobal.setvalue(0)
+	(Kidnapper01.getreference() as actor).evaluatepackage()
+	CurrentlyCaptured(true)
 	;Sometimes struggle bar alpha value set to 100 invisible
 elseif Scenario == 2;hit
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 1, false)
 elseif Scenario == 3;hitrope
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 2, false)
 elseif Scenario == 4;Sex and rope
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04A", "KidnapEvent04A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04A", "KidnapEvent04A", True)
 elseif Scenario == 5;No Guard Coming
+	if BaboKidnapPlayerGotTrappedGlobal.getvalue() == 1
+		
+	endif
 	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(14)
 	FadeinMoveScene(PlayerAlias, CenterMarkerPlayer, 0, false, true, "BaboRopeHit")
-	StartUptheEvent(BaboKidnapScenarioe.getvalue() as int)
+	StartUptheEvent(1)
 	TimeLapse(true, False)
+elseif Scenario == 6;You got trapped in the middle of the fight
+	FadeinScene(true)
+	(BaboSexController as BaboSexControllerManager).TrapResetCoordinates(PlayerRef, true)
+	(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).GetReady();Reset the trap
+	int iindex = CountKidnappersCombat()
+	FadeoutScene(true)
+	if iindex >= 3
+		(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01Combat, Kidnapper02Combat, Kidnapper03Combat, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE06C", "KidnapEvent06C", True)
+	elseif iindex == 2
+		(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01Combat, Kidnapper02Combat, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE06C", "KidnapEvent06C", True)
+	elseif iindex == 1
+		(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01Combat, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE06C", "KidnapEvent06C", True)
+	else
+		;Null
+	endif
 else;BadEnd / FakeKill
 	GotoState("BaboKidnapHangedReady")
 endif
 EndFunction
+
+Function FinalSex()
+int iindex = CountKidnappersCombat()
+if iindex >= 6
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper04Combat, Kidnapper05Combat, Kidnapper06Combat, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE06D", "KidnapEvent06D", True)
+elseif iindex >= 5
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper04Combat, Kidnapper05Combat, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE06D", "KidnapEvent06D", True)
+elseif iindex >= 4
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper03Combat, Kidnapper04Combat, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE06D", "KidnapEvent06D", True)
+else
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01Combat, Kidnapper02Combat, Kidnapper03Combat, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE06D", "KidnapEvent06D", True)
+endif
+EndFunction
+
+Function StartUptheEvent(int Scenarioe)
+		;Clearallthealiases()
+		if Scenarioe == 1
+			Gotostate("BaboKidnapBanditCave")
+		elseif Scenarioe == 2
+			Gotostate("BaboKidnapStandby")
+		elseif Scenarioe == 3
+			Gotostate("BaboKidnapPunishment")
+		elseif Scenarioe == 10
+			Gotostate("BaboKidnapBanditCave")
+		else
+			Gotostate("BaboKidnapStandby")
+		endif
+EndFunction
+
 
 EndState
 
@@ -2431,6 +3120,7 @@ Function YouAreRescued()
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcTraumaExpGain(10.0)
 	(BaboSexController as BaboSexControllerManager).ReputationDecrease(30, 5)
 	(BaboSexController as BaboSexControllerManager).ReputationBitchIncrease(10)
+	DisposeofCombatActors()
 	PlayerRef.moveto(RecoverMarker.getreference())
 	EquipRestraints(PlayerRef, false)
 	RecoverEquipments()
@@ -2441,11 +3131,50 @@ Function YouAreRescued()
 	KidnapQuestStopCheck()
 EndFunction
 
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
+EndState
+
+State BaboKidnapPunishment
+
+Bool Function KeyPress()
+Return False
+EndFunction
+
+Event OnUpdate()
+EndEvent
+
+Function YouGotSpotted(int Scenario)
+if Scenario == 1;Sex Time
+	if BaboKidnapPlayerGotTrappedGlobal.getvalue() == 1
+		(BaboSexController as BaboSexControllerManager).TrapResetCoordinates(PlayerRef, true)
+		(BaboTrapMarker.getreference() as BaboDiaSnareRopeTrap).GetReady();Reset the trap
+	endif
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapEPunishment06A", "BaboKidnapPunishment06A", True)
+else;Go back to Normal
+	BaboKidnapConfiscateChestAccessGlobal.setvalue(0)
+	FadeinMoveScene(PlayerAlias, CenterMarkerPlayer, 0, false, true, "BaboRopeHit")
+	(Kidnapper01.getreference() as actor).evaluatepackage()
+	CurrentlyCaptured(true)
+	StartUptheEvent(1)
+endif
+EndFunction
+
+Function StartUptheEvent(int Scenarioe)
+		;Clearallthealiases()
+		if Scenarioe == 1
+			Gotostate("BaboKidnapBanditCave")
+		elseif Scenarioe == 2
+			Gotostate("BaboKidnapStandby")
+		elseif Scenarioe == 3
+			Gotostate("BaboKidnapPunishment")
+		elseif Scenarioe == 10
+			Gotostate("BaboKidnapBanditCave")
+		else
+			Gotostate("BaboKidnapStandby")
+		endif
 EndFunction
 
 EndState
+
 ; Privated needs, Pee and Fart, (Mini needs)
 
 ;##################Slaver Event#20##################
@@ -2467,37 +3196,17 @@ Event OnBeginState()
 		endif
 		;FadeinMoveScene(PlayerAlias, CenterMarkerPlayer, 0, false, false, "")
 		FadeinScene(true)
-		akactor01 = Kidnapper01.getreference() as actor
-		akactor02 = Kidnapper02.getreference() as actor
-		akactor03 = Kidnapper03.getreference() as actor
-		akactor04 = Kidnapper04.getreference() as actor
-		akactor05 = Kidnapper05.getreference() as actor
-		
+		AssignActors(); Total 5
+		AssignCharacter()
+		SetKidnapperAliasArray()
 		MoveReftoPiont(PlayerAlias, CenterMarkerPlayer)
 		(Kidnapper01.getreference() as actor).moveto(KidnapperSafeMarkerA.getreference())
 		(Kidnapper01.getreference() as actor).addtofaction(BaboAnonymousSlaverFaction)
 		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank((Kidnapper01.getreference() as actor));Give a character
-		if akactor02
+		if Kidnapper02.getreference() as actor
 			(Kidnapper02.getreference() as actor).moveto(KidnapperMarker02.getreference())
-			(Kidnapper02.getreference() as actor).addtofaction(BaboAnonymousSlaverGuardFaction)
-			(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank((Kidnapper02.getreference() as actor));Give a character
 		endif
-		
-		if akactor03
-			(Kidnapper03.getreference() as actor).moveto(KidnapperMarker03.getreference())
-			(Kidnapper03.getreference() as actor).addtofaction(BaboAnonymousSlaverGuardFaction)
-		endif
-		
-		if akactor04
-			(Kidnapper04.getreference() as actor).moveto(KidnapperMarker04.getreference())
-			(Kidnapper04.getreference() as actor).addtofaction(BaboAnonymousSlaverGuardFaction)
-		endif
-
-		if akactor05
-			(Kidnapper05.getreference() as actor).moveto(KidnapperMarker05.getreference())
-			(Kidnapper05.getreference() as actor).addtofaction(BaboAnonymousSlaverGuardFaction)
-		endif
-
+		SettheStage()
 		StartGameHour = GameHour.value
 		EndGameHour = StartGameHour + ((Utility.randomint(1, 4)) * 24) as float
 		SetScenarioe(20)
@@ -2548,6 +3257,38 @@ if (choice == 0);Call the guard
 		BaboKidnapScenePlay(12)
 	endif
 endif
+EndFunction
+
+Function AssignCharacter()
+	(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor01);Give a character
+	if akactor02
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor02)
+		akactor02.addtofaction(BaboAnonymousSlaverGuardFaction)
+	endif
+	if akactor03
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor03)
+		akactor03.addtofaction(BaboAnonymousSlaverGuardFaction)
+	endif
+	if akactor04
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor04)
+		akactor04.addtofaction(BaboAnonymousSlaverGuardFaction)
+	endif
+	if akactor05
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor05)
+		akactor05.addtofaction(BaboAnonymousSlaverGuardFaction)
+	endif
+	if akactor06
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor06)
+		akactor06.addtofaction(BaboAnonymousSlaverGuardFaction)
+	endif
+	if akactor07
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor07)
+		akactor07.addtofaction(BaboAnonymousSlaverGuardFaction)
+	endif
+	if akactor08
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(akactor08)
+		akactor08.addtofaction(BaboAnonymousSlaverGuardFaction)
+	endif
 EndFunction
 
 ;Event OnKeyDown( int keyCode )
@@ -2872,14 +3613,9 @@ endif
 Endevent
 
 Function OnLOSRegister()
-	akactor02 = Kidnapper02.getreference() as actor
-	akactor03 = Kidnapper03.getreference() as actor
-	akactor04 = Kidnapper04.getreference() as actor
-	akactor05 = Kidnapper05.getreference() as actor
 	if akactor02
 		LOSRegister(akactor02, PlayerRef)
 	endif
-	
 	if akactor03
 		LOSRegister(akactor03, PlayerRef)
 	endif
@@ -2927,24 +3663,24 @@ elseif Scenario == 2;hit
 elseif Scenario == 3;hitrope
 	(BaboSexController as BaboSexControllerManager).EventPairMotion(Kidnapper01.getreference() as actor, 0, 0, 0, 2, false)
 elseif Scenario == 4;
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE04A", "KidnapEvent04A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE04A", "KidnapEvent04A", True)
 else;BadEnd / Kill
 	AddTitle(4)
 	GotoState("BaboSlaverDisposedStandby");Timid characters might let you go? WIP
 endif
 EndFunction
 
-Function GivePunishment(int istage)
+Function GivePunishment(int istage, actor akactor)
 
 if istage == 1;blowjob Rape
 	;FadeinMoveSceneFast(PlayerAlias, FurnitureSafeALink, 0, False)
 	FadeinScene(true)
-	MoveReftoPiont(PlayerAlias, FurnitureSafeALink)
+	MoveActortoPiont(PlayerRef, FurnitureSafeALink)
 	if BaboPlayerYoke.getvalue() == 1
 		ShackleRestraint(false)
 	endif
-	MoveReftoPiont(Kidnapper01, FurnitureSafeALink)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Blowjob", True, "KidnapE20A", "KidnapEvent20A", True)
+	MoveActortoPiont(akactor, FurnitureSafeALink)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, akactor, None, None, None, "MF", "Aggressive", "Blowjob", True, "KidnapE20A", "KidnapEvent20A", True)
 	FadeOutScene(true)
 	StartUptheEvent(2)
 elseif istage == 2;sex Rape
@@ -2955,7 +3691,7 @@ elseif istage == 2;sex Rape
 		ShackleRestraint(false)
 	endif
 	MoveReftoPiont(Kidnapper01, FurnitureSafeALink)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE20A", "KidnapEvent20A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE20A", "KidnapEvent20A", True)
 	FadeOutScene(true)
 	StartUptheEvent(2)
 elseif istage == 3;Blowjob
@@ -2978,22 +3714,22 @@ elseif istage == 6;DDI
 	ShackleRestraint(true);Restrained
 elseif istage == 7;GuardSex
 	FadeinScene(true)
-	MoveReftoPiont(PlayerAlias, FurnitureSafeALink)
+	MoveActortoPiont(PlayerRef, FurnitureSafeALink)
 	if BaboPlayerYoke.getvalue() == 1
 		ShackleRestraint(false)
 	endif
-	MoveReftoPiont(Kidnapper02, FurnitureSafeALink)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper02, None, None, None, "MF", "Aggressive", "Vaginal", True, "KidnapE20C", "KidnapEvent20C", True)
+	MoveActortoPiont(akactor, FurnitureSafeALink)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, akactor, None, None, None, "MF", "Aggressive", "Vaginal", True, "KidnapE20C", "KidnapEvent20C", True)
 	FadeOutScene(true)
 	StartUptheEvent(2)
 elseif istage == 8;GuardSex and escape
 	FadeinScene(true)
-	MoveReftoPiont(PlayerAlias, FurnitureSafeALink)
+	MoveActortoPiont(PlayerRef, FurnitureSafeALink)
 	if BaboPlayerYoke.getvalue() == 1
 		ShackleRestraint(false)
 	endif
-	MoveReftoPiont(Kidnapper02, FurnitureSafeALink)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper02, None, None, None, "MF", "Aggressive", "Vaginal", True, "KidnapE20D", "KidnapEvent20D", True)
+	MoveActortoPiont(akactor, FurnitureSafeALink)
+	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, akactor, None, None, None, "MF", "Aggressive", "Vaginal", True, "KidnapE20D", "KidnapEvent20D", True)
 	FadeOutScene(true)
 	StartUptheEvent(2)
 else
@@ -3016,7 +3752,7 @@ endif
 
 EndFunction
 
-Function KidnapperDied()
+Function KidnapperDied(int iactor)
 	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(12)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcCorruptionExpLoss(12.0)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcTraumaExpLoss(2.0)
@@ -3087,10 +3823,6 @@ elseif Callstage == 15
 endif
 EndFunction
 
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
-EndFunction
-
 Function TimeLapse(Bool OneHour, Bool Standby)
 	if GameHour.value >= 21.0 || GameHour.value < 8.0
 		(BaboSexController as BaboSexControllerManager).SlaveryEventMessagebox(10)
@@ -3098,11 +3830,13 @@ Function TimeLapse(Bool OneHour, Bool Standby)
 	endif
 	if OneHour
 		SetGameHourCustom(true, 1.0)
+		PlayerRef.RestoreActorValue("Stamina", 5)
 	Endif
 
 if Standby
 	if (GameHour.value >= 8.0 && GameHour.value < 21.0) && BaboActorDetectorGlobal.getvalue() == 1
 		SetGameHourCustom(false, 18.0)
+		PlayerRef.RestoreActorValue("Stamina", 5)
 	endif
 else
 
@@ -3194,7 +3928,7 @@ if Scenario == 1;
 		ShackleRestraint(false)
 	endif
 	MoveReftoPiont(Kidnapper01, FurnitureSafeALink)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE20A", "KidnapEvent20A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE20A", "KidnapEvent20A", True)
 	FadeOutScene(true)
 	StartUptheEvent(2)
 elseif Scenario == 2;Guard take you
@@ -3210,7 +3944,7 @@ else;BadEnd / Kill
 endif
 EndFunction
 
-Function GivePunishment(int istage)
+Function GivePunishment(int istage, actor akactor)
 
 if istage == 1;blowjob Rape
 	;FadeinMoveSceneFast(PlayerAlias, FurnitureSafeALink, 0, False)
@@ -3231,7 +3965,7 @@ elseif istage == 2;sex Rape
 		ShackleRestraint(false)
 	endif
 	MoveReftoPiont(Kidnapper01, FurnitureSafeALink)
-	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, "MF", "Aggressive", "Rape", True, "KidnapE20A", "KidnapEvent20A", True)
+	(BaboSexController as BaboSexControllerManager).SexCustom(PlayerAlias, Kidnapper01, None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE20A", "KidnapEvent20A", True)
 	FadeOutScene(true)
 	StartUptheEvent(2)
 elseif istage == 3;Normal Sex
@@ -3415,10 +4149,6 @@ Function YouAreRescued()
 	(BaboSexController as BaboSexControllerManager).RecoverControl(true)
 	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(15)
 	KidnapQuestStopCheck()
-EndFunction
-
-Function KidnapQuestStopCheck()
-	BaboKidnapEvent.stop()
 EndFunction
 
 EndState

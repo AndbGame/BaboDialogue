@@ -263,7 +263,7 @@ if RapeTry == true
 		Rapist.Setactorvalue("Variable06", 3)
 		(BaboDialogueWhiterun as BaboDialogueWhiterunScript).WVAS01()
 	EndIf
-
+CorruptionGainEvent()
 SexCount(1)
 endif
 EndFunction

@@ -2,6 +2,16 @@
 ;NEXT FRAGMENT INDEX 4
 Scriptname SF_BaboKidnapEventScenarioGu_08C32F49 Extends Scene Hidden
 
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
+;BEGIN CODE
+(Getowningquest() as BaboKidnapEvenScript).GivePunishment(7, kidnapper02.getreference() as actor)
+(CageDoorA as BaboKidnapCageDoorActivateScript).GotoNullState(false)
+stop()
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_3
 Function Fragment_3()
 ;BEGIN CODE
@@ -23,18 +33,10 @@ Function Fragment_0()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
-;BEGIN CODE
-(Getowningquest() as BaboKidnapEvenScript).GivePunishment(7)
-(CageDoorA as BaboKidnapCageDoorActivateScript).GotoNullState(false)
-stop()
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 ReferenceAlias Property CageDoorA  Auto  
 
 Quest Property BaboSexController  Auto  
+
+ReferenceAlias Property Kidnapper02  Auto  

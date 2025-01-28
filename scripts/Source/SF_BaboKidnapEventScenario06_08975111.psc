@@ -1,11 +1,30 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 5
+;NEXT FRAGMENT INDEX 6
 Scriptname SF_BaboKidnapEventScenario06_08975111 Extends Scene Hidden
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
 ;BEGIN CODE
-(getowningquest() as BaboKidnapEvenScript).ConfiscateAllItems()
+(getowningquest() as BaboKidnapEvenScript).PlayerTalkXmarkerStart()
+(BaboSexController as BaboSexControllerManager).LosingControl()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).RecoverControl(false)
+getowningquest().setstage(8)
+stop()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+;(getowningquest() as BaboKidnapEvenScript).ConfiscateAllItems()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -18,29 +37,18 @@ Function Fragment_3()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
+;BEGIN FRAGMENT Fragment_5
+Function Fragment_5()
+;BEGIN CODE
+(getowningquest() as BaboKidnapEvenScript).PlayerTalkXmarkerReturn()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
 ;BEGIN CODE
 (getowningquest() as BaboKidnapEvenScript).ConfiscateAllItems()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).RecoverControl()
-getowningquest().setstage(8)
-stop()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
-;BEGIN CODE
-(getowningquest() as BaboKidnapEvenScript).PlayerTalkXmarkerStart()
-(BaboSexController as BaboSexControllerManager).LosingControl()
 ;END CODE
 EndFunction
 ;END FRAGMENT

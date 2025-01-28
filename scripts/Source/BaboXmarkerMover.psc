@@ -3,6 +3,7 @@ Scriptname BaboXmarkerMover extends ReferenceAlias
 
 Actor Property PlayerRef  Auto  
 
+Quest Property BaboKidnapEvent Auto
 ReferenceAlias Property SoliloquyXmarker  Auto 
 ReferenceAlias Property SoliloquyXmarkerAlt  Auto 
 ReferenceAlias Property SoliloquyXmarkerAlt03  Auto 
@@ -70,7 +71,7 @@ Event OnUpdate()
 endEvent
 
 Function OnCellLoad()
-	if (BaboSoliloquyOnLocationChange.getvalue() == 1) && (playerCanSpeakChangeLocation == True) && (IsTalking == false)
+	if (BaboSoliloquyOnLocationChange.getvalue() == 1) && (playerCanSpeakChangeLocation == True) && (IsTalking == false) && BaboKidnapEvent.isrunning() == false
 		SoliloquyXmarkerAlt03.GetReference().MoveTo(PlayerRef)
 		BaboSoliloquyOnStartOnLocationChange.forcestart()
 		;playerCanSpeakChangeLocation = FALSE
