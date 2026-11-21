@@ -5,7 +5,8 @@ Scriptname SF_BaboEncounter10Scene02_081A8B4D Extends Scene Hidden
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
-GetOwningQuest().SetStage(40)
+getowningquest().setstage(40)
+stop()
 ;END CODE
 EndFunction
 ;END FRAGMENT

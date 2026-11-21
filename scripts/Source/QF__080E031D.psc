@@ -2,24 +2,9 @@
 ;NEXT FRAGMENT INDEX 36
 Scriptname QF__080E031D Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY CenterMarker
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_CenterMarker Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY TRIGGER
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_TRIGGER Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY PlayerRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PlayerRef Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY myHoldContested
+;BEGIN ALIAS PROPERTY myHoldLocation
 ;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldContested Auto
+LocationAlias Property Alias_myHoldLocation Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Adventurer
@@ -27,77 +12,43 @@ LocationAlias Property Alias_myHoldContested Auto
 ReferenceAlias Property Alias_Adventurer Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY myHoldImperial
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldImperial Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY myHoldLocation
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldLocation Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY myHoldSons
 ;ALIAS PROPERTY TYPE LocationAlias
 LocationAlias Property Alias_myHoldSons Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_17
-Function Fragment_17()
-;BEGIN CODE
-;Necro Rape Start
-(BaboSexController as BaboSexControllerManager).EncounterEvent01Messagebox(2)
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(0, "BaboEncounter01")
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_Adventurer, None, None, None, "Necro", "Femdom, Bigguy", true, "Event01Sex02", "Encounter01Sex02", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
-(BaboSexController as BaboSexControllerManager).CorruptionExp(1.0)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY myHoldContested
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldContested Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_31
-Function Fragment_31()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(5, "BaboEncounter01")
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY CenterMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_CenterMarker Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_15
-Function Fragment_15()
-;BEGIN AUTOCAST TYPE WEScript
-Quest __temp = self as Quest
-WEScript kmyQuest = __temp as WEScript
-;END AUTOCAST
-;BEGIN CODE
-;player pays "fine"
-Game.GetPlayer().RemoveItem(kmyquest.WEParentS.Gold001, kmyquest.Num1 as int)
-Alias_Adventurer.GetReference().AddItem(kmyquest.WEParentS.Gold001, kmyquest.Num1 as int)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY myHoldImperial
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldImperial Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_22
-Function Fragment_22()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
-;BEGIN CODE
-(Alias_Adventurer.getRef() as Actor).EvaluatePackage()
-kmyQuest.fRegisterForSingleUpdateGameTime(1.0)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY PlayerRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerRef Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_30
-Function Fragment_30()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
+;BEGIN ALIAS PROPERTY TRIGGER
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_TRIGGER Auto
+;END ALIAS PROPERTY
+
+;BEGIN FRAGMENT Fragment_24
+Function Fragment_24()
 ;BEGIN CODE
-kmyQuest.fRegisterForSingleUpdateGameTime(0.4)
+(BaboMsgScript as BaboMsgManager).EncounterEvent01Messagebox(3)
+(BaboSexController as BaboSexControllerManager).ConfidenceExp(3.0)
+(BaboSexController as BaboSexControllerManager).TraumaExp(-0.5)
+setstage(255)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -120,23 +71,10 @@ kmyQuest.gotostate("RoadEncounterEvent01A")
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_35
-Function Fragment_35()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).SLHHActivate(Alias_Adventurer.getreference() as actor, none)
-kmyQuest.fRegisterForSingleUpdateGameTime(0.5)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_26
 Function Fragment_26()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EncounterEvent01Messagebox(5)
+(BaboMsgScript as BaboMsgManager).EncounterEvent01Messagebox(5)
 (BaboSexController as BaboSexControllerManager).TraumaExp(-3.0)
 setstage(255)
 ;END CODE
@@ -147,7 +85,7 @@ EndFunction
 Function Fragment_14()
 ;BEGIN CODE
 ;Rape Start
-(BaboSexController as BaboSexControllerManager).EncounterEvent01Messagebox(1)
+(BaboMsgScript as BaboMsgManager).EncounterEvent01Messagebox(1)
 (BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_Adventurer, None, None, None, "Aggressive", "Femdom, Bigguy", true, "Event01Sex01", "Encounter01Sex01", true)
 (BaboSexController as BaboSexControllerManager).AddSexCount(1)
 (BaboSexController as BaboSexControllerManager).CorruptionExp(1.0)
@@ -155,10 +93,94 @@ Function Fragment_14()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_34
-Function Fragment_34()
+;BEGIN FRAGMENT Fragment_17
+Function Fragment_17()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(4, "BaboEncounter01")
+;Necro Rape Start
+(BaboMsgScript as BaboMsgManager).EncounterEvent01Messagebox(2)
+(BaboSceneController as BaboSceneManager).Encounter01ScenePlay(0, false)
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_Adventurer, None, None, None, "Necro", "Femdom, Bigguy", true, "Event01Sex02", "Encounter01Sex02", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+(BaboSexController as BaboSexControllerManager).CorruptionExp(1.0)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_31
+Function Fragment_31()
+;BEGIN CODE
+(BaboSceneController as BaboSceneManager).Encounter01ScenePlay(5, true)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_15
+Function Fragment_15()
+;BEGIN AUTOCAST TYPE WEScript
+Quest __temp = self as Quest
+WEScript kmyQuest = __temp as WEScript
+;END AUTOCAST
+;BEGIN CODE
+;player pays "fine"
+Game.GetPlayer().RemoveItem(kmyquest.WEParentS.Gold001, kmyquest.Num1 as int)
+Alias_Adventurer.GetReference().AddItem(kmyquest.WEParentS.Gold001, kmyquest.Num1 as int)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_19
+Function Fragment_19()
+;BEGIN CODE
+(BaboSceneController as BaboSceneManager).Encounter01ScenePlay(2, true)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_16
+Function Fragment_16()
+;BEGIN CODE
+;FIght starts
+(BaboSceneController as BaboSceneManager).Encounter01ScenePlay(0, false)
+(Alias_Adventurer.getreference() as actor).addperk(BaboReduceIncomingDamageTrauma)
+(BaboSexController as BaboSexControllerManager).ChallengeStart(alias_Adventurer)
+(BaboMsgScript as BaboMsgManager).EncounterEvent01Messagebox(6)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_30
+Function Fragment_30()
+;BEGIN AUTOCAST TYPE BaboDiaQuest
+Quest __temp = self as Quest
+BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.fRegisterForSingleUpdateGameTime(0.4)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_23
+Function Fragment_23()
+;BEGIN CODE
+;Go to Kidnap Event
+(BaboSceneController as BaboSceneManager).Encounter01ScenePlay(0, false)
+Actor Kidnapper = Alias_Adventurer.Getreference() as actor
+Alias_Adventurer.clear()
+if (BaboSexController as BaboSexControllerManager).KidnapQuestStart(Kidnapper, none, Utility.randomint(4, 6), None)
+(BaboKidnapEvent as BaboKidnapEvenScript).StartUptheEvent(4)
+endif
+setstage(255)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_28
+Function Fragment_28()
+;BEGIN CODE
+(BaboSceneController as BaboSceneManager).Encounter01ScenePlay(0, false)
+(BaboSexController as BaboSexControllerManager).NPCTurntoBandit(alias_Adventurer)
+;To death fight
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -167,14 +189,6 @@ EndFunction
 Function Fragment_29()
 ;BEGIN CODE
 (BaboSexController as BaboSexControllerManager).SLHHChokeActivate(Alias_Adventurer.getreference() as actor)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_32
-Function Fragment_32()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(3, "BaboEncounter01")
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -197,22 +211,10 @@ actors[0] = (Alias_Adventurer.GetReference() as actor)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
-;BEGIN CODE
-;FIght starts
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(0, "BaboEncounter01")
-(Alias_Adventurer.getreference() as actor).addperk(BaboReduceIncomingDamageTrauma)
-(BaboSexController as BaboSexControllerManager).ChallengeStart(alias_Adventurer)
-(BaboSexController as BaboSexControllerManager).EncounterEvent01Messagebox(6)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_25
 Function Fragment_25()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EncounterEvent01Messagebox(4)
+(BaboMsgScript as BaboMsgManager).EncounterEvent01Messagebox(4)
 (BaboSexController as BaboSexControllerManager).ConfidenceExp(1.0)
 (BaboSexController as BaboSexControllerManager).TraumaExp(-1.5)
 (BaboSexController as BaboSexControllerManager).CorruptionExp(-2.0)
@@ -221,46 +223,30 @@ setstage(255)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_24
-Function Fragment_24()
+;BEGIN FRAGMENT Fragment_32
+Function Fragment_32()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EncounterEvent01Messagebox(3)
-(BaboSexController as BaboSexControllerManager).ConfidenceExp(3.0)
-(BaboSexController as BaboSexControllerManager).TraumaExp(-0.5)
-setstage(255)
+(BaboSceneController as BaboSceneManager).Encounter01ScenePlay(3, true)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_23
-Function Fragment_23()
+;BEGIN FRAGMENT Fragment_33
+Function Fragment_33()
+;BEGIN AUTOCAST TYPE BaboDiaQuest
+Quest __temp = self as Quest
+BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
+;END AUTOCAST
 ;BEGIN CODE
-;Go to Kidnap Event
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(0, "BaboEncounter01")
-Actor Kidnapper = Alias_Adventurer.Getreference() as actor
-Alias_Adventurer.clear()
-if (BaboSexController as BaboSexControllerManager).KidnapQuestStart(Kidnapper, none, Utility.randomint(4, 6), None)
-(BaboKidnapEvent as BaboKidnapEvenScript).StartUptheEvent(4)
-endif
-setstage(255)
+kmyQuest.fRegisterForSingleUpdateGameTime(0.5)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_19
-Function Fragment_19()
+;BEGIN FRAGMENT Fragment_34
+Function Fragment_34()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(2, "BaboEncounter01")
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_28
-Function Fragment_28()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(0, "BaboEncounter01")
-(BaboSexController as BaboSexControllerManager).NPCTurntoBandit(alias_Adventurer)
-;To death fight
+(BaboSceneController as BaboSceneManager).Encounter01ScenePlay(4, true)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -274,13 +260,27 @@ Function Fragment_27()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_33
-Function Fragment_33()
+;BEGIN FRAGMENT Fragment_22
+Function Fragment_22()
 ;BEGIN AUTOCAST TYPE BaboDiaQuest
 Quest __temp = self as Quest
 BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
 ;END AUTOCAST
 ;BEGIN CODE
+(Alias_Adventurer.getRef() as Actor).EvaluatePackage()
+kmyQuest.fRegisterForSingleUpdateGameTime(1.0)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_35
+Function Fragment_35()
+;BEGIN AUTOCAST TYPE BaboDiaQuest
+Quest __temp = self as Quest
+BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
+;END AUTOCAST
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).SLHHActivate(Alias_Adventurer.getreference() as actor, none)
 kmyQuest.fRegisterForSingleUpdateGameTime(0.5)
 ;END CODE
 EndFunction
@@ -301,3 +301,7 @@ Quest Property BaboKidnapEvent  Auto
 Perk Property BaboReduceIncomingDamageTrauma  Auto  
 
 GlobalVariable Property BaboDebugging  Auto  
+
+Quest Property BaboSceneController  Auto  
+
+Quest Property BaboMsgScript  Auto  

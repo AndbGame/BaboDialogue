@@ -5,7 +5,7 @@ Scriptname SF_BaboChangeLocationEvent08_08F24425 Extends Scene Hidden
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
-Getowningquest().setstage(85);Temporary
+GetOwningQuest().SetStage(230)
 stop()
 ;END CODE
 EndFunction

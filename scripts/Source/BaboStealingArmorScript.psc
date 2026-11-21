@@ -2,6 +2,7 @@ Scriptname BaboStealingArmorScript extends Quest
 
 Import Debug
 Int property CuttingStage = 0 auto hidden
+int TearStage = 12 ; CuttingStage at which the cuirass is torn off, set at stage 6
 Actor targ
 Armor CurrentPanty
 Armor CurrentHead
@@ -40,9 +41,12 @@ GlobalVariable Property BaboStealingArmorSetting Auto
 GlobalVariable Property BaboGlobalDropItem Auto
 ObjectReference Property BaboTempStolenGoodsRef Auto
 Quest Property BaboSexController Auto
+Quest Property BaboDialogueUtil Auto
 
 ReferenceAlias Property PlayerAlias Auto
 Actor Property PlayerRef Auto
+
+String Property BaboUnequippedList = "babodialogue.unequipped" autoreadonly hidden
 
 ;Event OnEffectStart(Actor Victim, Actor Pervert)
 
@@ -75,188 +79,73 @@ Function StealingArmor(Actor Victim, Actor Pervert)
 		Return
 	Endif
 	
-	If Cuttingstage >= 12
-		If CurrentBody
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		EndIf
-	ElseIf Cuttingstage >= 11
-		If Victim.WornHasKeyword(SLA_ArmorPretty)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 10
-		If Victim.WornHasKeyword(EroticArmor)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 9
-		If Victim.WornHasKeyword(SLA_ArmorSpendex)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 8
-		If Victim.WornHasKeyword(SLA_ArmorLewdLeotard)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 7
-		If Victim.WornHasKeyword(SLA_ArmorHalfNakedBikini) || Victim.WornHasKeyword(SLA_ArmorCurtain)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 6
-		If Victim.WornHasKeyword(SLA_ArmorHalfNaked) || Victim.WornHasKeyword(SLA_ArmorTransparent)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 5
-		StealingArmorRandom(Victim, Pervert, true)
-	ElseIf Cuttingstage >= 4
-		FindThong(Victim, Pervert, True, True, None, False)
-	ElseIf Cuttingstage >= 3
-		FindPants(Victim, Pervert, True, True, None, False)
-	endif
-	
-EndFunction
-
-Function RemoveCuirass(Actor Victim, Actor Pervert)
-	Victim.RemoveItem(CurrentBody, 1, false, Pervert)
-	Pervert.Say(CombatTopicBra)
-	(BaboSexController as BaboSexControllerManager).StealArmorMessagebox(1)
-	SendAnimationEvent(Victim, "CoverPrivatesSec")
-EndFunction
-
-
-Function StealingArmorRandom(Actor Victim, Actor Pervert, Bool OnlyArmor)
-	int random = Utility.RandomInt(0, 99)
-	If random <= BaboGlobalDropItem.getvalue() as int
-	Armor unequippedarmor
-		If OnlyArmor
-			unequippedarmor = searcharmor(Victim, False, None, True)
-		else
-			unequippedarmor = searcharmor(Victim, False, None, False)
-		endif
-		
-		If unequippedarmor
-			Victim.RemoveItem(unequippedarmor, 1, false, Pervert)
+	If Cuttingstage == 6 ; read the style tier once per cycle: 0-1 halfnaked/transparent 6, 2-3 curtain/bikini 7, 4 leotard 8, 5 spandex 9, 6 erotic 10, 7 pretty 11, none 12
+		int tier = (BaboDialogueUtil as BaboDia_Util).GetStyleTier(Victim)
+		TearStage = 12
+		If tier >= 4
+			TearStage = tier + 4
+		ElseIf tier >= 0
+			TearStage = 6 + tier / 2
 		EndIf
 	EndIf
-EndFunction
-
-
-state FakeSteal
-
-Function StealingArmor(Actor Victim, Actor Pervert)
-	Cuttingstage += 1
-	CurrentBody = Victim.GetWornForm(0x00000004) as Armor ;This Form is for Cuirass
 	
-	If !CurrentBody
-		Cuttingstage = 0
-		Return
-	Endif
-	
-	If Cuttingstage >= 12
-		If CurrentBody
+	bool fake = GetState() == "FakeSteal"
+	If Cuttingstage >= 6
+		If Cuttingstage >= TearStage
 			RemoveCuirass(Victim, Pervert)
 		else
 			StealingArmorRandom(Victim, Pervert, true)
 		EndIf
-	ElseIf Cuttingstage >= 11
-		If Victim.WornHasKeyword(SLA_ArmorPretty)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 10
-		If Victim.WornHasKeyword(EroticArmor)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 9
-		If Victim.WornHasKeyword(SLA_ArmorSpendex)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 8
-		If Victim.WornHasKeyword(SLA_ArmorLewdLeotard)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 7
-		If Victim.WornHasKeyword(SLA_ArmorHalfNakedBikini) || Victim.WornHasKeyword(SLA_ArmorCurtain)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
-	ElseIf Cuttingstage >= 6
-		If Victim.WornHasKeyword(SLA_ArmorHalfNaked) || Victim.WornHasKeyword(SLA_ArmorTransparent)
-			RemoveCuirass(Victim, Pervert)
-		else
-			StealingArmorRandom(Victim, Pervert, true)
-		Endif
 	ElseIf Cuttingstage >= 5
 		StealingArmorRandom(Victim, Pervert, true)
 	ElseIf Cuttingstage >= 4
-		FindThong(Victim, None, False, True, BaboTempStolenGoodsRef, True)
+		FindThong(Victim, Pervert, !fake, True, BaboTempStolenGoodsRef, fake)
 	ElseIf Cuttingstage >= 3
-		FindPants(Victim, None, False, True, BaboTempStolenGoodsRef, True)
+		FindPants(Victim, Pervert, !fake, True, BaboTempStolenGoodsRef, fake)
 	endif
 	
 EndFunction
 
 Function RemoveCuirass(Actor Victim, Actor Pervert)
-	Victim.RemoveItem(CurrentBody, 1, false, BaboTempStolenGoodsRef)
+	If GetState() == "FakeSteal"
+		Victim.RemoveItem(CurrentBody, 1, false, BaboTempStolenGoodsRef)
+	Else
+		Victim.RemoveItem(CurrentBody, 1, false, Pervert)
+	EndIf
 	Pervert.Say(CombatTopicBra)
 	(BaboSexController as BaboSexControllerManager).StealArmorMessagebox(1)
 	SendAnimationEvent(Victim, "CoverPrivatesSec")
 EndFunction
 
 Function StealingArmorRandom(Actor Victim, Actor Pervert, Bool OnlyArmor)
-	int random = Utility.RandomInt(0, 99)
-	If random <= BaboGlobalDropItem.getvalue() as int
-	Armor unequippedarmor
-	
-		If OnlyArmor
-			unequippedarmor = searcharmor(Victim, False, None, True)
-		else
-			unequippedarmor = searcharmor(Victim, False, None, False)
-		endif
-		
+	If Utility.RandomInt(0, 99) <= BaboGlobalDropItem.getvalue() as int
+		Armor unequippedarmor = SearchArmor(Victim, False, None, OnlyArmor)
 		If unequippedarmor
-			Victim.RemoveItem(unequippedarmor, 1, false, BaboTempStolenGoodsRef)
+			If GetState() == "FakeSteal"
+				Victim.RemoveItem(unequippedarmor, 1, false, BaboTempStolenGoodsRef)
+			Else
+				Victim.RemoveItem(unequippedarmor, 1, false, Pervert)
+			EndIf
 		EndIf
-		
 	EndIf
 EndFunction
 
+
+state FakeSteal ; stolen items go to BaboTempStolenGoodsRef instead of the attacker (checked via GetState in the functions above)
 EndState
 
-
-Function GetStrippedArmor(Actor Victim, Actor Pervert, Bool StripCuirass)
-	CurrentBody = Victim.GetWornForm(0x00000004) as Armor ;This Form is for Cuirass
-	Victim.RemoveItem(SearchArmor(Victim, True, SLA_ThongCString), 1, false, BaboTempStolenGoodsRef)
-	Victim.RemoveItem(SearchArmor(Victim, True, SLA_ThongLowleg), 1, false, BaboTempStolenGoodsRef)
-	Victim.RemoveItem(SearchArmor(Victim, True, SLA_ThongT), 1, false, BaboTempStolenGoodsRef)
-	Victim.RemoveItem(SearchArmor(Victim, True, SLA_PantiesNormal), 1, false, BaboTempStolenGoodsRef)
-	if StripCuirass
-		Victim.RemoveItem(CurrentBody, 1, false, BaboTempStolenGoodsRef)
-	else
-		If (Victim.WornHasKeyword(SLA_ArmorSpendex) || Victim.WornHasKeyword(EroticArmor) || Victim.WornHasKeyword(SLA_ArmorHalfNakedBikini) || Victim.WornHasKeyword(SLA_ArmorHalfNaked))
-			Victim.RemoveItem(CurrentBody, 1, false, BaboTempStolenGoodsRef)
-		endif
+; Rip off the player's clothes: cuirass, then any remaining bra-type top. Pants/hotpants hold the bottom; else a skirt goes, else the underwear.
+Function RipoffClothes(Actor Victim)
+	BaboDia_Util util = BaboDialogueUtil as BaboDia_Util
+	Victim.RemoveItem(Victim.GetWornForm(0x00000004), 1, false, BaboTempStolenGoodsRef) ; cuirass
+	util.StripPlayerCoverage(BaboTempStolenGoodsRef, 0) ; remaining bra-type tops
+	if util.IsBottomFullyCovered(Victim, 7) ; pants/hotpants hold
+		return
 	endif
-Endfunction
+	if util.StripPlayerCoverage(BaboTempStolenGoodsRef, 6) == 0 ; skirt goes instead of underwear
+		util.StripPlayerCoverage(BaboTempStolenGoodsRef, 7, 2) ; otherwise underwear
+	endif
+EndFunction
 
 Form Function FindArmor(Actor target, Actor Receiver, Keyword TargetArmor, Bool StealSwitch = False, Bool Animated = False)
 Form[] wornForms = new Form[30]
@@ -265,6 +154,7 @@ int slotsChecked
 slotsChecked += 0x00100000
 slotsChecked += 0x00200000 ;ignore reserved slots
 slotsChecked += 0x80000000
+slotsChecked += 0x40000000 ; slot 60 (3BA body)
 
 int thisSlot = 0x01
 	while (thisSlot < 0x80000000)
@@ -293,19 +183,15 @@ int thisSlot = 0x01
 EndFunction
 
 Function FindThong(Actor target, actor Receiver, Bool StealSwitch = False, Bool Animated = False, ObjectReference TempChest, Bool FakeSwitch)
-Form[] wornForms = new Form[30]
-int index
-int slotsChecked
-slotsChecked += 0x00100000
-slotsChecked += 0x00200000 ;ignore reserved slots
-slotsChecked += 0x80000000
+BaboDia_Util util = BaboDialogueUtil as BaboDia_Util
+int slotsChecked = 0xC0300000 ;ignore reserved slots, 60 (3BA body), 61 (spell FX)
 
 int thisSlot = 0x01
 	while (thisSlot < 0x80000000)
 	if (Math.LogicalAnd(slotsChecked, thisSlot) != thisSlot) ;only check slots we haven't found anything equipped on already
 	Armor thisArmor = target.GetWornForm(thisSlot) as Armor
 	if (thisArmor)
-		if thisArmor.HasKeyword(SLA_PantiesNormal) || thisArmor.HasKeyword(SLA_MicroHotpants) || thisArmor.HasKeyword(SLA_ThongLowleg) || thisArmor.HasKeyword(SLA_ThongT) || thisArmor.HasKeyword(SLA_ThongGstring) || thisArmor.HasKeyword(SLA_ThongCString) || thisArmor.HasKeyword(SLA_PastiesCrotch)
+		if util.FormInCoverage(thisArmor, 7, 2) ; underwear, thongs, pasties (coverage_bottom after pants/Hotpants)
             Target.UnequipItem(thisArmor)
 			If StealSwitch
 				Target.RemoveItem(thisArmor, 1, false, Receiver)
@@ -329,19 +215,15 @@ int thisSlot = 0x01
 EndFunction
 
 Function FindPants(Actor target, Actor Receiver, Bool StealSwitch = False, Bool Animated = False, ObjectReference TempChest, Bool FakeSwitch)
-Form[] wornForms = new Form[30]
-int index
-int slotsChecked
-slotsChecked += 0x00100000
-slotsChecked += 0x00200000 ;ignore reserved slots
-slotsChecked += 0x80000000
+BaboDia_Util util = BaboDialogueUtil as BaboDia_Util
+int slotsChecked = 0xC0300000 ;ignore reserved slots, 60 (3BA body), 61 (spell FX)
 
 int thisSlot = 0x01
 	while (thisSlot < 0x80000000)
 	if (Math.LogicalAnd(slotsChecked, thisSlot) != thisSlot) ;only check slots we haven't found anything equipped on already
 	Armor thisArmor = target.GetWornForm(thisSlot) as Armor
 	if (thisArmor)
-		if thisArmor.HasKeyword(SLA_PelvicCurtain) || thisArmor.HasKeyword(SLA_MicroSkirt) || thisArmor.HasKeyword(SLA_MiniSkirt) || thisArmor.HasKeyword(SLA_ShowgirlSkirt) || thisArmor.HasKeyword(SLA_FullSkirt) || thisArmor.HasKeyword(SLA_PantsNormal)
+		if util.FormInCoverage(thisArmor, 6) || util.FormInCoverage(thisArmor, 7, 1) ; skirts/curtains, or armor_bottom_full/pants/Hotpants
             Target.UnequipItem(thisArmor)
 			If StealSwitch
 				Target.RemoveItem(thisArmor, 1, false, Receiver)
@@ -364,50 +246,34 @@ int thisSlot = 0x01
 	endWhile
 EndFunction
 
-
+; Random worn armor (one entry per armor). Amulet/ring/shield/reserved slots are never picked.
 Armor Function SearchArmor(Actor target, Bool Keywordswitch = False, Keyword TargetArmor, Bool OnlyCuirassPart = false)
-Armor[] wornForms = new Armor[30]
-int index
-int slotsChecked
-Bool StripSwitch
-slotsChecked += 0x00100000
-slotsChecked += 0x00200000 ;ignore reserved slots
-slotsChecked += 0x80000000
-slotsChecked += 0x00000200 ; shield
-
+int slotsChecked = 0xC0300260 ; reserved 20/21, 60 (3BA body), 61 (spell FX), shield, amulet, ring
 If OnlyCuirassPart
-	slotsChecked += 0x00000008 ;hand
-	slotsChecked += 0x00000010 ;forearms
-	slotsChecked += 0x00000080 ;feet
-	slotsChecked += 0x00000001 ;head
-	slotsChecked += 0x00000002 ;hair
-	slotsChecked += 0x00001000 ;circlet
+	slotsChecked += 0x0000109B ; head, hair, hands, forearms, feet, circlet
 else
-	slotsChecked += 0x00000004 ;Cuirass
+	slotsChecked += 0x00000004 ; cuirass
 EndIf
-
+Armor[] picks = new Armor[32]
+int count = 0
 
 int thisSlot = 0x01
-	while (thisSlot < 0x80000000) && StripSwitch == False
-	if (Math.LogicalAnd(slotsChecked, thisSlot) != thisSlot) ;only check slots we haven't found anything equipped on already
+	while (thisSlot < 0x80000000)
+	if (Math.LogicalAnd(slotsChecked, thisSlot) != thisSlot)
 	Armor thisArmor = target.GetWornForm(thisSlot) as Armor
-	StripSwitch = false
-	If !Keywordswitch
-		return thisarmor
-		StripSwitch = True
-	Else
-		if (thisArmor.HasKeyword(TargetArmor))
-			return thisarmor
-			StripSwitch = True
-		Else
-			slotsChecked += thisSlot
-		EndIf
+	if thisArmor && (!Keywordswitch || thisArmor.HasKeyword(TargetArmor))
+		slotsChecked += Math.LogicalAnd(thisArmor.GetSlotMask(), Math.LogicalNot(slotsChecked)) ; skip the other slots of this armor
+		picks[count] = thisArmor
+		count += 1
 	endif
 	endif
 		thisSlot *= 2 ;double the number to move on to the next slot
 	endWhile
+	if count
+		return picks[Utility.RandomInt(0, count - 1)]
+	endif
+	return None
 EndFunction
-
 Function SimpleFindandMoveArmor(Actor target, ObjectReference Receiver, Keyword TargetArmor, Bool RemoveSwitch)
 Form[] wornForms = new Form[30]
 int index
@@ -415,6 +281,7 @@ int slotsChecked
 slotsChecked += 0x00100000
 slotsChecked += 0x00200000 ;ignore reserved slots
 slotsChecked += 0x80000000
+slotsChecked += 0x40000000 ; slot 60 (3BA body)
 
 int thisSlot = 0x01
 	while (thisSlot < 0x80000000)
@@ -443,6 +310,7 @@ int slotsChecked
 slotsChecked += 0x00100000
 slotsChecked += 0x00200000 ;ignore reserved slots
 slotsChecked += 0x80000000
+slotsChecked += 0x40000000 ; slot 60 (3BA body)
 Int iIndex = KeywordFormList.GetSize()
 
 int thisSlot = 0x01

@@ -1,24 +1,16 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 4
+;NEXT FRAGMENT INDEX 5
 Scriptname QF_BaboQuestDebugTest_08F42BD5 Extends Quest Hidden
-
-;BEGIN ALIAS PROPERTY Actor02
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Actor02 Auto
-;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Actor01
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_Actor01 Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-Debug.notification("Alias 2 is dead but the reading says Alias 2 is still filled.")
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY Actor02
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Actor02 Auto
+;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
@@ -44,4 +36,32 @@ Debug.notification("Alias 1 is not dead.")
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN AUTOCAST TYPE BaboQuestDebugTestConfig
+Quest __temp = self as Quest
+BaboQuestDebugTestConfig kmyQuest = __temp as BaboQuestDebugTestConfig
+;END AUTOCAST
+;BEGIN CODE
+int choice = BaboDebugCheckupMsg.show()
+
+if choice == 0
+kmyQuest.FadeinTest()
+else
+;Nothing
+endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+Debug.notification("Alias 2 is dead but the reading says Alias 2 is still filled.")
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
+
+Message Property BaboDebugCheckupMsg  Auto

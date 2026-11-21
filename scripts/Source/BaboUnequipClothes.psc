@@ -1,5 +1,5 @@
 Scriptname BaboUnequipClothes extends ReferenceAlias  
-
+;It appears this script is not used anymore
 Quest Property MyQuest Auto
 Int Property Nextstage Auto
 

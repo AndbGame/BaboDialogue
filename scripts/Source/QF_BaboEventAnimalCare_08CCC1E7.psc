@@ -2,29 +2,9 @@
 ;NEXT FRAGMENT INDEX 20
 Scriptname QF_BaboEventAnimalCare_08CCC1E7 Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY CreatureRef
+;BEGIN ALIAS PROPERTY CreatureTalkingActivator
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_CreatureRef Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY OwnerRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_OwnerRef Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY SpawnMarkerCreature
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SpawnMarkerCreature Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY MarkerOwnerDeparture
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_MarkerOwnerDeparture Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY SpawnMarkerOwner
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SpawnMarkerOwner Auto
+ReferenceAlias Property Alias_CreatureTalkingActivator Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY MarkerCreatureDeparture
@@ -32,49 +12,66 @@ ReferenceAlias Property Alias_SpawnMarkerOwner Auto
 ReferenceAlias Property Alias_MarkerCreatureDeparture Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY CreatureTalkingActivator
+;BEGIN ALIAS PROPERTY SpawnMarkerCreature
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_CreatureTalkingActivator Auto
+ReferenceAlias Property Alias_SpawnMarkerCreature Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_15
-Function Fragment_15()
+;BEGIN ALIAS PROPERTY OwnerRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_OwnerRef Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY MarkerOwnerDeparture
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_MarkerOwnerDeparture Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY CreatureRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_CreatureRef Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY SpawnMarkerOwner
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_SpawnMarkerOwner Auto
+;END ALIAS PROPERTY
+
+;BEGIN FRAGMENT Fragment_10
+Function Fragment_10()
 ;BEGIN AUTOCAST TYPE BaboEventAnimalCareWhiterunScript
 Quest __temp = self as Quest
 BaboEventAnimalCareWhiterunScript kmyQuest = __temp as BaboEventAnimalCareWhiterunScript
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.MatewithHorse("Anal")
-kmyQuest.AddTitle()
+kmyQuest.Initial()
+kmyQuest.CreatureBlockState(true)
+kmyQuest.SetTimer(12.0)
+MsgCtrl.AnimalCareEventMessagebox(9)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_17
-Function Fragment_17()
+;BEGIN FRAGMENT Fragment_13
+Function Fragment_13()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(6)
-setstage(255)
+MsgCtrl.AnimalCareEventMessagebox(5)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_8
-Function Fragment_8()
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(3)
+MsgCtrl.AnimalCareEventMessagebox(2)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_5
-Function Fragment_5()
-;BEGIN AUTOCAST TYPE BaboEventAnimalCareWhiterunScript
-Quest __temp = self as Quest
-BaboEventAnimalCareWhiterunScript kmyQuest = __temp as BaboEventAnimalCareWhiterunScript
-;END AUTOCAST
+;BEGIN FRAGMENT Fragment_11
+Function Fragment_11()
 ;BEGIN CODE
-kmyquest.FinalInspection()
+MsgCtrl.AnimalCareEventMessagebox(4)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -98,7 +95,7 @@ Quest __temp = self as Quest
 BaboEventAnimalCareWhiterunScript kmyQuest = __temp as BaboEventAnimalCareWhiterunScript
 ;END AUTOCAST
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(7)
+MsgCtrl.AnimalCareEventMessagebox(7)
 kmyQuest.HorseDied()
 ;END CODE
 EndFunction
@@ -112,6 +109,28 @@ BaboEventAnimalCareWhiterunScript kmyQuest = __temp as BaboEventAnimalCareWhiter
 ;END AUTOCAST
 ;BEGIN CODE
 kmyQuest.MatewithHorse("Oral")
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_3
+Function Fragment_3()
+;BEGIN CODE
+PlayerRef.additem(gold001, 700)
+(Alias_OwnerRef.getreference() as actor).evaluatepackage()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_16
+Function Fragment_16()
+;BEGIN AUTOCAST TYPE BaboEventAnimalCareWhiterunScript
+Quest __temp = self as Quest
+BaboEventAnimalCareWhiterunScript kmyQuest = __temp as BaboEventAnimalCareWhiterunScript
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.MatewithHorse("Vaginal")
+kmyQuest.AddTitle()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -136,15 +155,37 @@ stop()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
-;BEGIN AUTOCAST TYPE BaboEventAnimalCareWhiterunScript
-Quest __temp = self as Quest
-BaboEventAnimalCareWhiterunScript kmyQuest = __temp as BaboEventAnimalCareWhiterunScript
-;END AUTOCAST
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
 ;BEGIN CODE
-kmyQuest.MatewithHorse("Vaginal")
-kmyQuest.AddTitle()
+if SceneManager.EventAnimalCareWhiterunScenePlay(1, true) == false
+setstage(15)
+endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_8
+Function Fragment_8()
+;BEGIN CODE
+MsgCtrl.AnimalCareEventMessagebox(3)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_6
+Function Fragment_6()
+;BEGIN CODE
+MsgCtrl.AnimalCareEventMessagebox(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_12
+Function Fragment_12()
+;BEGIN CODE
+PlayerRef.additem(gold001, 1500)
+(BaboSexController as BaboSexControllerManager).ReputationIncrease(15, 0)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -158,35 +199,15 @@ BaboAnimalCareHelpMessage.ShowAsHelpMessage("", 5, 30, 3)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_6
-Function Fragment_6()
+;BEGIN FRAGMENT Fragment_15
+Function Fragment_15()
+;BEGIN AUTOCAST TYPE BaboEventAnimalCareWhiterunScript
+Quest __temp = self as Quest
+BaboEventAnimalCareWhiterunScript kmyQuest = __temp as BaboEventAnimalCareWhiterunScript
+;END AUTOCAST
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_3
-Function Fragment_3()
-;BEGIN CODE
-PlayerRef.additem(gold001, 700)
-(Alias_OwnerRef.getreference() as actor).evaluatepackage()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(1, "BaboEventAnimalCare")
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(2)
+kmyQuest.MatewithHorse("Anal")
+kmyQuest.AddTitle()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -201,42 +222,23 @@ PlayerRef.additem(gold001, 3000)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_10
-Function Fragment_10()
+;BEGIN FRAGMENT Fragment_17
+Function Fragment_17()
+;BEGIN CODE
+MsgCtrl.AnimalCareEventMessagebox(6)
+setstage(255)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_5
+Function Fragment_5()
 ;BEGIN AUTOCAST TYPE BaboEventAnimalCareWhiterunScript
 Quest __temp = self as Quest
 BaboEventAnimalCareWhiterunScript kmyQuest = __temp as BaboEventAnimalCareWhiterunScript
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.Initial()
-kmyQuest.CreatureBlockState(true)
-kmyQuest.SetTimer(12.0)
-(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(9)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_12
-Function Fragment_12()
-;BEGIN CODE
-PlayerRef.additem(gold001, 1500)
-(BaboSexController as BaboSexControllerManager).ReputationIncrease(15, 0)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_11
-Function Fragment_11()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(4)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_13
-Function Fragment_13()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(5)
+kmyquest.FinalInspection()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -258,3 +260,7 @@ Actor Property PlayerRef  Auto
 Message Property BaboAnimalCareHelpMessage  Auto  
 
 ActorBase Property BaboEventAnimalCareOwner  Auto  
+
+BaboMsgManager Property MsgCtrl  Auto  
+
+BaboSceneManager Property SceneManager  Auto  

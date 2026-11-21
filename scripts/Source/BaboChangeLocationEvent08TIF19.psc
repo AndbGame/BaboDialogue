@@ -6,7 +6,7 @@ Scriptname BaboChangeLocationEvent08TIF19 Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-GetOwningQuest().SetStage(27)
+getOwningQuest().setStage(81)
 ;END CODE
 EndFunction
 ;END FRAGMENT

@@ -7,6 +7,7 @@ Int Property NextStage Auto
 Scene Property SceneToStart  Auto  
 {scene to start}
 bool Property SceneSwitch = false Auto
+bool Property TeleportSwitch = false Auto
 bool Property DoOnce = true Auto  
 {set to true if you want this trigger to fire only once
 false means it will try to start the scene each time
@@ -50,13 +51,15 @@ EVENT onTriggerEnter(objectReference actronaut)
 	if (triggerActor == None || actronaut as actor == triggerActor)
 		if (RequiredQuest.GetStage() >= (RequestedStage)) && (RequiredQuest.GetStage() < (RequestedStage02))
 			If CountActors() || !ActorArrayToggle
-			if SceneSwitch
-				SceneToStart.forceStart()
-			endif
-			if DoOnce
-				gotoState("done")
-			endif
-			RequiredQuest.SetStage(NextStage)
+				if TeleportSwitch
+				endif
+				if SceneSwitch
+					SceneToStart.forceStart()
+				endif
+				if DoOnce
+					gotoState("done")
+				endif
+				RequiredQuest.SetStage(NextStage)
 			EndIf
 		endif
 	endif

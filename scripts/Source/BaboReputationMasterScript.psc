@@ -34,6 +34,7 @@ GlobalVariable Property SexCountGangBang auto
 GlobalVariable Property SexCount auto
 GlobalVariable Property BaboSpendableFavor auto
 GlobalVariable Property BaboReputation auto
+GlobalVariable Property BaboReputationRieklingThirsk auto
 GlobalVariable Property BaboReputationCreatureSex auto
 GlobalVariable Property BaboReputationBitch auto
 GlobalVariable Property BaboPlayerFondofSexyArmorCycleValue Auto
@@ -113,6 +114,10 @@ Event RStatChangeEvent(float fstat, float ffavor)
 	BaboSpendableFavor.setvalue(BaboSpendableFavor.getvalue() + ffavor)
 EndEvent
 
+Event RRieklingStatChangeEvent(float fstat, float ffavor)
+	BaboReputationRieklingThirsk.setvalue(BaboReputationRieklingThirsk.getvalue() + fstat)
+EndEvent
+
 Function RBStatChangeEvent(Float fstat)
 	BaboReputationBitch.setvalue(BaboReputationBitch.getvalue() + fstat)
 EndFunction
@@ -123,12 +128,13 @@ EndFunction
 
 
 Function RegisterEvent()
-	RegisterForModEvent("OnCorruptionLossEvent", "CorruptionLossEvent")
-	RegisterForModEvent("OnCorruptionGainEvent", "CorruptionGainEvent")
-	RegisterForModEvent("OnRStatChangeEvent", "RStatChangeEvent");reputation
-	RegisterForModEvent("OnRBStatChangeEvent", "RBStatChangeEvent");bitch reputation
-	RegisterForModEvent("OnPutSexCountEvent", "PutSexCountEvent")
-	RegisterForModEvent("OnPutSexGangBangCountEvent", "PutSexGangBangCountEvent")
+	RegisterForModEvent("BaboDia_OnCorruptionLossEvent", "CorruptionLossEvent")
+	RegisterForModEvent("BaboDia_OnCorruptionGainEvent", "CorruptionGainEvent")
+	RegisterForModEvent("BaboDia_OnRStatChangeEvent", "RStatChangeEvent");reputation
+	RegisterForModEvent("BaboDia_OnRRieklingStatChangeEvent", "RRieklingStatChangeEvent");reputation
+	RegisterForModEvent("BaboDia_OnRBStatChangeEvent", "RBStatChangeEvent");bitch reputation
+	RegisterForModEvent("BaboDia_OnPutSexCountEvent", "PutSexCountEvent")
+	RegisterForModEvent("BaboDia_OnPutSexGangBangCountEvent", "PutSexGangBangCountEvent")
 	RegisterExternalModEvent()
 ;	RegisterFactionPopulatedSkyrim()
 	Debug.trace("BaboReputation Script Registering External Triggers")
@@ -147,6 +153,18 @@ Function DecreaseReputation(Int BaboRepuetationNum, Int BaboFavorNum)
 	EndIf
 EndFunction
 
+Function ModifyReputationRatio(float ratio)
+	float f = BaboReputation.getvalue()
+	f = f * ratio
+	BaboReputation.setvalue(f)
+EndFunction
+
+Function ModifyReputationBitchRatio(float ratio)
+	float f = BaboReputationBitch.getvalue()
+	f = f * ratio
+	BaboReputationBitch.setvalue(f)
+EndFunction
+
 Function DecreaseReputationBitch(Float BaboRepuetationNum)
 	BaboReputationBitch.setvalue((BaboReputationBitch.getvalue()) - BaboRepuetationNum)
 	if BaboReputationBitch.getvalue() < 0
@@ -154,9 +172,13 @@ Function DecreaseReputationBitch(Float BaboRepuetationNum)
 	endif
 EndFunction
 
+Function IncreaseReputationRieklingThirsk(Int BaboRepuetationNum)
+	BaboReputationRieklingThirsk.setvalue(BaboReputationRieklingThirsk.getvalue() + BaboRepuetationNum as float)
+EndFunction
+
 Function IncreaseReputation(Int BaboRepuetationNum, Int BaboFavorNum)
-	BaboReputation.setvalue((BaboReputation.getvalue() as Int) + BaboRepuetationNum)
-	BaboSpendableFavor.setvalue((BaboSpendableFavor.getvalue() as Int) + BaboFavorNum)
+	BaboReputation.setvalue(BaboReputation.getvalue() + BaboRepuetationNum as float)
+	BaboSpendableFavor.setvalue(BaboSpendableFavor.getvalue() + BaboFavorNum as float)
 EndFunction
 
 Function IncreaseReputationBitch(Float BaboRepuetationNum)
@@ -182,20 +204,20 @@ EndFunction
 
 Function SpendFavor(Int BaboFavorNum)
 	If BaboSpendableFavor.getvalue() > 0
-		BaboSpendableFavor.setvalue((BaboSpendableFavor.getvalue() as Int) - BaboFavorNum)
+		BaboSpendableFavor.setvalue(BaboSpendableFavor.getvalue() - BaboFavorNum as float)
 	Else
 		BaboSpendableFavor.setvalue(0)
 	EndIf
 EndFunction
 
 Function SexCount(Int Count)
-	SexCount.setvalue((SexCount.getvalue() as Int) + Count)
-	BDMScript.CalcTraumaExpGain(Count)
+	SexCount.setvalue(SexCount.getvalue() + Count)
+	;BDMScript.CalcTraumaExpGain(Count)
 EndFunction
 
 Function SexCountgangbang(Int Count)
-	SexCountGangBang.setvalue((SexCountGangBang.getvalue() as Int) + Count)
-	BDMScript.CalcTraumaExpGain(Count)
+	SexCountGangBang.setvalue(SexCountGangBang.getvalue() + Count)
+	;BDMScript.CalcTraumaExpGain(Count)
 EndFunction
 
 Function AddingTitletoPlayerRef(faction FTitle)
@@ -274,6 +296,10 @@ Function RegisterExternalModEvent()
 	Debug.trace("Registering External Mod Events...")
 	RegisterForModEvent("BaboDialogue_ConsequenceEvent", "BaboDialogueConsequenceEvent")
 	RegisterForModEvent("BaboDialogue_SLAPPConsequenceEvent", "BaboDialogueSLAPPConsequenceEvent")
+	RegisterForModEvent("BaboDialogue_CLQ08SLHHEscape", "BaboDialogueCLQ08SLHHEscape")
+	RegisterForModEvent("BaboDialogue_CLQ08SLHHEscapeFail", "BaboDialogueCLQ08SLHHEscapeFail")
+	RegisterForModEvent("BaboDialogue_CLQ08SLHHChokeEscape", "BaboDialogueCLQ08SLHHChokeEscape")
+	RegisterForModEvent("BaboDialogue_CLQ08SLHHChokeEscapeFail", "BaboDialogueCLQ08SLHHChokeEscapeFail")
 EndFunction
 
 
@@ -282,6 +308,22 @@ Event BaboDialogueConsequenceEvent(Form Rapist, Bool Worse, string results)
 	Debug.trace(results)
 	Actor RapistActor = Rapist as actor
 	ExternalTrigger(RapistActor, worse)
+EndEvent
+
+Event BaboDialogueCLQ08SLHHEscape(Form Akactor)
+	BaboChangeLocationEvent08.setstage(46)
+EndEvent
+
+Event BaboDialogueCLQ08SLHHEscapeFail(Form Akactor)
+	BaboChangeLocationEvent08.setstage(47)
+EndEvent
+
+Event BaboDialogueCLQ08SLHHChokeEscape(Form Akactor)
+	BaboChangeLocationEvent08.setstage(29)
+EndEvent
+
+Event BaboDialogueCLQ08SLHHChokeEscapeFail(Form Akactor)
+	BaboChangeLocationEvent08.setstage(28)
 EndEvent
 
 Function ExternalTrigger(Actor Raper, Bool Raped)
@@ -314,13 +356,13 @@ if Raped == true
 		(BaboDialogueHirelings as BaboDialogueHirelingsQuest).AfterRapeSceneStart()
 	EndIf
 
-	if (Raper.isinfaction(BaboChangeLocationEvent08Faction))
-		if BaboChangeLocationEvent08.getstage() == 25
-			BaboChangeLocationEvent08.setstage(28)
-		elseif BaboChangeLocationEvent08.getstage() == 45
-			BaboChangeLocationEvent08.setstage(47)
-		endif
-	endif
+;	if (Raper.isinfaction(BaboChangeLocationEvent08Faction))
+;		if BaboChangeLocationEvent08.getstage() == 25
+;			BaboChangeLocationEvent08.setstage(28)
+;		elseif BaboChangeLocationEvent08.getstage() == 45
+;			BaboChangeLocationEvent08.setstage(47)
+;		endif
+;	endif
 
 	if BaboChangeLocationEvent02.getstage() == 20
 		Utility.wait(3.0)

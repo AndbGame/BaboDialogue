@@ -6,7 +6,7 @@ Scriptname BaboEncounter12D05 Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-GetowningQuest().setstage(28)
+;getowningquest().setstage(28)
 ;END CODE
 EndFunction
 ;END FRAGMENT

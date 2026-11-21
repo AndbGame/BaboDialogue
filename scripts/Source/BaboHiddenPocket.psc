@@ -8,7 +8,7 @@ Actor Property PlayerRef Auto
 Quest Property BaboSexController Auto
 float Property MAXCAPACITY = 1.0 AutoReadOnly
 int Property MAXCOUNT = 5 AutoReadOnly
-
+Quest Property BaboMsgScript Auto
 ObjectReference pocket
 int addCount
 int removeCount
@@ -55,13 +55,13 @@ Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemRefere
 	endif
 
 	if back
-		(BaboSexController as BaboSexControllerManager).HiddenPocketMessagebox(2)
+		(BaboMsgScript as BaboMsgManager).HiddenPocketMessagebox(2)
 	endif
 
 	if !back
 		if pocket.GetTotalItemWeight() > MAXCAPACITY
 			back = true
-			(BaboSexController as BaboSexControllerManager).HiddenPocketMessagebox(3)
+			(BaboMsgScript as BaboMsgManager).HiddenPocketMessagebox(3)
 		endif
 	endif
 
@@ -77,7 +77,7 @@ Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemRefere
 		if count > MAXCOUNT
 			back = true
 			backCount = count - MAXCOUNT
-			(BaboSexController as BaboSexControllerManager).HiddenPocketMessagebox(3)
+			(BaboMsgScript as BaboMsgManager).HiddenPocketMessagebox(3)
 		endif
 	endif
 

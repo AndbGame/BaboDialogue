@@ -5,7 +5,6 @@ Bool Property PlayerIsRestrained Auto
 formlist property BaboSpawnRoads auto
 formlist property BaboSpawnTrees auto
 formlist property BaboSpawnAspenTrees auto
-int HowFarToLook
 int Property NoLess Auto
 
 ReferenceAlias Property Alias_PlayerRef auto
@@ -32,9 +31,6 @@ ActorBase Property BaboBadEndLvlAnimalTroll  Auto
 Actor Property PlayerRef Auto
 
 Furniture Property zbfTorturePoleCustom03StdWood  Auto  
-ImageSpaceModifier Property FadeToBlackImod  Auto  
-ImageSpaceModifier Property FadeToBlackHoldImod  Auto  
-ImageSpaceModifier Property FadeToBlackBackImod  Auto  
 GlobalVariable Property GameHour  Auto  
 Scene Property BaboBadEndBrigandScene  Auto  
 Scene Property BaboBadEndHelperScene  Auto  
@@ -56,16 +52,19 @@ Idle Property BaboBadEnding03 Auto
 Idle Property BaboDefeatedPanting01 Auto
 
 Quest Property BaboSexController Auto
+BaboMsgManager Property MsgCtrl Auto
+Int Property FarmerCallGuardChance = 70 Auto;Call Guard: % chance guards come
 
 BaboDiaMonitorScript property BDMScript Auto
-BaboStealingArmorScript Property BSAS Auto
+BaboDia_Util Property BDUtil Auto
 BaboDialogueConfigMenu Property BDCM Auto
 BaboReputationMasterScript Property BRMQuest  Auto  
 
 GlobalVariable Property BaboSimpleSlavery Auto
 GlobalVariable Property BaboSimpleSlaveryChance Auto
 GlobalVariable Property BaboBadEndScenario Auto
-
+actor SpawnActor1
+actor SpawnActor2
 
 Function PlayBaboBadEnding()
 int chance = Utility.randomint(1,3)
@@ -88,7 +87,7 @@ Function ResetAnimation()
 	Debug.SendAnimationEvent(Alias_PlayerRef.getactorreference(), "IdleForceDefaultState")
 EndFunction
 
-int Function StartScenarioe()
+Function StartScenarioe()
 
 int i = Utility.randomint(0, 99)
 
@@ -102,16 +101,14 @@ elseif i < 55
 	BaboBadEndVariable.setvalue(3);Thief
 elseif i < 60
 	BaboBadEndVariable.setvalue(4);Creature
-elseif i < 100
-	BaboBadEndVariable.setvalue(5);Farmer
 else
-	BaboBadEndVariable.setvalue(0);Guard
+	BaboBadEndVariable.setvalue(5);Farmer
 endif
 
 EndFunction
 
 
-int Function SelectScenarioe()
+Function SelectScenarioe()
 
 int i = Utility.randomint(0, 99)
 
@@ -121,10 +118,8 @@ elseif i < 60
 	BaboBadEndScenario.setvalue(1);Help
 elseif i < 75
 	BaboBadEndScenario.setvalue(2);Rape
-elseif i < 100
-	BaboBadEndScenario.setvalue(3);Call Guard
 else
-	BaboBadEndScenario.setvalue(1);Guard
+	BaboBadEndScenario.setvalue(3);Call Guard
 endif
 
 EndFunction
@@ -147,6 +142,7 @@ Function SpawnVariable(int num)
 		Alias_PlayerRef.Getowningquest().setstage(15)
 	elseif num == 5
 		SpawnNPCs(BaboBadEndFarmerM, None)
+		(BaboSexController as BaboSexControllerManager).SetRandomCharacterRank(SpawnActor1)
 		Alias_PlayerRef.Getowningquest().setstage(15)
 	elseif num == 6
 		SpawnNPCs(BaboBadEndFarmerM, BaboBadEndFarmerM)
@@ -204,32 +200,26 @@ EndFunction
 Function RevertQuest(int num)
 
 	if num == 0
-		(BaboSexController as BaboSexControllerManager).BadEndMessagebox(10)
+		MsgCtrl.BadEndMessagebox(10)
 		RescueFromGuards()
 	elseif num == 1
 		ClearRestraints()
 	elseif num == 2
-		(BaboSexController as BaboSexControllerManager).BadEndMessagebox(1)
+		MsgCtrl.BadEndMessagebox(1)
 		BRMQuest.DecreaseReputation(10, 0)
-		FadeToBlackImod.Apply()
-		utility.wait(2)
+		(BaboSexController as BaboSexControllerManager).FadeinScene(true)
 		Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
-		FadeToBlackImod.PopTo(FadeToBlackHoldImod)
-		if Alias_Raper
-			Alias_Raper.getactorreference().delete()
-			Alias_Raper2.getactorreference().delete()
-			Alias_Raper.clear()
-			Alias_Raper2.clear()
-		endif
+		Alias_Raper.getactorreference().delete()
+		Alias_Raper2.getactorreference().delete()
+		Alias_Raper.clear()
+		Alias_Raper2.clear()
 		
-		if Alias_FarmerM
-			Alias_FarmerM.getactorreference().delete()
-			Alias_FarmerM.clear()
-		endif
+		Alias_FarmerM.getactorreference().delete()
+		Alias_FarmerM.clear()
 		
 		utility.wait(2)
 		PlayBaboBadEnding()
-		FadeToBlackHoldImod.Remove()
+		(BaboSexController as BaboSexControllerManager).FadeOutScene(true)
 
 		MiscUtil.SetFreeCameraState(true)
 		MiscUtil.SetFreeCameraSpeed(2)
@@ -277,63 +267,26 @@ Function RevertQuest(int num)
 EndFunction
 
 Function SpawnNPCs(Actorbase SpawnNPC, Actorbase SpawnNPC2)
-	actor SpawnActor1
-	actor SpawnActor2
-	HowFarToLook = 512
-	objectreference spawnherolocation
-	Int BaboSpawnRoadsList = BaboSpawnRoads.GetSize()
-	Int I = 0
-		objectreference BaboEndSpawn = game.FindRandomReferenceOfAnyTypeInListFromRef(BaboSpawnRoads, game.GetPlayer() as objectreference, HowFarToLook as Float)
-		objectreference BaboEndSpawnTress = game.FindRandomReferenceOfAnyTypeInListFromRef(BaboSpawnTrees, game.GetPlayer() as objectreference, HowFarToLook as Float)
-		objectreference BaboEndSpawnAspenTress = game.FindRandomReferenceOfAnyTypeInListFromRef(BaboSpawnAspenTrees, game.GetPlayer() as objectreference, HowFarToLook as Float)
-		if BaboEndSpawn != none && game.GetPlayer().GetDistance(BaboEndSpawn) > NoLess as Float
-			SpawnActor1 = BaboEndSpawn.PlaceActorAtMe(SpawnNPC, 4, none)
-			
-			if SpawnNPC2
-				SpawnActor2 = BaboEndSpawn.PlaceActorAtMe(SpawnNPC2, 4, none)
-				self.DesignateAlias(SpawnActor1, SpawnActor2)
-				self.StatsSet(SpawnActor1)
-				self.StatsSet(SpawnActor2)
-			else
-				self.DesignateAlias(SpawnActor1, None)
-				self.StatsSet(SpawnActor1)
+	objectreference SpawnPoint = Game.FindRandomReferenceOfAnyTypeInListFromRef(BaboSpawnRoads, PlayerRef, 512.0)
+	if !SpawnPoint || PlayerRef.GetDistance(SpawnPoint) <= NoLess as Float
+		SpawnPoint = Game.FindRandomReferenceOfAnyTypeInListFromRef(BaboSpawnTrees, PlayerRef, 512.0)
+		if !SpawnPoint || PlayerRef.GetDistance(SpawnPoint) <= NoLess as Float
+			SpawnPoint = Game.FindRandomReferenceOfAnyTypeInListFromRef(BaboSpawnAspenTrees, PlayerRef, 512.0)
+			if !SpawnPoint || PlayerRef.GetDistance(SpawnPoint) <= NoLess as Float
+				SpawnPoint = Alias_CenterMarker.GetReference()
 			endif
-			
-		elseif BaboEndSpawnTress != none && game.GetPlayer().GetDistance(BaboEndSpawnTress) > NoLess as Float
-			SpawnActor1 = BaboEndSpawnTress.PlaceActorAtMe(SpawnNPC, 4, none)
-			if SpawnNPC2
-				SpawnActor2 = BaboEndSpawnTress.PlaceActorAtMe(SpawnNPC2, 4, none)
-				self.DesignateAlias(SpawnActor1, SpawnActor2)
-				self.StatsSet(SpawnActor1)
-				self.StatsSet(SpawnActor2)
-			else
-				self.DesignateAlias(SpawnActor1, None)
-				self.StatsSet(SpawnActor1)
-			endif
-		elseif BaboEndSpawnAspenTress != none && game.GetPlayer().GetDistance(BaboEndSpawnAspenTress) > NoLess as Float
-			SpawnActor1 = BaboEndSpawnAspenTress.PlaceActorAtMe(SpawnNPC, 4, none)
-			if SpawnNPC2
-				SpawnActor2 = BaboEndSpawnAspenTress.PlaceActorAtMe(SpawnNPC2, 4, none)
-				self.DesignateAlias(SpawnActor1, SpawnActor2)
-				self.StatsSet(SpawnActor1)
-				self.StatsSet(SpawnActor2)
-			else
-				self.DesignateAlias(SpawnActor1, None)
-				self.StatsSet(SpawnActor1)
-			endif
-		else
-			objectreference Centermarker = Alias_CenterMarker.getreference()
-			SpawnActor1 = Centermarker.PlaceActorAtMe(SpawnNPC, 4, none)
-			if SpawnNPC2
-				SpawnActor2 = Centermarker.PlaceActorAtMe(SpawnNPC2, 4, none)
-				self.DesignateAlias(SpawnActor1, SpawnActor2)
-				self.StatsSet(SpawnActor1)
-				self.StatsSet(SpawnActor2)
-			else
-				self.DesignateAlias(SpawnActor1, None)
-				self.StatsSet(SpawnActor1)
-			endif
-		endIf
+		endif
+	endif
+	SpawnActor1 = SpawnPoint.PlaceActorAtMe(SpawnNPC, 4, none)
+	if SpawnNPC2
+		SpawnActor2 = SpawnPoint.PlaceActorAtMe(SpawnNPC2, 4, none)
+		DesignateAlias(SpawnActor1, SpawnActor2)
+		StatsSet(SpawnActor1)
+		StatsSet(SpawnActor2)
+	else
+		DesignateAlias(SpawnActor1, None)
+		StatsSet(SpawnActor1)
+	endif
 EndFunction
 
 Function DesignateAlias(Actor akactor, Actor akactor2)
@@ -373,7 +326,8 @@ endfunction
 
 Function StripandGetdressed()
 
-BSAS.GetStrippedArmor(Alias_PlayerRef.getactorreference(), None, True)
+PlayerRef.RemoveItem(PlayerRef.GetWornForm(0x00000004), 1, false, BDCM.BaboTempStolenGoodsRef)
+BDUtil.StripPlayerTopBottom(BDCM.BaboTempStolenGoodsRef)
 (BaboSexController as BaboSexControllerManager).EquipRestraints(Alias_PlayerRef.getactorreference(), true)
 Utility.wait(1.0)
 (BaboSexController as BaboSexControllerManager).EquipCumItem(Alias_PlayerRef.getactorreference())
@@ -381,22 +335,17 @@ Utility.wait(1.0)
 EndFunction
 
 Function Fadein()
+(BaboSexController as BaboSexControllerManager).FadeinScene(true)
+StripandGetdressed()
 Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
-FadeToBlackImod.Apply()
-utility.wait(2)
-FadeToBlackImod.PopTo(FadeToBlackHoldImod)
-utility.wait(2)
+
 PlayBaboBadEnding()
-;BDMScript.FurnitureDisplay(PlayerRef, zbfTorturePoleCustom03StdWood)
-;BDMScript.FurnitureActivate(PlayerRef)
-utility.wait(2)
-FadeToBlackHoldImod.Remove()
 
 MiscUtil.SetFreeCameraState(true)
 MiscUtil.SetFreeCameraSpeed(2)
 utility.wait(2)
 MiscUtil.SetFreeCameraState(false)
-
+(BaboSexController as BaboSexControllerManager).FadeoutScene(true)
 EndFunction
 
 Function PastTime()
@@ -404,31 +353,38 @@ Function PastTime()
 Float CurrentTime = GameHour.GetValue()
 BDMScript.RandomPainMenu(Alias_PlayerRef.getactorreference())
 GameHour.SetValue(CurrentTime + Utility.randomfloat(1, 3))
-(BaboSexController as BaboSexControllerManager).BadEndMessagebox(2)
+MsgCtrl.BadEndMessagebox(2)
 
 EndFunction
+
+
+Faction Property SLAX_AggressiveFaction Auto
 
 Function ForceSceneStart(int num)
 
 if num == 0
-	(BaboSexController as BaboSexControllerManager).BadEndMessagebox(8)
+	MsgCtrl.BadEndMessagebox(8)
 	BaboBadEndGuardScene.forcestart()
 elseif num == 1
-	(BaboSexController as BaboSexControllerManager).BadEndMessagebox(3)
+	MsgCtrl.BadEndMessagebox(3)
 	BaboBadEndHelperScene.Forcestart()
 elseif num == 2
-	(BaboSexController as BaboSexControllerManager).BadEndMessagebox(4)
+	MsgCtrl.BadEndMessagebox(4)
 	BaboBadEndBrigandScene.Forcestart()
 elseif num == 3
-	(BaboSexController as BaboSexControllerManager).BadEndMessagebox(5)
+	MsgCtrl.BadEndMessagebox(5)
 	BaboBadEndThiefScene.forcestart()
 elseif num == 4
-	(BaboSexController as BaboSexControllerManager).BadEndMessagebox(6)
+	MsgCtrl.BadEndMessagebox(6)
 	BaboBadEndTrollScene.forcestart()
 elseif num == 5
-	(BaboSexController as BaboSexControllerManager).BadEndMessagebox(7)
+	MsgCtrl.BadEndMessagebox(7)
+	if (Alias_FarmerM.getreference() as actor).getfactionrank(SLAX_AggressiveFaction) >= 3
+		BaboBadEndScenario.setvalue(2)
+	else
+		SelectScenarioe()
+	endif
 	BaboBadEndFarmerScene.forcestart()
-	SelectScenarioe()
 endif
 RegisterForSingleUpdate(360.0)
 EndFunction
@@ -448,6 +404,19 @@ Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
 Utility.wait(1.0)
 (BaboSexController as BaboSexControllerManager).SexCustom(Alias_PlayerREF, Alias_Creature, None, None, None, "CF", "Aggressive", None, True, "BEAS01", "BadEndAfterSex01", true)
 
+EndFunction
+
+Function FarmerCallGuard()
+	Utility.Wait(5.0)
+	(BaboSexController as BaboSexControllerManager).FadeinScene(true)
+	GameHour.Mod(Utility.RandomFloat(2.0, 4.0));Time skip under black
+	Alias_FarmerM.getactorreference().delete()
+	if Utility.RandomInt(0, 99) < FarmerCallGuardChance
+		RevertQuest(6);Guards came
+	else
+		RevertQuest(3);Nobody came, re-roll
+	endif
+	(BaboSexController as BaboSexControllerManager).FadeOutScene(true)
 EndFunction
 
 Function RescuetoSaferoom()

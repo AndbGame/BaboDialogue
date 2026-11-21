@@ -4,10 +4,15 @@ Event OnInit()
 	Debug.notification("BaboMCMReset System Rebooting...")
 EndEvent
 
-Function Updatetofive()
-	;(BaboDialogueMCM as BaboDialogueConfigMenu).PageReset()
+Function Updatetofive();Obsolete
 	BaboDialogueMCM.stop()
 	BaboDialogueMCM.start()
+EndFunction
+
+Function UpdatetoSix()
+	if BaboEventRieklingThirsk.isrunning()
+		BaboEventRieklingThirsk.stop()
+	endif
 EndFunction
 
 Function UpdateWhiterunOrcQuest()

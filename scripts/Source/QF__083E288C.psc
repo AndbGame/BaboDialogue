@@ -1,20 +1,10 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 34
+;NEXT FRAGMENT INDEX 42
 Scriptname QF__083E288C Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY myHoldLocation
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldLocation Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY myHoldSons
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldSons Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY myHoldContested
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldContested Auto
+;BEGIN ALIAS PROPERTY Scene_Marker2
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Scene_Marker2 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY myHoldImperial
@@ -22,9 +12,9 @@ LocationAlias Property Alias_myHoldContested Auto
 LocationAlias Property Alias_myHoldImperial Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY CenterMarker
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_CenterMarker Auto
+;BEGIN ALIAS PROPERTY myHoldSons
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldSons Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Scene_Marker1
@@ -32,19 +22,34 @@ ReferenceAlias Property Alias_CenterMarker Auto
 ReferenceAlias Property Alias_Scene_Marker1 Auto
 ;END ALIAS PROPERTY
 
+;BEGIN ALIAS PROPERTY PlayerAlias
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerAlias Auto
+;END ALIAS PROPERTY
+
 ;BEGIN ALIAS PROPERTY TRIGGER
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_TRIGGER Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY HiredThug03
+;BEGIN ALIAS PROPERTY HiredThug01Marker
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_HiredThug03 Auto
+ReferenceAlias Property Alias_HiredThug01Marker Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY HiredThug01
+;BEGIN ALIAS PROPERTY PlayerDialogueMarker
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_HiredThug01 Auto
+ReferenceAlias Property Alias_PlayerDialogueMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY myHoldLocation
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldLocation Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY myHoldContested
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldContested Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY HiredThug02
@@ -52,57 +57,50 @@ ReferenceAlias Property Alias_HiredThug01 Auto
 ReferenceAlias Property Alias_HiredThug02 Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY PlayerRef
+;BEGIN ALIAS PROPERTY HiredThug03
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PlayerRef Auto
+ReferenceAlias Property Alias_HiredThug03 Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY Scene_Marker2
+;BEGIN ALIAS PROPERTY PlayerAliasMarker
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Scene_Marker2 Auto
+ReferenceAlias Property Alias_PlayerAliasMarker Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_31
-Function Fragment_31()
-;BEGIN CODE
-BaboEncounter06Scene01.forcestart()
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY HiredThug01
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_HiredThug01 Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_33
-Function Fragment_33()
-;BEGIN CODE
-Alias_PlayerRef.getactorreference().removeitem(gold001, 2000, Alias_HiredThug01.getactorreference())
-(BaboSexController as BaboSexControllerManager).EncounterEvent06Messagebox(1)
-setstage(200)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY LookOutMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_LookOutMarker Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_22
-Function Fragment_22()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.ChallengeStart(Alias_HiredThug01)
-kmyQuest.ChallengeStart(Alias_HiredThug02)
-kmyQuest.ChallengeStart(Alias_HiredThug03)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY CenterMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_CenterMarker Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_25
-Function Fragment_25()
-;BEGIN CODE
-;Bring Player to Loanshark Organization
-BaboLoanSharks.setstage(10)
-setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY PostGoalMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PostGoalMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY BountyNote
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_BountyNote Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY HiredThug03Marker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_HiredThug03Marker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY HiredThug02Marker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_HiredThug02Marker Auto
+;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_12
 Function Fragment_12()
@@ -113,158 +111,225 @@ WEScript kmyQuest = __temp as WEScript
 ;BEGIN CODE
 ; debug.trace(self + "stage 255, calling DeleteWhenAble() on created aliases")
 BDQuest.DisableEssential()
-
-Alias_HiredThug01.GetReference().DeleteWhenAble()
-Alias_HiredThug02.GetReference().DeleteWhenAble()
-Alias_HiredThug03.GetReference().DeleteWhenAble()
-
+BaboEventLoanSharkCollectInterestReady.setvalue(0)
+(BaboSexController as BaboSexControllerManager).RecoverRingMarkers()
+Actor[] actors = New Actor[3]
+actors[0] = (Alias_HiredThug01.GetReference() as actor)
+actors[1] = (Alias_HiredThug02.GetReference() as actor)
+actors[2] = (Alias_HiredThug03.GetReference() as actor)
+(BaboSexController as BaboSexControllerManager).DeleteWhenAbleWithTimeout(actors, 60)
 ; debug.trace(self + "stage 255, calling ReArmTrigger() on trigger" + Alias_Trigger.GetReference())
 (Alias_Trigger.GetReference() as WETriggerScript).ReArmTrigger()
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_27
-Function Fragment_27()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
+;BEGIN FRAGMENT Fragment_33
+Function Fragment_33()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
 Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
 ;END AUTOCAST
 ;BEGIN CODE
-;Left alone
-kmyQuest.FadeinMove(Alias_PlayerRef, None, 62, true)
-Alias_PlayerRef.getactorreference().PlayIdle(BaboExhaustedFront03)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_32
-Function Fragment_32()
-;BEGIN CODE
-;Bad Ending
-BaboBadendKeyword.SendStoryEvent(None, Alias_CenterMarker.getreference())
-Utility.wait(1.0)
-BaboBadEnd.setstage(2)
-Utility.wait(2.0)
-BaboBadEnd.setstage(3)
-Utility.wait(4.0)
-BaboBadEnd.setstage(5)
-setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_24
-Function Fragment_24()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
-;BEGIN CODE
-;Lost
-(Alias_HiredThug01.getRef() as Actor).SetUnconscious(false)
-(Alias_HiredThug02.getRef() as Actor).SetUnconscious(false)
-(Alias_HiredThug03.getRef() as Actor).SetUnconscious(false)
-
-(Alias_HiredThug01.getRef() as Actor).GetActorBase().SetEssential(false)
-(Alias_HiredThug02.getRef() as Actor).GetActorBase().SetEssential(false)
-(Alias_HiredThug03.getRef() as Actor).GetActorBase().SetEssential(false)
-
-kmyQuest.pacifyAlias(Alias_HiredThug01)
-kmyQuest.pacifyAlias(Alias_HiredThug02)
-kmyQuest.pacifyAlias(Alias_HiredThug03)
-
-BaboEncounter06Scene03.forcestart()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_21
-Function Fragment_21()
-;BEGIN CODE
-if BaboDebugging.getvalue() == 1
-;Debug.notification("Babo Encounter 06")
+(Alias_HiredThug01.GetReference() as actor).evaluatepackage()
+if Alias_HiredThug02
+(Alias_HiredThug02.GetReference() as actor).evaluatepackage()
 endif
-(Alias_HiredThug01.getRef() as Actor).EvaluatePackage()
-(Alias_HiredThug02.getRef() as Actor).EvaluatePackage()
-(Alias_HiredThug03.getRef() as Actor).EvaluatePackage()
+if Alias_HiredThug03
+(Alias_HiredThug03.GetReference() as actor).evaluatepackage()
+endif
+kmyQuest.PrepareBribeCosts()
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_23
-Function Fragment_23()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
+;BEGIN FRAGMENT Fragment_25
+Function Fragment_25()
+;BEGIN CODE
+;Bring Player to Loanshark Organization
+(BaboLoanSharks as BaboLoanSharkScript).FailRepay()
+setstage(255)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_38
+Function Fragment_38()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
 Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.RapeCustom(Alias_PlayerRef, Alias_HiredThug01, Alias_HiredThug02, Alias_HiredThug03, None, "MF", "Aggressive", "Vagina", True, "AfterSexS", "AfterSexScene", true)
-kmyQuest.TraumaExp(3.0)
-kmyQuest.CorruptionExp(4.0)
-kmyQuest.LewdnessExp(3.0)
+(Alias_HiredThug01.GetReference() as actor).evaluatepackage()
+if Alias_HiredThug02
+(Alias_HiredThug02.GetReference() as actor).evaluatepackage()
+endif
+if Alias_HiredThug03
+(Alias_HiredThug03.GetReference() as actor).evaluatepackage()
+endif
+kmyQuest.StartSexHereCapture()
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_29
-Function Fragment_29()
+;BEGIN FRAGMENT Fragment_41
+Function Fragment_41()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EncounterEvent06Messagebox(2)
-setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_26
-Function Fragment_26()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EncounterEvent06Messagebox(4)
-BRMQuest.DecreaseReputation(30, 0)
-Utility.wait(15.0)
-Alias_HiredThug01.GetReference().Delete()
-Alias_HiredThug02.GetReference().Delete()
-Alias_HiredThug03.GetReference().Delete()
-setstage(75)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_30
-Function Fragment_30()
-;BEGIN CODE
-Alias_HiredThug01.GetReference().Delete()
-Alias_HiredThug02.GetReference().Delete()
-Alias_HiredThug03.GetReference().Delete()
-
-(BaboSexController as BaboSexControllerManager).EncounterEvent06Messagebox(3)
-setstage(255)
+kmyQuest.ThugsKilled()
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
 ;BEGIN FRAGMENT Fragment_28
 Function Fragment_28()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
 Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
 ;END AUTOCAST
 ;BEGIN CODE
-;Victory
+kmyQuest.ShowSubmitChoice()
+;END CODE
+EndFunction
+;END FRAGMENT
 
-(Alias_HiredThug01.getRef() as Actor).SetUnconscious(false)
-(Alias_HiredThug02.getRef() as Actor).SetUnconscious(false)
-(Alias_HiredThug03.getRef() as Actor).SetUnconscious(false)
+;BEGIN FRAGMENT Fragment_27
+Function Fragment_27()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.BeginWalkAwayLeave()
+;END CODE
+EndFunction
+;END FRAGMENT
 
-(Alias_HiredThug01.getRef() as Actor).GetActorBase().SetEssential(false)
-(Alias_HiredThug02.getRef() as Actor).GetActorBase().SetEssential(false)
-(Alias_HiredThug03.getRef() as Actor).GetActorBase().SetEssential(false)
+;BEGIN FRAGMENT Fragment_23
+Function Fragment_23()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.BeginWalkAwayLeave()
+;END CODE
+EndFunction
+;END FRAGMENT
 
-kmyQuest.pacifyAlias(Alias_HiredThug01)
-kmyQuest.pacifyAlias(Alias_HiredThug02)
-kmyQuest.pacifyAlias(Alias_HiredThug03)
+;BEGIN FRAGMENT Fragment_37
+Function Fragment_37()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.BeginSurrender()
+;END CODE
+EndFunction
+;END FRAGMENT
 
-BaboEncounter06Scene02.forcestart()
+;BEGIN FRAGMENT Fragment_34
+Function Fragment_34()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).ConfidenceExp(3.0)
+(BaboSexController as BaboSexControllerManager).CorruptionExp(-3.0)
+kmyQuest.BeginWalkAwayLeave()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_39
+Function Fragment_39()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.RelocateThenStartSeduceSex()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_40
+Function Fragment_40()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.LeaveUnderBlack()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_26
+Function Fragment_26()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.StartEncounterCombat()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_21
+Function Fragment_21()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+if BaboDebugging.getvalue() == 1
+;Debug.notification("Babo Encounter 06")
+endif
+kmyQuest.SetupEncounter()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_32
+Function Fragment_32()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.BeginCombatDefeat()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_36
+Function Fragment_36()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.BeginSubmitKneel()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_35
+Function Fragment_35()
+;BEGIN AUTOCAST TYPE BaboEncounter06Script
+Quest __temp = self as Quest
+BaboEncounter06Script kmyQuest = __temp as BaboEncounter06Script
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.EndEncounterCombat()
+kmyQuest.ShowVictoryChoice()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -296,3 +361,12 @@ Keyword Property BaboBadendKeyword  Auto
 GlobalVariable Property BaboDebugging  Auto  
 
 Quest Property BaboSexController  Auto  
+
+BaboMsgManager Property MsgCtrl  Auto  
+
+BaboSceneManager Property SceneManager  Auto  
+ReferenceAlias[] Property HiredThugs  Auto  
+
+BaboBadEndQuest Property BadEndQuest  Auto  
+
+GlobalVariable Property BaboEventLoanSharkCollectInterestReady  Auto  

@@ -16,22 +16,6 @@ EndFunction
 Function Fragment_0()
 ;BEGIN CODE
 Xmarkermover.PlayerVoiceMovein()
-if (FarmerM.getreference() as actor).getfactionrank(SLAX_AggressiveFaction) >= 3
-BaboBadEndScenario.setvalue(2)
-else
-BaboBadEndScenario.setvalue(Utility.randomint(0, 3))
-endif
-;0 - Run 1 - Help 2 - Rape 3 - Call guards
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_3
-Function Fragment_3()
-;BEGIN CODE
-if BaboSexlabStatusFHU.getvalue() > 2 && (FarmerM.getreference() as actor).getfactionrank(SLAX_AggressiveFaction) < 2
-BaboBadEndScenario.setvalue(0)
-endif
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -50,6 +34,16 @@ EndFunction
 Function Fragment_5()
 ;BEGIN CODE
 (Getowningquest() as BaboBadEndQuest).UnregisterUpdate()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_3
+Function Fragment_3()
+;BEGIN CODE
+if BaboSexlabStatusFHU.getvalue() > 2 && (FarmerM.getreference() as actor).getfactionrank(SLAX_AggressiveFaction) < 2
+BaboBadEndScenario.setvalue(0)
+endif
 ;END CODE
 EndFunction
 ;END FRAGMENT

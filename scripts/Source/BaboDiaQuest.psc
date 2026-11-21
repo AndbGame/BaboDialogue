@@ -42,17 +42,17 @@ Function RapeCustom(ReferenceAlias Victim, ReferenceAlias Raper01, ReferenceAlia
 	EndIf
 EndFunction
 
-function ExaminePussyPlayer(ReferenceAlias Raper)
-	Actor ActorRef = Raper.GetActorReference()
-	actor[] sexActors = new actor[2]
-	sexActors[0] = PlayerREF
-	sexActors[1] = ActorRef
-	sslBaseAnimation[] anims
-	anims = SexLab.GetAnimationsByTag(2, "Fisting", "Aggressive", "Binding",  TagSuppress = "Femdom")
-	;debug.messagebox ("He tries to penetrate my pussy with his fist!!")
-	RegisterForModEvent("AnimationEnd_AfterSexS2", "AfterSexScene2")
-	SexLab.StartSex(sexActors, anims, victim=sexActors[0], hook="AfterSexS2")
-EndFunction
+;/ function ExaminePussyPlayer(ReferenceAlias Raper) /;
+	;/ Actor ActorRef = Raper.GetActorReference() /;
+	;/ actor[] sexActors = new actor[2] /;
+	;/ sexActors[0] = PlayerREF /;
+	;/ sexActors[1] = ActorRef /;
+	;/ sslBaseAnimation[] anims /;
+	;/ anims = SexLab.GetAnimationsByTag(2, "Fisting", "Aggressive", "Binding",  TagSuppress = "Femdom") /;
+	;/ ;debug.messagebox ("He tries to penetrate my pussy with his fist!!") /;
+	;/ RegisterForModEvent("AnimationEnd_AfterSexS2", "AfterSexScene2") /;
+	;/ SexLab.StartSex(sexActors, anims, victim=sexActors[0], hook="AfterSexS2") /;
+;/ EndFunction /;
 
 function RapeFemalePlayerActor(Actor Rapist)
 	
@@ -83,7 +83,7 @@ function RapeFaintedFemalePlayer(ReferenceAlias Raper)
 	sexActors[1] = ActorRef
 	sslBaseAnimation[] anims
 	anims = SexLab.GetAnimationsByTag(2, "Faint", "Necro", "Vaginal",  TagSuppress = "Femdom")
-	(BaboSexController as BaboSexControllerManager).BaboDiaMessagebox(2)
+	;(BaboSexController as BaboSexControllerManager).BaboDiaMessagebox(2)
 	RegisterForModEvent("AnimationEnd_AfterSexS", "AfterSexScene")
 	SexLab.StartSex(sexActors, anims, victim=sexActors[0], hook="AfterSexS")
 EndFunction
@@ -95,7 +95,7 @@ function RapeFemalePlayeragain(ReferenceAlias Raper)
 	sexActors[1] = ActorRef
 	sslBaseAnimation[] anims
 	anims = SexLab.GetAnimationsByTag(2, "Necro", "Aggressive", "Vaginal" ,  TagSuppress = "Femdom")
-	(BaboSexController as BaboSexControllerManager).BaboDiaMessagebox(3)
+	;(BaboSexController as BaboSexControllerManager).BaboDiaMessagebox(3)
 	RegisterForModEvent("AnimationEnd_AfterSexS2", "AfterSexScene2")
 	SexLab.StartSex(sexActors, anims, victim=sexActors[0])
 ;	SexLab.StartSex(sexActors, anims, victim=sexActors[0], hook="AfterSexS2")
@@ -236,23 +236,23 @@ Event AfterSexScene3(string eventName, string argString, float argNum, form send
 	EndIf
 EndEvent
 
-Event AfterSexSceneMMMF01(string eventName, string argString, float argNum, form sender)
-	Actor Victim = SexLab.HookActors(argString)[0]
-	Actor Raper01 = SexLab.HookActors(argString)[1]
-	Actor Raper02 = SexLab.HookActors(argString)[2]
-	Actor Raper03 = SexLab.HookActors(argString)[3]
-	actor[] sexActors = new actor[4]
-	sexActors[0] = Victim
-	sexActors[1] = Raper01
-	sexActors[2] = Raper02
-	sexActors[3] = Raper03
-	sslBaseAnimation[] anims
-	anims = SexLab.GetAnimationsByTag(4, "MMMF", "Aggressive")
-	(BaboSexController as BaboSexControllerManager).BaboDiaMessagebox(1)
-	RegisterForModEvent("AnimationEnd_AfterSexS", "AfterSexScene")
-	SexLab.StartSex(sexActors, anims, victim=sexActors[0], hook="AfterSexS")
-;	UnregisterForModEvent("AnimationEnd_AfterSexSceneMMMF01S")
-EndEvent
+;/ Event AfterSexSceneMMMF01(string eventName, string argString, float argNum, form sender) /;
+	;/ Actor Victim = SexLab.HookActors(argString)[0] /;
+	;/ Actor Raper01 = SexLab.HookActors(argString)[1] /;
+	;/ Actor Raper02 = SexLab.HookActors(argString)[2] /;
+	;/ Actor Raper03 = SexLab.HookActors(argString)[3] /;
+	;/ actor[] sexActors = new actor[4] /;
+	;/ sexActors[0] = Victim /;
+	;/ sexActors[1] = Raper01 /;
+	;/ sexActors[2] = Raper02 /;
+	;/ sexActors[3] = Raper03 /;
+	;/ sslBaseAnimation[] anims /;
+	;/ anims = SexLab.GetAnimationsByTag(4, "MMMF", "Aggressive") /;
+	;/ (BaboSexController as BaboSexControllerManager).BaboDiaMessagebox(1) /;
+	;/ RegisterForModEvent("AnimationEnd_AfterSexS", "AfterSexScene") /;
+	;/ SexLab.StartSex(sexActors, anims, victim=sexActors[0], hook="AfterSexS") /;
+;/ ;	UnregisterForModEvent("AnimationEnd_AfterSexSceneMMMF01S") /;
+;/ EndEvent /;
 
 Event AnotherSexMF01(string eventName, string argString, float argNum, form sender)
 	Actor Victim = SexLab.HookActors(argString)[0]
@@ -378,20 +378,11 @@ Function UnEquipCumItem(actor victim)
 EndFunction
 
 Function LosingControl()
-	Game.DisablePlayerControls( true, true, true, false, true, false, true, false )
-	Game.SetPlayerAIDriven( true )
-;	PlayerRef.SetRestrained(true)
-;	PlayerRef.SetDontMove(true)
-	Game.ForceThirdPerson()
+	(BaboSexController as BaboSexControllerManager).LosingControl()
 EndFunction
 
 Function RecoverControl()
-	Game.EnablePlayerControls()
-	Game.SetPlayerAIDriven(false)
-	PlayerRef.SetRestrained(false)
-	PlayerRef.SetDontMove(false)
-	Game.ForceThirdPerson()
-	Debug.SendAnimationEvent(PlayerRef, "IdleForceDefaultState")
+	(BaboSexController as BaboSexControllerManager).RecoverControl()
 EndFunction
 
 Function ConfiscatedEquipments(actor victim)
@@ -436,8 +427,7 @@ EndIf
 endFunction
 
 Function SLHHActivate(Actor pTarget, Actor pTargetFriend = None)
-	Keyword SLHHScriptEventKeyword = Game.GetFormFromFile(0x00C510, "SexLabHorribleHarassment.esp") as Keyword
-	SLHHScriptEventKeyword.SendStoryEvent(None, pTarget, pTargetFriend)
+	(BaboSexController as BaboSexControllerManager).SLHHActivate(pTarget, pTargetFriend)
 endFunction
 
 Function SLHHChokeActivate(Actor pTarget)
@@ -457,11 +447,6 @@ int Property AnimaitonEventStage04 Auto
 int Property AnimaitonEventStage05 Auto
 
 Function SLHHRegisterAnimationEvent()
-;	RegisterForAnimationEvent(PlayerREF, "Babo_Struggle_S02_A01")
-;	RegisterForAnimationEvent(PlayerREF, "Babo_Struggle_S03_A01")
-;	RegisterForAnimationEvent(PlayerREF, "Babo_Struggle_S05_A01")	
-;	RegisterForAnimationEvent(PlayerREF, "Babo_ChokeHug_S04_A01")
-;	RegisterForAnimationEvent(PlayerREF, "Babo_ChokeHug_S05_A01")
 	
 	RegisterForAnimationEvent(PlayerREF, AnimationEventString01)
 	if AnimationEventString02 != ""
@@ -490,14 +475,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	elseif	(akSource == PlayerRef) && (asEventName == AnimationEventString05)
 		WERaperQ.setstage(AnimaitonEventStage05)
 	endIf
-;	if (akSource == PlayerRef) && (asEventName == "Babo_Struggle_S03_A01")
-;		;Debug.notification("Stage" + SLHHGropingStage)
-;		WERaperQ.setstage(SLHHGropingStage)
-;	endIf
-;	if (akSource == PlayerRef) && (asEventName == "Babo_Struggle_S05_A01")
-;		;Debug.notification("Stage" + SLHHEscapeStage)
-;		WERaperQ.setstage(SLHHEscapeStage)
-;	endIf
+
 endEvent
 
 Function SpectatorChangeStatus(int SCNextStage)
@@ -570,47 +548,17 @@ Function EnableEssential()
 	BDMCM.Enableinvincibility()
 EndFunction
 
-Function CorruptionExpLoss(Float Mult)
-	BDMScript.CalcCorruptionExpLoss(Mult)
-EndFunction
+Event Surrender()
 
-Function CorruptionExp(Float Mult)
-	BDMScript.CalcCorruptionExpGain(Mult)
-EndFunction
-
-Function TraumaExp(Float Mult)
-	BDMScript.CalcTraumaExpGain(Mult)
-EndFunction
-
-Function TraumaExpLoss(Float Mult)
-	BDMScript.CalcTraumaExpLoss(Mult)
-EndFunction
-
-Function LewdnessExp(Float Mult)
-	BDMScript.CalcLewdnessExpGain(Mult)
-EndFunction
-
-Function LewdnessExpLoss(Float Mult)
-	BDMScript.CalcLewdnessExpLoss(Mult)
-EndFunction
-
-Function CreatureTraumaExp(Float Mult)
-	BDMScript.CalcCreatureTraumaExpGain(Mult)
-EndFunction
-
-Function CreatureTraumaExpLoss(Float Mult)
-	BDMScript.CalcCreatureTraumaExpLoss(Mult)
-EndFunction
+EndEvent
 
 Function DesignateEventActor(Actor akactor)
 	EventActor = akactor
 EndFunction
 
-
 Function StopAllSexlabAnimations()
 	ThreadSlot.stopall()
 EndFunction
-
 
 Function fRegisterForSingleUpdate(float timer)
 	RegisterForSingleUpdate(timer)
@@ -658,6 +606,49 @@ EndEvent
 
 EndState
 
+State RoadEncounterEvent02;WIP
+
+Event Onbeginstate()
+	RegisterForModEvent("On_BaboDiaSurrender", "Surrender")
+	(BaboSexController as BaboSexControllerManager).ReadySurrender(true)
+Endevent
+
+Event Surrender()
+	WERaperQ.setstage(20)
+EndEvent
+
+EndState
+
+State RoadEncounterEvent06
+
+;   Event Onbeginstate(): RegisterForModEvent("On_BaboDiaSurrender", "Surrender")
+;                         (BaboSexController as BaboSexControllerManager).ReadySurrender(true)
+;   Event Surrender(): WERaperQ.setstage(SurrenderStage)
+
+Int Function DeathCount()
+	DeathCountNum = DeathCountNum + 1
+	Debug.Trace(DeathCountNum + " + 1")
+	Encounter06Script.OnCrewDeathCounted()
+		If DeathCountNum >= DeathCountGoalNum
+			WERaperQ.setstage(255)
+		EndIf
+	Return DeathCountNum
+EndFunction
+
+EndState
+
+State RoadEncounterEvent08
+
+Event Onbeginstate()
+	RegisterForModEvent("On_BaboDiaSurrender", "Surrender")
+	(BaboSexController as BaboSexControllerManager).ReadySurrender(true)
+Endevent
+
+Event Surrender()
+	WERaperQ.setstage(20)
+EndEvent
+
+EndState
 
 State ChangeLocationEvent08A
 
@@ -687,6 +678,33 @@ EndEvent
 
 EndState
 
+State ChangeLocationEvent09
+
+Event Onbeginstate()
+	RegisterForSingleUpdateGameTime(12.0)
+Endevent
+
+
+Event Onupdate()
+
+EndEvent
+
+Event OnupdateGameTime()
+	if WERaperQ.getstage() < 50
+		WERaperQ.setstage(90)
+	elseif WERaperQ.getstage() == 50
+		WERaperQ.setstage(170)
+	elseif WERaperQ.getstage() == 55
+		WERaperQ.setstage(255)
+	elseif WERaperQ.getstage() >= 120 && WERaperQ.getstage() < 140
+		WERaperQ.setstage(255)
+	elseif WERaperQ.getstage() >= 140 && WERaperQ.getstage() <= 150
+		WERaperQ.setstage(255)
+	endif
+EndEvent
+
+
+EndState
 
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ This is property zone \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -695,6 +713,8 @@ EndState
 BaboDialogueConfigMenu Property BDMCM Auto
 SexLabFramework Property SexLab  Auto 
 Quest Property WERaperQ Auto
+; E06 mercenary death -> ConsumeVisit hook (RoadEncounterEvent06 state only)
+BaboEncounter06Script Property Encounter06Script Auto
 float Property Num1 auto
 Scene Property Scene01 Auto
 Scene Property Scene02 Auto
@@ -755,6 +775,9 @@ Int Property SLHHEscapeStage auto
 Int Property SLHHStartStage auto
 Int Property SLHHGropingStage auto
 Int Property SLHHAfterRaped auto
+
+; SurrenderStage: no longer used by Encounter06 (surrender moved to BaboEncounter06Script 2026-09-28).
+Int Property SurrenderStage Auto
 
 
 GlobalVariable Property BaboSimpleSlaveryChance Auto

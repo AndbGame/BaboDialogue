@@ -2,15 +2,6 @@
 ;NEXT FRAGMENT INDEX 2
 Scriptname SF_BaboLoanSharksScene01_081D13D5 Extends Scene Hidden
 
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-getowningquest().setstage(20)
-stop()
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
@@ -18,6 +9,16 @@ int ri = Utility.randomint(0, 1)
 BaboEventLoanSharkSexType.setvalue(ri)
 ;1 Consensual
 ;2 Non-consensual
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+(GetOwningQuest() as BaboLoanSharkScript).BrothelScene01Done()
+
+stop();
 ;END CODE
 EndFunction
 ;END FRAGMENT

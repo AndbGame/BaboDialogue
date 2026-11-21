@@ -234,34 +234,10 @@ function RapeGangbangBE4(ReferenceAlias Actor01, ReferenceAlias Actor02, Referen
 
 EndFunction
 
-;anims = SexLab.GetAnimationByName("")
-
-Event AfterSexBE(string eventName, string argString, float argNum, form sender)
-
-	Actor Victim = SexLab.HookActors(argString)[0]
-	Actor Raper01 = SexLab.HookActors(argString)[1]
-	Actor Raper02 = SexLab.HookActors(argString)[2]
-	Actor Raper03 = SexLab.HookActors(argString)[3]
-
-	actor[] sexActors = new actor[4]
-	sexActors[0] = Victim
-	sexActors[1] = Raper01
-	sexActors[2] = Raper02
-	sexActors[3] = Raper03
-	sslBaseAnimation[] anims
-	anims = SexLab.GetAnimationsByTag(4, "MMMF", "Aggressive")
-	Self.Messagebox(10)
-	RegisterForModEvent("AnimationEnd_AfterSexTBE", "AfterSexSceneBE")
-	SexLab.StartSex(sexActors, anims, victim=sexActors[0], hook="AfterSexTBE")
-	UnregisterForModEvent("AnimationEnd_Gangbang4AfterBE")
-
-EndEvent
-
 Event AfterSexSceneBE(string eventName, string argString, float argNum, form sender)
-	Scene01.forceStart()
 	Game.DisablePlayerControls(abmenu = true)
-	PlayerREF.playIdle(OrgasmAfter01)
-	UnregisterForModEvent("AnimationEnd_AfterSexT")
+	(BaboSexController as BaboSexControllerManager).RandomExhaustionIdle(PlayerRef)
+	(BaboSceneController as BaboSceneManager).EventWOVScenePlay(2, true)
 EndEvent
 
 String Function CustomSexStringRandom()
@@ -278,23 +254,17 @@ Return Rstring
 EndFunction
 
 Function EquipZazItem()
-
-PlayerREF.EquipItem(Yoke, true, true)
-PlayerREF.EquipItem(RopeCollar, true, true)
 PlayerREF.EquipItem(AnkleChain, true, true)
 PlayerREF.EquipItem(Logbit, true, true)
-
+Utility.wait(1.0)
+PlayerREF.EquipItem(Yoke, true, true)
 EndFunction
 
 Function UnEquipZazItem()
-
 PlayerREF.UnEquipItem(Yoke, true, true)
-PlayerREF.UnEquipItem(RopeCollar, true, true)
 PlayerREF.UnEquipItem(AnkleChain, true, true)
 PlayerREF.UnEquipItem(Logbit, true, true)
-
 Self.Messagebox(11)
-
 EndFunction
 
 Bool Function ResetQuest()
@@ -303,10 +273,7 @@ Bool Function ResetQuest()
 			Return False
 		endif
 	EndIf
-	OrcRapeScene01.stop()
-	BaboEventWhiterunOrcVisitiorsScene02.stop()
-	BaboEventWhiterunOrcVisitiorsSceneExtra.stop()
-	BaboEventWhiterunOrcVisitiorsSceneIntro.stop()
+	(BaboSceneController as BaboSceneManager).EventWOVScenePlay(0, false)
 	UnregisterForUpdateGameTime()
 	UnEquipZazItem()
 	(BaboSexController as BaboSexControllerManager).RecoverControl(true)
@@ -365,39 +332,10 @@ Function AfterWhiterunViceCaptainClearQuest()
 	ResetScript.UpdateWhiterunOrcQuest()
 EndFunction
 
+
+
 Function Messagebox(int num)
-	(BaboSexController as BaboSexControllerManager).WhiterunOrcVisitMessagebox(num)
-EndFunction
-
-Function WOASBigGuy01()
-	Game.DisablePlayerControls(abmenu = true)
-	(BaboSexController as BaboSexControllerManager).RandomExhaustionIdle(PlayerRef)
-	BaboEventWhiterunOrcVisitiorsSceneBG01.forcestart()
-EndFunction
-
-Function WOASBigGuy02()
-	Game.DisablePlayerControls(abmenu = true)
-	(BaboSexController as BaboSexControllerManager).RandomExhaustionIdle(PlayerRef)
-	BaboEventWhiterunOrcVisitiorsSceneBG02.forcestart()
-EndFunction
-
-Function WOASBigGuy03()
-	Game.DisablePlayerControls(abmenu = true)
-	PlayerREF.playIdle(OrgasmAfter01)
-	;(BaboSexController as BaboSexControllerManager).RandomExhaustionIdle(PlayerRef)
-	Scene01.forceStart()
-EndFunction
-
-Function WOAS01()
-	Game.DisablePlayerControls(abmenu = true)
-	(BaboSexController as BaboSexControllerManager).RandomExhaustionIdle(PlayerRef)
-	BaboEventWhiterunOrcVisitiorsScene03.forcestart()
-EndFunction
-
-Function WOAS02()
-	Game.DisablePlayerControls(abmenu = true)
-	(BaboSexController as BaboSexControllerManager).RandomExhaustionIdle(PlayerRef)
-	BaboEventWhiterunOrcVisitiorsScene01.forcestart()
+	(BaboMsgScript as BaboMsgManager).WhiterunOrcVisitMessagebox(num)
 EndFunction
 
 Bool Function WaitForHelp()
@@ -580,6 +518,8 @@ GlobalVariable Property BaboGlobalWhiterunOrcFuckToyTitle Auto
 GlobalVariable Property BaboEventDebug Auto
 GlobalVariable Property BaboDialogueSEGlobal Auto
 
+Quest Property BaboMsgScript Auto
+Quest Property BaboSceneController Auto
 Quest Property BaboSexController Auto
 BaboSexControllerManager property BQuest Auto
 GlobalVariable property BaboEventWhiterunOrcVisitorsNextVisitInterval Auto
@@ -606,23 +546,13 @@ ReferenceAlias Property OrcRaper02 Auto
 ReferenceAlias Property OrcRaper03 Auto
 ReferenceAlias Property LydiaRef Auto
 
-Scene Property OrcRapeScene01 Auto
-Scene Property BaboEventWhiterunOrcVisitiorsScene01 Auto
-Scene Property BaboEventWhiterunOrcVisitiorsScene02 Auto
-Scene Property BaboEventWhiterunOrcVisitiorsScene03 Auto
-Scene Property BaboEventWhiterunOrcVisitiorsSceneExtra Auto
-Scene Property BaboEventWhiterunOrcVisitiorsSceneIntro Auto
-Scene Property BaboEventWhiterunOrcVisitiorsSceneBG01 Auto
-Scene Property BaboEventWhiterunOrcVisitiorsSceneBG02 Auto
-
 Faction Property OrcRaperMild Auto
 Faction Property OrcRaperHot Auto
 Faction Property BaboEventWhiterunOrcVisitors Auto
 Faction Property BaboEventWhiterunOrcVisitorsAgain Auto
 SexLabFramework Property SexLab  Auto
 Idle property OrgasmAfter01 auto
-Scene Property Scene01 Auto
-Scene Property Scene02 Auto
+
 Actor property PlayerREF auto
 Armor property Yoke auto
 Armor property RopeCollar auto

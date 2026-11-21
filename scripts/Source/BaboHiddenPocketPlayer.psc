@@ -3,8 +3,7 @@ Scriptname BaboHiddenPocketPlayer  extends ReferenceAlias
 Referencealias property HiddenPocket Auto
 Quest Property BaboSexController Auto
 Actor player
-;ObjectReference pocket
-;SexLabFramework SexLab
+Quest Property BaboMsgScript Auto
 
 Event OnInit()
 	OnPlayerLoadGame()
@@ -21,7 +20,7 @@ EndEvent
 
 Event OnCheckFinished(bool detected)
 	if detected
-		(BaboSexController as BaboSexControllerManager).HiddenPocketMessagebox(1)
+		(BaboMsgScript as BaboMsgManager).HiddenPocketMessagebox(1)
 	else
 		(HiddenPocket.getreference()).Activate(player)
 	endif

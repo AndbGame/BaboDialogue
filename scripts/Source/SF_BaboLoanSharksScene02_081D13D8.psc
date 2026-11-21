@@ -5,7 +5,8 @@ Scriptname SF_BaboLoanSharksScene02_081D13D8 Extends Scene Hidden
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
-GetOwningQuest().SetStage(22)
+(GetOwningQuest() as BaboLoanSharkScript).BrothelScene02Done()
+
 stop()
 ;END CODE
 EndFunction

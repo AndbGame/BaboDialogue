@@ -1,5 +1,9 @@
 Scriptname BaboTestKidnapButton extends ObjectReference  
 
+Keyword Property BaboRieklingThirskKidnapCallKeyword Auto
+ActorBase Property BaboRieklingChiefInvaderChief Auto
+Location Property BaboKidnapperRieklingLocation01 Auto
+
 Location Property BaboEventMorthalLocation Auto
 ActorBase Property BaboEventChangeLoactaion07Traveller01 Auto
 ActorBase Property BaboEventChangeLoactaion07Traveller02 Auto
@@ -82,6 +86,10 @@ event onActivate(objectReference akActivator)
 		endif
 	elseif choice == 3
 		BaboKidnapCallKeyword.SendStoryEvent()
+	elseif choice == 4
+		actor akactor = PlayerRef.placeactoratme(BaboRieklingChiefInvaderChief, 4)
+		BaboRieklingThirskKidnapCallKeyword.SendStoryEvent(BaboKidnapperRieklingLocation01, PlayerRef, akactor)
+		return
 	endif
 
 	Utility.wait(7.0)

@@ -2,24 +2,14 @@
 ;NEXT FRAGMENT INDEX 12
 Scriptname QF_BaboChangeLocationEvent02_0889FAEE Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY CenterMarker
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_CenterMarker Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY myHoldLocation
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldLocation Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY TRIGGER
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_TRIGGER Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY PlayerAlias
+;BEGIN ALIAS PROPERTY CenterMarker
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PlayerAlias Auto
+ReferenceAlias Property Alias_CenterMarker Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY CreatureRef
@@ -27,10 +17,47 @@ ReferenceAlias Property Alias_PlayerAlias Auto
 ReferenceAlias Property Alias_CreatureRef Auto
 ;END ALIAS PROPERTY
 
+;BEGIN ALIAS PROPERTY myHoldLocation
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldLocation Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY PlayerAlias
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerAlias Auto
+;END ALIAS PROPERTY
+
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_5
+Function Fragment_5()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_9
 Function Fragment_9()
 ;BEGIN CODE
 (BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7()
+;BEGIN CODE
+Utility.wait(2.0)
+Setstage(100)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -45,37 +72,10 @@ setstage(5)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
-;BEGIN CODE
-Utility.wait(2.0)
-Setstage(100)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_3
-Function Fragment_3()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_10
 Function Fragment_10()
 ;BEGIN CODE
 (BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -97,28 +97,10 @@ Function Fragment_8()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_6
-Function Fragment_6()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_5
-Function Fragment_5()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(1)
+MsgCtrl.ChangeLocationEvent02Messagebox(1)
 Game.DisablePlayerControls(false, false, true, false, false, false, false)
 Alias_CreatureRef.trytoremovefromfaction(BaboChangeLocationEvent02FactionBefore)
 Alias_CreatureRef.trytoaddtofaction(BaboChangeLocationEvent02FactionAfter)
@@ -131,8 +113,26 @@ setstage(20)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
+;BEGIN FRAGMENT Fragment_6
+Function Fragment_6()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_3
+Function Fragment_3()
 ;BEGIN CODE
 (BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerAlias, Alias_CreatureRef, None, None, None, "MovingDick", "", true, "CLEvent02DLC02", "ChangeLocationEvent02DLC02", true)
 (BaboSexController as BaboSexControllerManager).AddSexCount(1)
@@ -147,3 +147,5 @@ Quest Property BaboSexController  Auto
 Faction Property BaboChangeLocationEvent02FactionBefore  Auto  
 
 Faction Property BaboChangeLocationEvent02FactionAfter  Auto  
+
+BaboMsgManager Property MsgCtrl  Auto  

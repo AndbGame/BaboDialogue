@@ -50,8 +50,10 @@ GlobalVariable Property BaboSexlabStatAggressor Auto
 
 GlobalVariable Property BaboSexlabStatCorruptionSpeed Auto
 GlobalVariable Property BaboSexlabStatCorruption Auto
-GlobalVariable Property BaboSexlabStatExhibitionist Auto
+GlobalVariable Property BaboSexlabStatExhibitionist Auto;Practically Obsolete. Same as exhibitionist faction
 GlobalVariable Property BaboSexlabStatLewdness Auto
+GlobalVariable Property BaboSexlabStatKarma Auto
+
 
 GlobalVariable Property BaboDetectSpectatorUpdateInterval Auto
 GlobalVariable Property BaboDetectSpectatorHowMany Auto
@@ -116,7 +118,7 @@ Keyword Property SLA_ArmorLewdLeotard Auto
 Keyword Property SLA_ArmorCurtain Auto
 
 
-Quest Property zadquest Auto
+Quest Property zadquest Auto Hidden
 
 Keyword Property zad_Lockable Auto Hidden
 Keyword Property zad_DeviousCollar Auto Hidden
@@ -150,14 +152,14 @@ Keyword Property zad_DeviousPiercingsNipple Auto Hidden
 ;LeveledItem Property zad_dev_chastitybelts_closed Auto Hidden
 ;LeveledItem Property zad_dev_armcuffs Auto Hidden
 
-Key Property zad_ChastityKey Auto
-Key Property zad_PiercingsRemovalTool Auto
-Key Property zad_RestraintsKey Auto
+Key Property zad_ChastityKey Auto Hidden
+Key Property zad_PiercingsRemovalTool Auto Hidden
+Key Property zad_RestraintsKey Auto Hidden
 
 Faction Property _BF_ParentFaction Auto
 GlobalVariable Property _BFPlayerState Auto; 0"Follicular_State" / 1"Ovulation_State" / 2"Luteal_State" / 3"Menstruation_State" / 4"PregnancyFirst_State" / 5"PregnancySecond_State" / 6"PregnancyThird_State" / 7"LaborPains_State" / 8"Replanish_State"
 
-Faction Property zzEstrusChaurusBreederFaction Auto
+Faction Property zzEstrusChaurusBreederFaction Auto Hidden
 
 Faction Property SR_InflateFaction Auto Hidden
 
@@ -186,6 +188,18 @@ GlobalVariable Property BaboSexlabStatExhibitionistSpeed Auto
 GlobalVariable Property BaboSexlabStatSkimpyDecrease  Auto
 GlobalVariable Property BaboSexlabStatLewdnessSpeed Auto
 GlobalVariable Property BaboPlayerPubicHair Auto
+
+GlobalVariable Property BaboPlayerNudityCriteriaPretty Auto
+GlobalVariable Property BaboPlayerNudityCriteriaSexy Auto
+GlobalVariable Property BaboPlayerNudityCriteriaSkimpy Auto
+GlobalVariable Property BaboPlayerNudityCriteriaNaked Auto
+GlobalVariable Property BaboPlayerNudityCriteriaCommon Auto
+
+GlobalVariable Property BaboPlayerAppearanceValue Auto
+GlobalVariable Property BaboPlayerBreastsValue Auto
+GlobalVariable Property BaboPlayerButtocksValue Auto
+GlobalVariable Property BaboPlayerNudityValue Auto
+GlobalVariable Property BaboPlayerNudityBottomless Auto
 
 GlobalVariable Property BaboSexCountRiekling Auto
 GlobalVariable Property BaboSexCountTroll Auto
@@ -286,6 +300,7 @@ Book Property _SLS_LicenceClothes Auto
 
 Faction Property BaboFactionStatWill Auto
 Faction Property BaboFactionStatCorruption Auto
+Faction Property BaboFactionStatKarma Auto
 Faction Property BaboFactionStatExhibitionist Auto
 Faction Property BaboFactionStatLewdness Auto
 
@@ -352,12 +367,13 @@ Faction Property BaboFactionBoozethatleadstoTitle Auto
 
 Faction Property BaboNPCAnimating Auto
 
-;Bool bTriggeredEvent = false
+Bool Property bSurrenderKey = false Auto
 ;======================================
 ;===============Event Zone================
 ;======================================
 
 Quest Property BaboKidnapEvent Auto
+Quest Property BaboEventRieklingThirsk Auto
 
 Event OnInit()
 	RegisterFunction()
@@ -379,6 +395,14 @@ Event OnKeyDown( int keyCode )
 			endif
 		endif
 		
+		if BaboEventRieklingThirsk.isrunning()
+			Bool bkey = (BaboEventRieklingThirsk as BaboEventRiekling).KeyPress()
+			if bkey
+				BaboXmarkerMoverScript.KeyPressSelfCommentary(6)
+				return
+			endif
+		endif
+		
 		If BDDibella.getstage() >= 20 && !PlayerRef.isincombat()
 			;Debug.Notification("I press it!")
 
@@ -391,8 +415,10 @@ Event OnKeyDown( int keyCode )
 			Else
 				BaboXmarkerMoverScript.KeyPressSelfCommentary(0)
 			EndIf
-		Elseif PlayerRef.isincombat()
-			;(BaboSexController as BaboSexControllerManager).;Surrender? WIP
+		Elseif crosshairRef.isincombat() && bSurrenderKey
+			(BaboSexController as BaboSexControllerManager).Surrender(crosshairRef)
+		;Elseif PlayerRef.isincombat() && crosshairRef && bSurrenderKey
+		;	(BaboSexController as BaboSexControllerManager).Surrender(crosshairRef)
 		Else
 			BaboXmarkerMoverScript.KeyPressSelfCommentary(0)
 		Endif
@@ -640,6 +666,7 @@ Function RegisterFunction()
 	CD_Fertility()
 	CD_EstrusChaurus()
 	
+	(BaboSexController as BaboSexControllerManager).KarmaFinalCheck()
 	Debug.Trace("BaboDialogue Keysetting Completed")
 EndFunction
 
@@ -647,7 +674,7 @@ Function RegisterForSexLabEvents()
 	;RegisterForModEvent("PlayerTrack_Start", "BaboPlayerTrackStart") ;PlayerTrack event call doesn't seem to work. Maybe because of separateorgasm?
 	;RegisterForModEvent("PlayerTrack_End", "BaboPlayerTrackEnd")
 	RegisterForModEvent("SexLabOrgasmSeparate", "BaboOrgasmSeparate")
-	RegisterForModEvent("HookOrgasmStart", "BaboOrgasm")
+	UnregisterForModEvent("HookOrgasmStart") ; P+: OrgasmStart fires only in Legacy climax and double-counts with SexLabOrgasmSeparate; unregister clears it from existing saves
 	RegisterForModEvent("HookAnimationEnd", "BaboSexlabEnd")
 	
 	if BaboHorribleHarassment.getvalue() == 1
@@ -769,7 +796,7 @@ Event BaboOrgasmSeparate(Form ActorRef, Int Thread)
 	sslBaseAnimation anim = sexlab.HookAnimation(Thread)
 	Actor akactor = ActorRef as actor
 	
-	if akactor != PlayerRef
+	if akactor == PlayerRef || !sexlab.GetController(Thread).HasPlayer ; count the partner's (creature's) orgasm in a player scene
 		return
 	endif
 
@@ -993,7 +1020,7 @@ EndEvent
 Function DoStatus()
 
 if BaboFHU.getvalue() == 1
-	SR_InflateFaction = Game.GetFormFromFile(0x00A991, "sr_FillHerUp.esp") as Faction
+	;SR_InflateFaction = Game.GetFormFromFile(0x00A991, "sr_FillHerUp.esp") as Faction
 	InflationFloat = PlayerRef.getfactionrank(SR_InflateFaction)
 	
 	if InflationFloat < 5
@@ -1032,10 +1059,19 @@ EndFunction
 
 Quest Property BaboBoyFriendVariableSetting Auto
 
+
+Function AdjustSexlabStats(Actor ActorRef, string Name, int AdjustBy)
+	SexLab.Stats.AdjustBy(ActorRef, Name, AdjustBy)
+EndFunction
+
 Function DoUpdate()
 	BaboDetectSpectatorKeyword.SendStoryEvent(None, PlayerRef)
 	
-	Utility.wait(5.0);Wait for the quest to start
+	Float w = 0.0
+	while !BaboDetectSpectatorQuest.IsRunning() && w < 5.0
+		Utility.Wait(0.5)
+		w += 0.5
+	endwhile
 	if BaboDebugging.getvalue() == 1
 		Debug.Notification("Doupdate")
 		Debug.Notification(BaboDetectSpectatorQuest.getalias(0).getname())
@@ -1047,7 +1083,7 @@ Function DoUpdate()
 	akAF01 = (BaboDetectSpectatorQuest.getalias(4) as referencealias).getreference() as actor
 	Alias_ViceCaptain = BaboDetectSpectatorQuest.getalias(5) as referencealias
 	ViceCaptain = Alias_ViceCaptain.GetReference() as Actor
-
+	BaboDetectSpectatorQuest.stop()
 	int HowManyPeople = 0
 	if akAM01
 		HowManyPeople += 1
@@ -1072,12 +1108,15 @@ Function DoUpdate()
 	BRMQuest.DecreaseReputationBitch(1)
 	BaboDetectSpectatorHowMany.setvalue(HowManyPeople)
 
-	If (_SLS_BikiniArmor && PlayerRef.WornHasKeyword(_SLS_BikiniArmor)) ||  PlayerRef.WornHasKeyword(SLA_ArmorPretty) || PlayerRef.WornHasKeyword(EroticArmor) || PlayerRef.WornHasKeyword(SLA_ArmorSpendex) || PlayerRef.WornHasKeyword(SLA_ArmorHalfNakedBikini) || PlayerRef.WornHasKeyword(SLA_ArmorLewdLeotard) || PlayerRef.WornHasKeyword(SLA_ArmorCurtain) || PlayerRef.WornHasKeyword(SLA_ArmorHalfNaked) || PlayerRef.WornHasKeyword(SLA_ArmorTransparent)
-		CalcExpGain()
-	ElseIf PlayerRef.WornHasKeyword(Armorcuirass) || PlayerRef.WornHasKeyword(ClothingBody)
-		CalcExpLoss()
-	Elseif !PlayerRef.WornHasKeyword(Armorcuirass) && !PlayerRef.WornHasKeyword(ClothingBody)
-		CalcExpNakedGain()
+	; Game hours since last update and current exposure, read once per tick
+	Float hours = (GameDaysPassed.GetValue() - LastUpdate) * 24.0
+	Float nudity = BaboPlayerNudityValue.GetValue()
+	If nudity == 100
+		CalcExpNakedGain(hours, HowManyPeople)
+	elseIf nudity > BaboPlayerNudityCriteriaPretty.getvalue()
+		CalcExpGain(hours, HowManyPeople, nudity / 100.0)
+	else
+		CalcExpLoss(hours)
 	EndIf
 
 	CalcLevel()
@@ -1096,124 +1135,126 @@ Function SkyrimAchievement()
 
 EndFunction
 
-GlobalVariable Property BaboPlayerAppearanceValue Auto
-GlobalVariable Property BaboPlayerBreastsValue Auto
-GlobalVariable Property BaboPlayerButtocksValue Auto
+Function CalcExpNakedGain(Float hours, Int people)
+	if people > 0
+		Float gain = hours * (BaboSexlabStatExhibitionistSpeed.getvalue() * 3)
 
-Function CalcExpNakedGain()
-	;Alias_Male01.getreference() as actor  I am not sure if an alias alone can detect whether there is a designated actor or not
-	
-	if akAM01
-		ExhibitionistExp += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 3)
-		CalcLewdnessExpGain(3.0)
-		;BRMQuest.DecreaseReputation(1, 0)
-		BRMQuest.IncreaseReputationBitch(1)
-	endif
-
-	if	akAM02 && akAM03
-		ExhibitionistExp *= 3
-		CalcLewdnessExpGain(2.0)
-		BRMQuest.IncreaseReputationBitch(2)
-	elseif akAM02 || akAM03
-		ExhibitionistExp *= 2
-		CalcLewdnessExpGain(1.0)
-		BRMQuest.IncreaseReputationBitch(1)
+		if people == 1
+			CalcLewdnessExpGain(3.0)
+			BRMQuest.IncreaseReputationBitch(1)
+		elseif people == 2
+			gain *= 2
+			CalcLewdnessExpGain(4.0)
+			BRMQuest.IncreaseReputationBitch(2)
+		elseif people >= 3
+			gain *= 3
+			CalcLewdnessExpGain(5.0)
+			BRMQuest.IncreaseReputationBitch(3)
+		endif
+		ExhibitionistExp += gain
 	endif
 EndFunction
 
-Function CalcExpGain()
+Function CalcExpGain(Float hours, Int people, Float NudityValue)
 	Float ExhibitionistExpT = 0.0
 	Float LewdnessExpT = 0.0
 	Float ReputationBitchT = 0.0
 	Float GetRepFloat = 0.0
+	Float ex = hours * BaboSexlabStatExhibitionistSpeed.GetValue()
 
-	if	PlayerRef.WornHasKeyword(SLA_Brabikini) && !(PlayerRef.WornHasKeyword(SLA_PantyNormal)) && !(PlayerRef.WornHasKeyword(SLA_ThongCString)) && !(PlayerRef.WornHasKeyword(SLA_ThongLowleg)) && !(PlayerRef.WornHasKeyword(SLA_ThongT)) && !(PlayerRef.WornHasKeyword(SLA_ThongGString)) && !(PlayerRef.WornHasKeyword(SLA_PantsNormal)) && !(PlayerRef.WornHasKeyword(SLA_MicroHotpants))
-		ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.4)
+	if NudityValue * 100.0 > BaboPlayerNudityCriteriaSexy.GetValue()
+		BikExp += hours * (BaboSexlabStatSkimpySpeed.getvalue() * (NudityValue + 0.5))
 	endif
 
-	if PlayerRef.WornHasKeyword(SLA_ArmorHalfNaked) || PlayerRef.WornHasKeyword(SLA_ArmorTransparent)
-		BikExp += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatSkimpySpeed.getvalue() * 1.5)
-	elseif PlayerRef.WornHasKeyword(SLA_ArmorHalfNakedBikini) || PlayerRef.WornHasKeyword(SLA_ArmorCurtain)
-		BikExp += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatSkimpySpeed.getvalue() * 1.3)
-	elseif PlayerRef.WornHasKeyword(SLA_ArmorSpendex) || PlayerRef.WornHasKeyword(SLA_ArmorLewdLeotard)
-		BikExp += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatSkimpySpeed.getvalue() * 1.1)
-	elseif PlayerRef.WornHasKeyword(EroticArmor)
-		BikExp += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatSkimpySpeed.getvalue() * 1.0)
-	elseif PlayerRef.WornHasKeyword(SLA_ArmorPretty)
-		BikExp += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatSkimpySpeed.getvalue() * 0.8)
-	elseif _SLS_BikiniArmor && PlayerRef.WornHasKeyword(_SLS_BikiniArmor)
-		BikExp += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * BaboSexlabStatSkimpySpeed.getvalue()
-	endif
+	if people > 0
+		
+		ExhibitionistExpT += ex * (0.5 + NudityValue * 1.5)
+		LewdnessExpT += NudityValue * 2.0
+		ReputationBitchT += NudityValue * 3.0
 
-	if akAM01
-		if PlayerRef.WornHasKeyword(SLA_ArmorHalfNaked) || PlayerRef.WornHasKeyword(SLA_ArmorTransparent)
-			ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 2)
-			LewdnessExpT += 2.0
-			ReputationBitchT += 3.0
-		elseif PlayerRef.WornHasKeyword(SLA_ArmorHalfNakedBikini) || PlayerRef.WornHasKeyword(SLA_ArmorCurtain)
-			ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.3)
-			LewdnessExpT += 1.2
-			ReputationBitchT += 2.0
-		elseif PlayerRef.WornHasKeyword(SLA_ArmorSpendex) || PlayerRef.WornHasKeyword(SLA_ArmorLewdLeotard)
-			ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.15)
-			LewdnessExpT += 0.5
-			ReputationBitchT += 1.5
-		elseif PlayerRef.WornHasKeyword(EroticArmor)
-			ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.1)
+		if BaboPlayerNudityBottomless.getvalue() == 1
+			ExhibitionistExpT += ex * 1.4
 			LewdnessExpT += 1.0
-			ReputationBitchT += 1.0
-		endif
-
-		if BaboPlayerPubicHair.getvalue() >= 1 
-			if PlayerRef.WornHasKeyword(SLA_ThongCString)
-				ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.3)
-				LewdnessExpT += 0.8
-			elseif PlayerRef.WornHasKeyword(SLA_ThongLowleg) || PlayerRef.WornHasKeyword(SLA_ThongGstring)
-				ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.25);Including G String
-				LewdnessExpT += 0.6
-			elseif PlayerRef.WornHasKeyword(SLA_ThongT) || PlayerRef.WornHasKeyword(SLA_MicroHotpants)
-				ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.1)
-				LewdnessExpT += 0.4
-			endif
 		else
+			; Thong tier 1..3, pubic hair adds bonus
+			Int t = 0
 			if PlayerRef.WornHasKeyword(SLA_ThongCString)
-				ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.15)
-				LewdnessExpT += 0.7
+				t = 3
 			elseif PlayerRef.WornHasKeyword(SLA_ThongLowleg) || PlayerRef.WornHasKeyword(SLA_ThongGstring)
-				ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.1)
-				LewdnessExpT += 0.5
+				t = 2
 			elseif PlayerRef.WornHasKeyword(SLA_ThongT) || PlayerRef.WornHasKeyword(SLA_MicroHotpants)
-				ExhibitionistExpT += ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * (BaboSexlabStatExhibitionistSpeed.getvalue() * 1.05)
-				LewdnessExpT += 0.3
+				t = 1
+			endif
+			if t > 0
+				Float hair = 0.0
+				if BaboPlayerPubicHair.GetValue() >= 1
+					hair = 0.1
+				endif
+				ExhibitionistExpT += ex * (1.0 + t * 0.05 + hair * t * 0.5)
+				LewdnessExpT += 0.1 + t * 0.2 + hair
 			endif
 		endif
 
-		if	akAM02 && akAM03
-			ExhibitionistExpT *= 3
-			LewdnessExpT *= 3
-			ReputationBitchT *= 3
-		elseif	akAM02 || akAM03
-			ExhibitionistExpT *= 2
-			LewdnessExpT *= 2
-			ReputationBitchT *= 2
+
+		; Spectator multiplier (1..3)
+		ExhibitionistExpT *= people
+		LewdnessExpT *= people
+		ReputationBitchT *= people
+		GetRepFloat += (BaboPlayerAppearanceValue.getvalue() / 2)
+		GetRepFloat += (BaboPlayerBreastsValue.getvalue() / 5)
+		GetRepFloat += (BaboPlayerButtocksValue.getvalue() / 6)
+		
+		if GetRepFloat as int >= Utility.randomint(0, 100)	
+			BRMQuest.IncreaseReputationBitchbyExposure(ReputationBitchT)
+		endif
+		
+		Float nud = NudityValue * 100.0
+		Float ExhibitionistCap = -1.0
+		if nud < BaboPlayerNudityCriteriaNaked.GetValue()
+			if nud > BaboPlayerNudityCriteriaSkimpy.GetValue()
+				ExhibitionistCap = ExpPerLevel * 30.0
+			elseif nud > BaboPlayerNudityCriteriaSexy.GetValue()
+				ExhibitionistCap = ExpPerLevel * 15.0
+			else
+				ExhibitionistCap = ExpPerLevel * 7.5
+			endif
+		endif
+		if ExhibitionistCap < 0.0
+			ExhibitionistExp += ExhibitionistExpT
+		elseif ExhibitionistExp < ExhibitionistCap
+			ExhibitionistExp += ExhibitionistExpT
+			if ExhibitionistExp > ExhibitionistCap
+				ExhibitionistExp = ExhibitionistCap
+			endif
+		endif
+		if BaboSexlabStatLewdness.getvalue() < 40
+			CalcLewdnessExpGain(LewdnessExpT)
 		endif
 	endif
-	GetRepFloat += (BaboPlayerAppearanceValue.getvalue() / 2)
-	GetRepFloat += (BaboPlayerBreastsValue.getvalue() / 5)
-	GetRepFloat += (BaboPlayerButtocksValue.getvalue() / 6)
-	
-	if GetRepFloat as int >= Utility.randomint(0, 100)	
-		BRMQuest.IncreaseReputationBitchbyExposure(ReputationBitchT)
-	endif
-	
-	ExhibitionistExp += ExhibitionistExpT
-	if BaboSexlabStatLewdness.getvalue() < 40
-		CalcLewdnessExpGain(LewdnessExpT)
-	endif
+
 	If BikExp > ExpPerLevel * 7.5 ; Cap experience
 		BikExp = ExpPerLevel * 7.5
 	EndIf
 	;Debug.Messagebox("OldExp: " + OldExp + "\nExpGain: " + ExpGain + "\nNewExp: " + BikExp)
+EndFunction
+
+Function CalcExpLoss(Float hours)
+	ExhibitionistExp -= hours * BaboSexlabStatExhibitionistSpeed.getvalue()
+	BikExp -= hours * BaboSexlabStatSkimpyDecrease.getvalue()
+	CalcLewdnessExpLoss(10.0)
+	BRMQuest.DecreaseReputationBitch(2)
+	If ExhibitionistExp < 0.0
+		ExhibitionistExp = 0.0
+	EndIf
+
+	If LewdnessExp < 0.0
+		LewdnessExp = 0.0
+	EndIf
+
+	If BikExp < 0.0
+		BikExp = 0.0
+	EndIf
+	;Debug.Messagebox("ExpLoss")
 EndFunction
 
 Function CalcCreatureTraumaExpGain(Float Mult)
@@ -1225,7 +1266,7 @@ Function CalcCreatureTraumaExpLoss(Float Mult)
 EndFunction
 
 Function CalcCorruptionExpGain(Float Mult)
-	BaboSexlabStatCorruption.setvalue(BaboSexlabStatCorruption.getvalue() + (BaboSexlabStatCorruptionSpeed.getvalue() * Mult))
+	BaboSexlabStatCorruption.mod(BaboSexlabStatCorruptionSpeed.value * Mult)
 	if BaboSexlabStatCorruption.getvalue() > 50
 		BaboSexlabStatCorruption.setvalue(50)
 	elseif BaboSexlabStatCorruption.getvalue() < 0
@@ -1234,14 +1275,13 @@ Function CalcCorruptionExpGain(Float Mult)
 	CorruptionFinalCheck()
 EndFunction
 
-Function CalcCorruptionExpLoss(Float Mult)
+Function CalcCorruptionExpLoss(Float Mult);Obsolete
 	BaboSexlabStatCorruption.setvalue(BaboSexlabStatCorruption.getvalue() - (BaboSexlabStatCorruptionSpeed.getvalue() * Mult))
 	if BaboSexlabStatCorruption.getvalue() < 0
 		BaboSexlabStatCorruption.setvalue(0)
 	endif
 	CorruptionFinalCheck()
 EndFunction
-
 
 Function CorruptionFinalCheck()
 int Stat = BaboSexlabStatCorruption.getvalue() as int
@@ -1269,7 +1309,7 @@ endif
 EndFunction
 
 Function CalcConfidenceExpGain(Float Mult)
-	BaboSexlabStatConfidenceWill.setvalue(BaboSexlabStatConfidenceWill.getvalue() + Mult)
+	BaboSexlabStatConfidenceWill.mod(Mult)
 	if BaboSexlabStatConfidenceWill.getvalue() > 100
 		BaboSexlabStatConfidenceWill.setvalue(100)
 	elseif BaboSexlabStatConfidenceWill.getvalue() < 0
@@ -1279,7 +1319,7 @@ WillFinalCheck()
 EndFunction
 
 Function CalcTraumaExpGain(Float Mult)
-	BaboSexlabStatTrauma.setvalue(BaboSexlabStatTrauma.getvalue() + Mult)
+	BaboSexlabStatTrauma.mod(Mult)
 	if BaboSexlabStatTrauma.getvalue() > 200
 		BaboSexlabStatTrauma.setvalue(200)
 	elseif BaboSexlabStatTrauma.getvalue() < 0
@@ -1325,7 +1365,7 @@ Function CalcCanineTraumaExpGain(Float Mult)
 EndFunction
 
 Function CalcRieklingTraumaExpGain(Float Mult)
-	BaboSexlabStatRieklingTrauma.setvalue(BaboSexlabStatRieklingTrauma.getvalue() + Mult)
+	BaboSexlabStatRieklingTrauma.mod(Mult)
 	if BaboSexlabStatRieklingTrauma.getvalue() > 200
 		BaboSexlabStatRieklingTrauma.setvalue(200)
 	endif
@@ -1420,7 +1460,7 @@ Function WillFinalCheck()
 float Stat = BaboSexlabStatTrauma.getvalue()
 float wStat = BaboSexlabStatConfidenceWill.getvalue()
 
-if stat == 0
+if stat <= 0
 	if wStat <= 10
 		PlayerRef.setfactionrank(SLAX_WillfulFaction, 0)
 		PlayerRef.setfactionrank(BaboFactionStatWill, 4)
@@ -1535,24 +1575,7 @@ endif
 
 EndFunction
 
-Function CalcExpLoss()
-	ExhibitionistExp -= ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * BaboSexlabStatExhibitionistSpeed.getvalue()
-	BikExp -= ((GameDaysPassed.GetValue() - LastUpdate) * 24.0) * BaboSexlabStatSkimpyDecrease.getvalue()
-	CalcLewdnessExpLoss(10.0)
-	BRMQuest.DecreaseReputationBitch(2)
-	If ExhibitionistExp < 0.0
-		ExhibitionistExp = 0.0
-	EndIf
-
-	If LewdnessExp < 0.0
-		LewdnessExp = 0.0
-	EndIf
-
-	If BikExp < 0.0
-		BikExp = 0.0
-	EndIf
-	;Debug.Messagebox("ExpLoss")
-EndFunction
+Faction Property BaboFactionStatBikini Auto
 
 Function CalcLevel()
 	Int OldLevel = BaboSexlabStatSkimpyExpLevel.GetValue() as Int
@@ -1567,7 +1590,9 @@ Function CalcLevel()
 	Else
 		BaboSexlabStatSkimpyExpLevel.SetValue(0)
 	EndIf
-
+	
+	PlayerRef.setfactionrank(BaboFactionStatBikini, BaboSexlabStatSkimpyExpLevel.getvalue() as int)
+	
 	If ExhibitionistExp > ExpPerLevel * 30.0
 		PlayerRef.setfactionrank(SLAX_NudismAddictFaction, 5)
 		PlayerRef.setfactionrank(BaboFactionStatExhibitionist, 5)
@@ -1601,8 +1626,6 @@ Function CalcLevel()
 	ElseIf NewLevel < OldLevel
 		Debug.Messagebox("You've lost bikini armor experience\nBikini Experience Rank: " + GetBikRankString())
 	EndIf
-	
-	BaboDetectSpectatorQuest.stop()
 EndFunction
 
 String Function GetBikRankString()
@@ -1841,6 +1864,7 @@ Function SendFHUInflationEventNoActor(form inflater, Bool Inflation, int poolmas
 	ModEvent.PushString(handle, callback)
 	ModEvent.Send(handle)
 EndFunction
+
 
 Function SendFHUInflationEvent(form inflater, form injector, Bool Inflation, int poolmask, float amount, int time, string callback)
 	Int handle = ModEvent.Create("SR_InflateInjectorEvent")
@@ -2124,7 +2148,6 @@ Function ExportStatus()
 		JsonUtil.SetintValue(File, "BaboCuminsideCreaturesBeast", BaboSexlabStatCreaturesBeast.getvalue() as int)
 		JsonUtil.SetintValue(File, "BaboCuminsideCreaturesCanine", BaboSexlabStatCreaturesCanine.getvalue() as int)
 		JsonUtil.SetintValue(File, "BaboCuminsideCreaturesChaurus", BaboSexlabStatCreaturesChaurus.getvalue() as int)
-		JsonUtil.SetintValue(File, "BaboCuminsideCreaturesChaurus", BaboSexlabStatCreaturesChaurus.getvalue() as int)
 		JsonUtil.SetintValue(File, "BaboCuminsideCreaturesDraugr", BaboSexlabStatCreaturesDraugr.getvalue() as int)
 		JsonUtil.SetintValue(File, "BaboCuminsideCreaturesDwarven", BaboSexlabStatCreaturesDwarven.getvalue() as int)
 		JsonUtil.SetintValue(File, "BaboCuminsideCreaturesFalmer", BaboSexlabStatCreaturesFalmer.getvalue() as int)
@@ -2281,12 +2304,12 @@ EndFunction
 
 Function RandomAheMenu(Actor act)
 	int Random = Utility.Randomint(1, 6)
-	AheMenu(act, random)
+	AheMenu(act, random, true, false)
 EndFunction
 
 Function RandomPainMenu(Actor act)
 	int Random = Utility.Randomint(1, 8)
-	PainMenu(act, random)
+	PainMenu(act, random, true, false)
 EndFunction
 
 Function GagPhoneme(Actor akactor, int index)
@@ -2298,7 +2321,7 @@ Function GagPhoneme(Actor akactor, int index)
 	endif
 EndFunction
 
-Function PainMenu(Actor act, Int index)
+Function PainMenu(Actor act, Int index, bool bmouth = true, bool bgag = false)
 	if index == 1
 		act.SetExpressionOverride(3, 50)
 		mfgconsolefunc.SetModifier(act, 2, 10)
@@ -2308,7 +2331,6 @@ Function PainMenu(Actor act, Int index)
 		mfgconsolefunc.SetModifier(act, 11, 30)
 		mfgconsolefunc.SetModifier(act, 12, 30)
 		mfgconsolefunc.SetModifier(act, 13, 30)
-		mfgconsolefunc.SetPhoneme(act, 0, 20)
 	elseIf index == 2
 		act.SetExpressionOverride(8, 50)
 		mfgconsolefunc.SetModifier(act, 0, 100)
@@ -2317,9 +2339,6 @@ Function PainMenu(Actor act, Int index)
 		mfgconsolefunc.SetModifier(act, 3, 100)
 		mfgconsolefunc.SetModifier(act, 4, 100)
 		mfgconsolefunc.SetModifier(act, 5, 100)
-		mfgconsolefunc.SetPhoneme(act, 2, 100)
-		mfgconsolefunc.SetPhoneme(act, 5, 100)
-		mfgconsolefunc.SetPhoneme(act, 11, 40)
 	elseIf index == 3
 		act.SetExpressionOverride(9, 50)
 		mfgconsolefunc.SetModifier(act, 2, 100)
@@ -2327,9 +2346,6 @@ Function PainMenu(Actor act, Int index)
 		mfgconsolefunc.SetModifier(act, 4, 100)
 		mfgconsolefunc.SetModifier(act, 5, 100)
 		mfgconsolefunc.SetModifier(act, 11, 90)
-		mfgconsolefunc.SetPhoneme(act, 0, 100)
-		mfgconsolefunc.SetPhoneme(act, 2, 100)
-		mfgconsolefunc.SetPhoneme(act, 11, 40)
 	elseIf index == 4
 		act.SetExpressionOverride(8, 50)
 		mfgconsolefunc.SetModifier(act, 0, 100)
@@ -2338,8 +2354,6 @@ Function PainMenu(Actor act, Int index)
 		mfgconsolefunc.SetModifier(act, 3, 100)
 		mfgconsolefunc.SetModifier(act, 4, 100)
 		mfgconsolefunc.SetModifier(act, 5, 100)
-		mfgconsolefunc.SetPhoneme(act, 2, 100)
-		mfgconsolefunc.SetPhoneme(act, 5, 40)
 	elseIf index == 5
 		act.SetExpressionOverride(9, 50)
 		mfgconsolefunc.SetModifier(act, 2, 100)
@@ -2347,41 +2361,65 @@ Function PainMenu(Actor act, Int index)
 		mfgconsolefunc.SetModifier(act, 4, 100)
 		mfgconsolefunc.SetModifier(act, 5, 100)
 		mfgconsolefunc.SetModifier(act, 11, 90)
-		mfgconsolefunc.SetPhoneme(act, 0, 30)
-		mfgconsolefunc.SetPhoneme(act, 2, 30)
 	elseIf index == 6
 		act.SetExpressionOverride(3, 50)
 		mfgconsolefunc.SetModifier(act, 11, 50)
 		mfgconsolefunc.SetModifier(act, 13, 14)
-		mfgconsolefunc.SetPhoneme(act, 2, 50)
-		mfgconsolefunc.SetPhoneme(act, 13, 20)
-		mfgconsolefunc.SetPhoneme(act, 15, 40)
 	elseIf index == 7
 		act.SetExpressionOverride(1, 50)
 		mfgconsolefunc.SetModifier(act, 0, 30)
 		mfgconsolefunc.SetModifier(act, 1, 20)
 		mfgconsolefunc.SetModifier(act, 12, 90)
 		mfgconsolefunc.SetModifier(act, 13, 90)
-		mfgconsolefunc.SetPhoneme(act, 2, 100)
-		mfgconsolefunc.SetPhoneme(act, 5, 80)
 	elseIf index == 8
 		act.SetExpressionOverride(3, 50)
 		mfgconsolefunc.SetModifier(act, 0, 30)
 		mfgconsolefunc.SetModifier(act, 1, 30)
 		mfgconsolefunc.SetModifier(act, 4, 80)
 		mfgconsolefunc.SetModifier(act, 5, 80)
-		mfgconsolefunc.SetPhoneme(act, 2, 100)
-		mfgconsolefunc.SetPhoneme(act, 4, 50)
-		mfgconsolefunc.SetPhoneme(act, 5, 100)
 	elseIf index == 9;Faint
 		act.SetExpressionOverride(3, 50)
 		mfgconsolefunc.SetModifier(act, 0, 80)
 		mfgconsolefunc.SetModifier(act, 1, 80)
-		mfgconsolefunc.SetPhoneme(act, 1, 30)
 	endIf
+	if bmouth && bgag == false
+		if index == 1
+			mfgconsolefunc.SetPhoneme(act, 0, 20)
+		elseif index == 2
+			mfgconsolefunc.SetPhoneme(act, 2, 100)
+			mfgconsolefunc.SetPhoneme(act, 5, 100)
+			mfgconsolefunc.SetPhoneme(act, 11, 40)
+		elseif index == 3
+			mfgconsolefunc.SetPhoneme(act, 0, 100)
+			mfgconsolefunc.SetPhoneme(act, 2, 100)
+			mfgconsolefunc.SetPhoneme(act, 11, 40)
+		elseif index == 4
+			mfgconsolefunc.SetPhoneme(act, 2, 100)
+			mfgconsolefunc.SetPhoneme(act, 5, 40)
+		elseif index == 5
+			mfgconsolefunc.SetPhoneme(act, 0, 30)
+			mfgconsolefunc.SetPhoneme(act, 2, 30)
+		elseif index == 6
+			mfgconsolefunc.SetPhoneme(act, 2, 50)
+			mfgconsolefunc.SetPhoneme(act, 13, 20)
+			mfgconsolefunc.SetPhoneme(act, 15, 40)
+		elseif index == 7
+			mfgconsolefunc.SetPhoneme(act, 2, 100)
+			mfgconsolefunc.SetPhoneme(act, 5, 80)
+		elseif index == 8
+			mfgconsolefunc.SetPhoneme(act, 2, 100)
+			mfgconsolefunc.SetPhoneme(act, 4, 50)
+			mfgconsolefunc.SetPhoneme(act, 5, 100)
+		elseif index == 9
+			mfgconsolefunc.SetPhoneme(act, 1, 30)
+		endif
+	elseif bgag
+		MfgConsoleFunc.SetPhoneme(act, 1, 100)
+		MfgConsoleFunc.SetPhoneme(act, 11, 70)
+	endif
 endFunction
 
-Function AheMenu(Actor act, Int index)
+Function AheMenu(Actor act, Int index, bool bmouth = true, bool bgag = false)
 	if index == 1
 		act.SetExpressionOverride(4, 50)
 		mfgconsolefunc.SetModifier(act, 0, 30)
@@ -2393,9 +2431,6 @@ Function AheMenu(Actor act, Int index)
 		mfgconsolefunc.SetModifier(act, 11, 80)
 		mfgconsolefunc.SetModifier(act, 12, 70)
 		mfgconsolefunc.SetModifier(act, 13, 80)
-		mfgconsolefunc.SetPhoneme(act, 3, 50)
-		mfgconsolefunc.SetPhoneme(act, 11, 50)
-		mfgconsolefunc.SetPhoneme(act, 15, 50)
 	elseIf index == 2
 		act.SetExpressionOverride(4, 50)
 		mfgconsolefunc.SetModifier(act, 0, 50)
@@ -2406,31 +2441,17 @@ Function AheMenu(Actor act, Int index)
 		mfgconsolefunc.SetModifier(act, 7, 10)
 		mfgconsolefunc.SetModifier(act, 11, 90)
 		mfgconsolefunc.SetModifier(act, 12, 30)
-		mfgconsolefunc.SetPhoneme(act, 3, 50)
-		mfgconsolefunc.SetPhoneme(act, 8, 50)
-		mfgconsolefunc.SetPhoneme(act, 14, 50)
 	elseIf index == 3
 		act.SetExpressionOverride(2, 60)
-		mfgconsolefunc.SetPhoneme(act, 0, 43)
-		mfgconsolefunc.SetPhoneme(act, 4, 7)
-		mfgconsolefunc.SetPhoneme(act, 14, 90)
 		mfgconsolefunc.SetModifier(act, 11, 180)
 		mfgconsolefunc.SetModifier(act, 9, 43)
 	elseIf index == 4
 		act.SetExpressionOverride(2, 60)
-		mfgconsolefunc.SetPhoneme(act, 0, 20)
-		mfgconsolefunc.SetPhoneme(act, 1, 100)
-		mfgconsolefunc.SetPhoneme(act, 14, 3)
 		mfgconsolefunc.SetModifier(act, 7, 77)
 		mfgconsolefunc.SetModifier(act, 11, 180)
 		mfgconsolefunc.SetModifier(act, 11, 60)
 	elseIf index == 5
 		act.SetExpressionOverride(2, 70)
-		mfgconsolefunc.SetPhoneme(act, 1, 7)
-		mfgconsolefunc.SetPhoneme(act, 5, 100)
-		mfgconsolefunc.SetPhoneme(act, 11, 33)
-		mfgconsolefunc.SetPhoneme(act, 12, 3)
-		mfgconsolefunc.SetPhoneme(act, 15, 16)
 		mfgconsolefunc.SetModifier(act, 4, 100)
 		mfgconsolefunc.SetModifier(act, 5, 100)
 		mfgconsolefunc.SetModifier(act, 6, 100)
@@ -2439,12 +2460,41 @@ Function AheMenu(Actor act, Int index)
 		mfgconsolefunc.SetModifier(act, 11, 100)
 	elseIf index == 6
 		act.SetExpressionOverride(4, 70)
-		mfgconsolefunc.SetPhoneme(act, 1, 20)
-		mfgconsolefunc.SetPhoneme(act, 8, 70)
-		mfgconsolefunc.SetPhoneme(act, 13, 30)
-		mfgconsolefunc.SetPhoneme(act, 15, 4)
 		mfgconsolefunc.SetModifier(act, 3, 70)
 		mfgconsolefunc.SetModifier(act, 11, 100)
 		mfgconsolefunc.SetModifier(act, 13, 50)
-	endIf
+	endif
+	if bmouth && bgag == false
+		if index == 1
+			mfgconsolefunc.SetPhoneme(act, 3, 50)
+			mfgconsolefunc.SetPhoneme(act, 11, 50)
+			mfgconsolefunc.SetPhoneme(act, 15, 50)
+		elseif index == 2
+			mfgconsolefunc.SetPhoneme(act, 3, 50)
+			mfgconsolefunc.SetPhoneme(act, 8, 50)
+			mfgconsolefunc.SetPhoneme(act, 14, 50)
+		elseif index == 3
+			mfgconsolefunc.SetPhoneme(act, 0, 43)
+			mfgconsolefunc.SetPhoneme(act, 4, 7)
+			mfgconsolefunc.SetPhoneme(act, 14, 90)
+		elseif index == 4
+			mfgconsolefunc.SetPhoneme(act, 0, 20)
+			mfgconsolefunc.SetPhoneme(act, 1, 100)
+			mfgconsolefunc.SetPhoneme(act, 14, 3)
+		elseif index == 5
+			mfgconsolefunc.SetPhoneme(act, 1, 7)
+			mfgconsolefunc.SetPhoneme(act, 5, 100)
+			mfgconsolefunc.SetPhoneme(act, 11, 33)
+			mfgconsolefunc.SetPhoneme(act, 12, 3)
+			mfgconsolefunc.SetPhoneme(act, 15, 16)
+		elseif index == 6
+			mfgconsolefunc.SetPhoneme(act, 1, 20)
+			mfgconsolefunc.SetPhoneme(act, 8, 70)
+			mfgconsolefunc.SetPhoneme(act, 13, 30)
+			mfgconsolefunc.SetPhoneme(act, 15, 4)
+		endif
+	elseif bgag
+		MfgConsoleFunc.SetPhoneme(act, 1, 100)
+		MfgConsoleFunc.SetPhoneme(act, 11, 70)
+	endif
 endFunction

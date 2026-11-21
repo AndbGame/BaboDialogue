@@ -2,9 +2,9 @@
 ;NEXT FRAGMENT INDEX 22
 Scriptname QF_BaboChangeLocationEvent02_088E1C68 Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY myHoldLocation
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldLocation Auto
+;BEGIN ALIAS PROPERTY PlayerRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerRef Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY TRIGGER
@@ -17,14 +17,14 @@ ReferenceAlias Property Alias_TRIGGER Auto
 ReferenceAlias Property Alias_CenterMarker Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY PlayerRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PlayerRef Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY myHoldContested
 ;ALIAS PROPERTY TYPE LocationAlias
 LocationAlias Property Alias_myHoldContested Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY myHoldLocation
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldLocation Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY CreatureRef
@@ -32,16 +32,15 @@ LocationAlias Property Alias_myHoldContested Auto
 ReferenceAlias Property Alias_CreatureRef Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_13
-Function Fragment_13()
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
 ;BEGIN CODE
-Utility.wait(10.0)
-Alias_CreatureRef.trytoaddtofaction(BaboChangeLocationEvent02FactionBefore)
-Alias_CreatureRef.trytoremovefromfaction(BaboChangeLocationEvent02FactionAfter)
-Utility.wait(1.0)
-(Alias_CreatureRef.getref() as actor).SetActorValue("Aggression", 3)
-
-(BaboSexController as BaboSexControllerManager).ChallengeStart(Alias_CreatureRef)
+;Copulation Ready
+MsgCtrl.ChangeLocationEvent02Messagebox(1)
+Game.DisablePlayerControls(false, false, true, false, false, false, false)
+(BaboSexController as BaboSexControllerManager).pacifyAlias(Alias_CreatureRef)
+Alias_CreatureRef.trytoaddtofaction(BaboChangeLocationEvent02FactionAfter)
+setstage(20)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -70,56 +69,26 @@ endif
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
+;BEGIN FRAGMENT Fragment_13
+Function Fragment_13()
 ;BEGIN CODE
-;Copulation Ready
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(1)
-Game.DisablePlayerControls(false, false, true, false, false, false, false)
-(BaboSexController as BaboSexControllerManager).pacifyAlias(Alias_CreatureRef)
-Alias_CreatureRef.trytoaddtofaction(BaboChangeLocationEvent02FactionAfter)
-setstage(20)
+Utility.wait(10.0)
+Alias_CreatureRef.trytoaddtofaction(BaboChangeLocationEvent02FactionBefore)
+Alias_CreatureRef.trytoremovefromfaction(BaboChangeLocationEvent02FactionAfter)
+Utility.wait(1.0)
+(Alias_CreatureRef.getref() as actor).SetActorValue("Aggression", 3)
+
+(BaboSexController as BaboSexControllerManager).ChallengeStart(Alias_CreatureRef)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
+;BEGIN FRAGMENT Fragment_16
+Function Fragment_16()
 ;BEGIN CODE
-;After the Copulation
-Debug.sendanimationevent(Alias_PlayerRef.getreference() as actor, "BaboFaintFEnd")
-utility.wait(30.0)
-setstage(100)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_15
-Function Fragment_15()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(6)
+MsgCtrl.ChangeLocationEvent02Messagebox(6)
 (BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "Vaginal", "", true, "CLEvent02Marsh", "ChangeLocationEvent02Marsh", true)
 (BaboSexController as BaboSexControllerManager).AddSexCount(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_11
-Function Fragment_11()
-;BEGIN CODE
-Utility.wait(2.0)
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(3)
-Setstage(50)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_10
-Function Fragment_10()
-;BEGIN CODE
-Utility.wait(2.0)
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(3)
-Setstage(50)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -132,74 +101,32 @@ Function Fragment_21()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_3
-Function Fragment_3()
-;BEGIN CODE
-;Copulation Start
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "", "", true, "CLEvent02", "ChangeLocationEvent02", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_9
-Function Fragment_9()
-;BEGIN CODE
-Utility.wait(2.0)
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(3)
-Setstage(50)
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_8
 Function Fragment_8()
 ;BEGIN CODE
 Utility.wait(2.0)
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(3)
+MsgCtrl.ChangeLocationEvent02Messagebox(3)
 Setstage(50)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_12
-Function Fragment_12()
+;BEGIN FRAGMENT Fragment_11
+Function Fragment_11()
 ;BEGIN CODE
-;After the copulation
 Utility.wait(2.0)
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(2)
+MsgCtrl.ChangeLocationEvent02Messagebox(3)
+Setstage(50)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_10
+Function Fragment_10()
+;BEGIN CODE
 Utility.wait(2.0)
-setstage(50)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_14
-Function Fragment_14()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(5)
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "Vaginal", "", true, "CLEvent02Marsh", "ChangeLocationEvent02Marsh", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(6)
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "Vaginal", "", true, "CLEvent02Marsh", "ChangeLocationEvent02Marsh", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_18
-Function Fragment_18()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(6)
-(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "Vaginal", "", true, "CLEvent02Marsh", "ChangeLocationEvent02Marsh", true)
-(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+MsgCtrl.ChangeLocationEvent02Messagebox(3)
+Setstage(50)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -217,6 +144,79 @@ endif
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_9
+Function Fragment_9()
+;BEGIN CODE
+Utility.wait(2.0)
+MsgCtrl.ChangeLocationEvent02Messagebox(3)
+Setstage(50)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_18
+Function Fragment_18()
+;BEGIN CODE
+MsgCtrl.ChangeLocationEvent02Messagebox(6)
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "Vaginal", "", true, "CLEvent02Marsh", "ChangeLocationEvent02Marsh", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_14
+Function Fragment_14()
+;BEGIN CODE
+MsgCtrl.ChangeLocationEvent02Messagebox(5)
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "Vaginal", "", true, "CLEvent02Marsh", "ChangeLocationEvent02Marsh", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_15
+Function Fragment_15()
+;BEGIN CODE
+MsgCtrl.ChangeLocationEvent02Messagebox(6)
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "Vaginal", "", true, "CLEvent02Marsh", "ChangeLocationEvent02Marsh", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+;After the Copulation
+Debug.sendanimationevent(Alias_PlayerRef.getreference() as actor, "BaboFaintFEnd")
+utility.wait(30.0)
+setstage(100)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_12
+Function Fragment_12()
+;BEGIN CODE
+;After the copulation
+Utility.wait(2.0)
+MsgCtrl.ChangeLocationEvent02Messagebox(2)
+Utility.wait(2.0)
+setstage(50)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_3
+Function Fragment_3()
+;BEGIN CODE
+;Copulation Start
+(BaboSexController as BaboSexControllerManager).SexCustomTag(Alias_PlayerRef, Alias_CreatureRef, None, None, None, "", "", true, "CLEvent02", "ChangeLocationEvent02", true)
+(BaboSexController as BaboSexControllerManager).AddSexCount(1)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 Faction Property BaboChangeLocationEvent02FactionAfter  Auto  
@@ -226,3 +226,5 @@ Faction Property BaboChangeLocationEvent02FactionBefore  Auto
 Quest Property BaboSexController  Auto  
 
 GlobalVariable Property BaboDebugging  Auto  
+
+BaboMsgManager Property MsgCtrl  Auto  

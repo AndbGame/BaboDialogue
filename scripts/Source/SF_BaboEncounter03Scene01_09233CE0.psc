@@ -13,7 +13,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EncounterEvent03Messagebox(4)
+(BaboMsgScript as BaboMsgManager).EncounterEvent03Messagebox(4)
 GetOwningQuest().setstage(255)
 SendModEvent("SSLV Entry")
 ;END CODE
@@ -31,3 +31,5 @@ EndFunction
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 Quest Property BaboSexController  Auto  
+
+Quest Property BaboMsgScript  Auto  

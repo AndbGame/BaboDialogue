@@ -1,172 +1,281 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 18
+;NEXT FRAGMENT INDEX 25
 Scriptname QF_BaboEventRieklingThirsk_0807AD9B Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY PlayerRef
+;BEGIN ALIAS PROPERTY KidnapperRoomMarkerP
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PlayerRef Auto
+ReferenceAlias Property Alias_KidnapperRoomMarkerP Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY RieklingChallenger
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_RieklingChallenger Auto
+;BEGIN ALIAS PROPERTY CurrentLocation
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_CurrentLocation Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY RieklingWarrior01
+;BEGIN ALIAS PROPERTY FurnitureSafeALink
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_RieklingWarrior01 Auto
+ReferenceAlias Property Alias_FurnitureSafeALink Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY SpuseRef
+;BEGIN ALIAS PROPERTY VictimMarkerP
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SpuseRef Auto
+ReferenceAlias Property Alias_VictimMarkerP Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY RieklingWarrior02
+;BEGIN ALIAS PROPERTY DoorAlias
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_RieklingWarrior02 Auto
+ReferenceAlias Property Alias_DoorAlias Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_15
-Function Fragment_15()
-;BEGIN AUTOCAST TYPE BaboEventRiekling
-Quest __temp = self as Quest
-BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
-;END AUTOCAST
-;BEGIN CODE
-BRMQuest.DecreaseReputation(20, 5)
-BRMQuest.AddingTitletoPlayerRef(BaboFactionRieklingThirskFuckToyTitle)
-BRMQuest.SetTitleGlobal(BaboGlobalRieklingThirskFuckToyTitle, 1)
-kmyQuest.UnEquipRestraints()
-debug.messagebox ("Ah... God.. Thank you.")
-Setstage(130)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY Restrainmarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Restrainmarker Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_10
-Function Fragment_10()
-;BEGIN AUTOCAST TYPE BaboEventRiekling
-Quest __temp = self as Quest
-BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.SpawnNewRiekling()
-Utility.wait(2.0)
-kmyQuest.EquipRestraints()
-Setstage(90)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY KidnapPatrolMarkerE
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapPatrolMarkerE Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_13
-Function Fragment_13()
-;BEGIN CODE
-(Alias_RieklingChallenger.getRef() as Actor).EvaluatePackage()
-debug.messagebox ("This is a chance to escape from here and survive this nightmare.. However with this yoke and chain on my ankles, I am not sure I could make it...")
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY KidnapFurnitureMarkerF
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapFurnitureMarkerF Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_14
-Function Fragment_14()
-;BEGIN CODE
-debug.messagebox ("The Guard has been killed. Now I am free! It's time to get rid of this cursed yoke hanging on my neck. Maybe I need to look for a blacksmith right away.")
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY PlayerSpeaker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerSpeaker Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_11
-Function Fragment_11()
-;BEGIN CODE
-(Alias_RieklingChallenger.getRef() as Actor).EvaluatePackage()
-(Alias_RieklingWarrior01.getRef() as Actor).EvaluatePackage()
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY KidnapPatrolMarkerB
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapPatrolMarkerB Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_9
-Function Fragment_9()
-;BEGIN AUTOCAST TYPE BaboEventRiekling
-Quest __temp = self as Quest
-BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.RieklingThreesome(Alias_PlayerRef, Alias_RieklingChallenger)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY VictimMarkerB
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_VictimMarkerB Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_17
-Function Fragment_17()
-;BEGIN AUTOCAST TYPE BaboEventRiekling
-Quest __temp = self as Quest
-BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.ChallengeStart(Alias_RieklingChallenger)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY KidnapperRoomMarkerA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapperRoomMarkerA Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_12
-Function Fragment_12()
-;BEGIN CODE
-(Alias_RieklingChallenger.getRef() as Actor).EvaluatePackage()
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY RieklingPole
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingPole Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN AUTOCAST TYPE BaboEventRiekling
-Quest __temp = self as Quest
-BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.Fadeout(Alias_RieklingChallenger)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY FurnitureSafeA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_FurnitureSafeA Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_5
-Function Fragment_5()
-;BEGIN CODE
-(Alias_RieklingChallenger.getRef() as Actor).EvaluatePackage()
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY RescuerA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RescuerA Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_6
-Function Fragment_6()
-;BEGIN AUTOCAST TYPE BaboEventRiekling
-Quest __temp = self as Quest
-BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.RegisterUpdate()
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY KidnapMarkerA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapMarkerA Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
-;BEGIN CODE
-(Alias_RieklingChallenger.getRef() as Actor).EvaluatePackage()
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY KidnapperSafeMarkerB
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapperSafeMarkerB Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
-;BEGIN CODE
-debug.messagebox ("I killed the challenger. He almost enslaved me.. I don't even want to imagine if I have been enslaved.. and raped.")
-BRMQuest.IncreaseReputation(15, 5)
-Utility.wait(5.0)
-Setstage(170)
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY KidnapMarkerF
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapMarkerF Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RieklingGateKeeper
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingGateKeeper Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapMarkerH
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapMarkerH Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY VictimMarkerC
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_VictimMarkerC Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RieklingThroneMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingThroneMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY VictimMarkerA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_VictimMarkerA Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RescuerMarkerB
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RescuerMarkerB Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RieklingMinion05
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingMinion05 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapPatrolMarkerA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapPatrolMarkerA Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RedoranGuard
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RedoranGuard Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RieklingMinion02
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingMinion02 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapMarkerC
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapMarkerC Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY CenterMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_CenterMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RieklingMinion03
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingMinion03 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapMarkerG
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapMarkerG Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapMarkerE
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapMarkerE Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY WPMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_WPMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RieklingChief
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingChief Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapMarkerD
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapMarkerD Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapFurnitureMarkerE
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapFurnitureMarkerE Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RescuerMarkerA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RescuerMarkerA Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapFurnitureMarkerD
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapFurnitureMarkerD Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY ConfiscateChest
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ConfiscateChest Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapPatrolMarkerC
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapPatrolMarkerC Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY CageDoorA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_CageDoorA Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapMarkerB
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapMarkerB Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY PlayerAlias
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PlayerAlias Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapPatrolMarkerD
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapPatrolMarkerD Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapPatrolMarkerF
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapPatrolMarkerF Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY FoodMarker
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_FoodMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapFurnitureMarkerA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapFurnitureMarkerA Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RieklingMinion04
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingMinion04 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapperSafeMarkerA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapperSafeMarkerA Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RieklingMinion01
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RieklingMinion01 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY SpouseAlias
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_SpouseAlias Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapFurnitureMarkerB
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapFurnitureMarkerB Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY KidnapFurnitureMarkerC
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_KidnapFurnitureMarkerC Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY RescuerB
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_RescuerB Auto
+;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
@@ -175,44 +284,72 @@ Quest __temp = self as Quest
 BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.RieklingNewChallenge()
-(Alias_RieklingChallenger.getRef() as Actor).EvaluatePackage()
+kmyQuest.MainStageStart()
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_8
-Function Fragment_8()
+;BEGIN FRAGMENT Fragment_21
+Function Fragment_21()
 ;BEGIN CODE
-debug.messagebox ("The new chief has been finally killed and I have retrieved my own throne of little thirsk mead hall... But my pussy and womb are full of dirty stinky sperm... I don't want to be pregnant. I am not sure that I can hold this much longer.")
-Utility.wait(5.0)
-Setstage(170)
+(Alias_RieklingChief.getreference() as actor).evaluatepackage()
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_3
-Function Fragment_3()
+;BEGIN FRAGMENT Fragment_23
+Function Fragment_23()
 ;BEGIN AUTOCAST TYPE BaboEventRiekling
 Quest __temp = self as Quest
 BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.pacifyAlias(Alias_RieklingChallenger)
-BaboEventRieklingThirskScene01.Start()
+kmyQuest.ToRavenRock()
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
+;BEGIN FRAGMENT Fragment_20
+Function Fragment_20()
 ;BEGIN AUTOCAST TYPE BaboEventRiekling
 Quest __temp = self as Quest
 BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.ChallengeStart(Alias_RieklingChallenger)
-debug.messagebox ("The new challenger wants to fight me. I have to deal with him first.")
+kmyQuest.QuestStart()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_24
+Function Fragment_24()
+;BEGIN CODE
+SceneManager.EventRieklingThirskScenePlay(1, true)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_22
+Function Fragment_22()
+;BEGIN AUTOCAST TYPE BaboEventRiekling
+Quest __temp = self as Quest
+BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.ClearStage()
+stop()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_19
+Function Fragment_19()
+;BEGIN AUTOCAST TYPE BaboEventRiekling
+Quest __temp = self as Quest
+BaboEventRiekling kmyQuest = __temp as BaboEventRiekling
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.FireInitialSex()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -226,3 +363,9 @@ GlobalVariable Property BaboGlobalRieklingThirskFuckToyTitle  Auto
 BaboReputationMasterScript Property BRMQuest Auto
 
 Scene Property BaboEventRieklingThirskScene01  Auto  
+
+Quest Property BaboSexController  Auto  
+
+GlobalVariable Property BaboKillCountRieklingChallenger  Auto  
+
+BaboSceneManager Property SceneManager  Auto  

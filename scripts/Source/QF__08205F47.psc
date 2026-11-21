@@ -1,10 +1,10 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 19
+;NEXT FRAGMENT INDEX 21
 Scriptname QF__08205F47 Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY TRIGGER
+;BEGIN ALIAS PROPERTY Soldier3
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_TRIGGER Auto
+ReferenceAlias Property Alias_Soldier3 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Player
@@ -12,49 +12,9 @@ ReferenceAlias Property Alias_TRIGGER Auto
 ReferenceAlias Property Alias_Player Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY SceneMarker3
+;BEGIN ALIAS PROPERTY TRIGGER
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SceneMarker3 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY PostEncounterSandboxRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_PostEncounterSandboxRef Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Bandit3
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Bandit3 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY SceneMarker2
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SceneMarker2 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Bandit2
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Bandit2 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY myHoldContested
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldContested Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY myHoldLocation
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldLocation Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Soldier3
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Soldier3 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY Soldier2
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Soldier2 Auto
+ReferenceAlias Property Alias_TRIGGER Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Soldier1
@@ -62,14 +22,14 @@ ReferenceAlias Property Alias_Soldier2 Auto
 ReferenceAlias Property Alias_Soldier1 Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY myHoldImperial
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_myHoldImperial Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY SceneCenterMarker
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_SceneCenterMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY myHoldContested
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldContested Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY Bandit1
@@ -77,9 +37,19 @@ ReferenceAlias Property Alias_SceneCenterMarker Auto
 ReferenceAlias Property Alias_Bandit1 Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY SceneMarker1
+;BEGIN ALIAS PROPERTY myHoldImperial
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldImperial Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY BanditVictory01
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SceneMarker1 Auto
+ReferenceAlias Property Alias_BanditVictory01 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Bandit3
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Bandit3 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY myHoldSons
@@ -87,22 +57,58 @@ ReferenceAlias Property Alias_SceneMarker1 Auto
 LocationAlias Property Alias_myHoldSons Auto
 ;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-if BaboDebugging.getvalue() == 1
-Debug.notification("BaboDialogue: Road Event 02 fired")
-endif
-;END CODE
-EndFunction
-;END FRAGMENT
+;BEGIN ALIAS PROPERTY SceneMarker2
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_SceneMarker2 Auto
+;END ALIAS PROPERTY
 
-;BEGIN FRAGMENT Fragment_16
-Function Fragment_16()
+;BEGIN ALIAS PROPERTY myHoldLocation
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_myHoldLocation Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY PostEncounterSandboxRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_PostEncounterSandboxRef Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY SceneMarker1
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_SceneMarker1 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY SceneMarker3
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_SceneMarker3 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Soldier2
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Soldier2 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY BanditVictory02
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_BanditVictory02 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY Bandit2
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_Bandit2 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY BanditVictory03
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_BanditVictory03 Auto
+;END ALIAS PROPERTY
+
+;BEGIN FRAGMENT Fragment_13
+Function Fragment_13()
 ;BEGIN CODE
-BaboEncounter02SceneSLHH.stop()
+;BaboEncounter02SceneSLHH.stop()
+(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(0, false)
 utility.wait(3.0)
-BaboEncounter02SceneSLHHEnd.forcestart()
+setstage(11)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -114,12 +120,12 @@ Quest __temp = self as Quest
 BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
 ;END AUTOCAST
 ;BEGIN CODE
-BaboEncounter02Scene02.Stop()
+(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(0, false)
 BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), False, None, None)
-(BaboSexController as BaboSexControllerManager).EncounterEvent02Messagebox(3)
+(BaboMsgScript as BaboMsgManager).EncounterEvent02Messagebox(3)
 SendModEvent("SSLV Entry")
 (BaboSexController as BaboSexControllerManager).ReputationBitchIncrease(10)
-kmyQuest.TraumaExp(10.0)
+BMSQuest.CalcTraumaExpGain(10.0)
 setstage(255)
 ;END CODE
 EndFunction
@@ -137,32 +143,14 @@ kmyQuest.DraggingtoSexMarketWithPossibility()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_17
-Function Fragment_17()
+;BEGIN FRAGMENT Fragment_5
+Function Fragment_5()
 ;BEGIN CODE
-SetStage(10)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_15
-Function Fragment_15()
-;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EncounterEvent02Messagebox(5)
-;BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), True, BaboEmbarrassment01F, BaboEmbarrassment01MChest)
+;Judgement Scene Start
+(BaboMsgScript as BaboMsgManager).EncounterEvent02Messagebox(1)
 BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), True, "Babo_Flirt_A01", "Babo_Flirt_A02D")
-BMSQuest.RandomPainMenu(Game.getplayer())
-BaboEncounter02Scene01.forcestart()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_13
-Function Fragment_13()
-;BEGIN CODE
-BaboEncounter02SceneSLHH.stop()
-utility.wait(3.0)
-setstage(11)
+BMSQuest.RandomPainMenu(Alias_Player.getreference() as actor)
+(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(1, true)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -170,7 +158,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_2
 Function Fragment_2()
 ;BEGIN CODE
-BaboEncounter02Scene02.Stop()
+(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(0, false)
 BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), False, None, None)
 Utility.wait(1.0)
 (Alias_bandit1.getRef() as Actor).EvaluatePackage()
@@ -180,31 +168,108 @@ Utility.wait(1.0)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_10
-Function Fragment_10()
+;BEGIN FRAGMENT Fragment_15
+Function Fragment_15()
+;BEGIN CODE
+(BaboMsgScript as BaboMsgManager).EncounterEvent02Messagebox(5)
+BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), True, "Babo_Flirt_A01", "Babo_Flirt_A02D")
+BMSQuest.RandomPainMenu(Game.getplayer())
+(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(1, true)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
 ;BEGIN CODE
 BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), False, None, None)
+Utility.wait(1.0)
+(BaboMsgScript as BaboMsgManager).EncounterEvent02Messagebox(2)
+(BaboSexController as BaboSexControllerManager).SexCustom(Alias_Player, Alias_Bandit1, Alias_Bandit2, Alias_Bandit3, None, "MMMF", "Aggressive", "Vagina", true, "Event02Sex01", "Encounter02Sex01", true)
+BRMQuest.SexCountgangbang(3)
+BMSQuest.CalcCorruptionExpGain(3.0)
+(BaboSexController as BaboSexControllerManager).ReputationBitchIncrease(2)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_5
-Function Fragment_5()
+;BEGIN FRAGMENT Fragment_14
+Function Fragment_14()
 ;BEGIN CODE
-;Judgement Scene Start
-(BaboSexController as BaboSexControllerManager).EncounterEvent02Messagebox(1)
-;BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), True, BaboEmbarrassment01F, BaboEmbarrassment01MChest)
-BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), True, "Babo_Flirt_A01", "Babo_Flirt_A02D")
-BMSQuest.RandomPainMenu(Alias_Player.getreference() as actor)
-BaboEncounter02Scene01.start()
+(BaboSexController as BaboSexControllerManager).SLHHChokeActivate(Alias_bandit1.getreference() as actor)
+(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(3, true)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_6
-Function Fragment_6()
+;BEGIN FRAGMENT Fragment_18
+Function Fragment_18()
 ;BEGIN CODE
-;No slavery
+BRMQuest.IncreaseReputation(20, 10)
+setstage(255)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_11
+Function Fragment_11()
+;BEGIN CODE
+Utility.wait(3.0)
+Debug.SendAnimationEvent(Alias_Player.getref() as actor, "IdleForceDefaultState")
+BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), True, "Babo_FlirtPussy_A01", "Babo_FlirtPussy_A02D")
+;(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(2, true)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_16
+Function Fragment_16()
+;BEGIN CODE
+;BaboEncounter02SceneSLHH.stop()
+(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(0, false)
+utility.wait(3.0)
+(BaboSceneController as BaboSceneManager).Encounter02ScenePlay(4, true)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_20
+Function Fragment_20()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).pacifyAliasArray(BanditArray)
+(BaboSexController as BaboSexControllerManager).DisableEssential()
+
+
+int numberi
+numberi = (BaboSexController as BaboSexControllerManager).GetAliasArray(Alias_Bandit1, Alias_Bandit2, Alias_Bandit3, None, None)
+BaboEncounter02FoeNum.setvalue(numberi)
+
+Alias_Bandit1.clear()
+Alias_Bandit2.clear()
+Alias_Bandit3.clear()
+
+Alias_BanditVictory01.forcerefto(BaboTempList.getat(0) as actor)
+if numberi > 1
+Alias_BanditVictory02.forcerefto(BaboTempList.getat(1) as actor)
+endif
+if numberi > 2
+Alias_BanditVictory03.forcerefto(BaboTempList.getat(2) as actor)
+endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+; debug.trace(making bandits aggressive and attack player")
+;(BaboSexController as BaboSexControllerManager).ChallengeStartArray(BanditArray)
+(BaboSexController as BaboSexControllerManager).ActorCombatStart(Alias_Bandit1.getreference() as actor)
+(BaboSexController as BaboSexControllerManager).ActorCombatStart(Alias_Bandit2.getreference() as actor)
+(BaboSexController as BaboSexControllerManager).ActorCombatStart(Alias_Bandit3.getreference() as actor)
+(BaboMsgScript as BaboMsgManager).EncounterEvent02Messagebox(6)
+BMSQuest.CalcTraumaExpLoss(2.0)
+BMSQuest.CalcCorruptionExpLoss(1.0)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -236,20 +301,37 @@ stop()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+if BaboDebugging.getvalue() == 1
+Debug.notification("BaboDialogue: Road Event 02 fired")
+endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_10
+Function Fragment_10()
 ;BEGIN CODE
 BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), False, None, None)
-Utility.wait(1.0)
-(BaboSexController as BaboSexControllerManager).EncounterEvent02Messagebox(2)
-kmyQuest.Rapegangbang4(Alias_Player, Alias_Bandit1, Alias_Bandit2, Alias_Bandit3)
-BRMQuest.SexCountgangbang(3)
-kmyQuest.CorruptionExp(3.0)
-(BaboSexController as BaboSexControllerManager).ReputationBitchIncrease(2)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_19
+Function Fragment_19()
+;BEGIN CODE
+(BaboSexController as BaboSexControllerManager).pacifyAliasArray(BanditArray)
+(BaboSexController as BaboSexControllerManager).DisableEssential()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_17
+Function Fragment_17()
+;BEGIN CODE
+SetStage(10)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -262,62 +344,18 @@ setstage(7)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_11
-Function Fragment_11()
-;BEGIN CODE
-Utility.wait(3.0)
-Debug.SendAnimationEvent(Alias_Player.getref() as actor, "IdleForceDefaultState")
-;BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), True, BaboEmbarrassment01F, BaboEmbarrassment01MPussy)
-BMSQuest.StruggleAnim((Alias_Player.getref() as actor), (Alias_bandit1.getref() as actor), True, "Babo_FlirtPussy_A01", "Babo_FlirtPussy_A02D")
-BaboEncounter02Scene02.Start()
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_7
 Function Fragment_7()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
 ;BEGIN CODE
 ;Yes Slavery
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_14
-Function Fragment_14()
+;BEGIN FRAGMENT Fragment_6
+Function Fragment_6()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).SLHHChokeActivate(Alias_bandit1.getreference() as actor)
-BaboEncounter02SceneSLHH.forcestart()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_18
-Function Fragment_18()
-;BEGIN CODE
-BRMQuest.IncreaseReputation(20, 10)
-setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
-;BEGIN AUTOCAST TYPE BaboDiaQuest
-Quest __temp = self as Quest
-BaboDiaQuest kmyQuest = __temp as BaboDiaQuest
-;END AUTOCAST
-;BEGIN CODE
-; debug.trace(making bandits aggressive and attack player")
-
-kmyQuest.ChallengeStart(Alias_Bandit1)
-kmyQuest.ChallengeStart(Alias_Bandit2)
-kmyQuest.ChallengeStart(Alias_Bandit3)
-kmyQuest.TraumaExpLoss(2.0)
-kmyQuest.CorruptionExpLoss(1.0)
+;No slavery
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -339,3 +377,13 @@ Scene Property BaboEncounter02SceneSLHH  Auto
 Scene Property BaboEncounter02SceneSLHHEnd  Auto  
 
 GlobalVariable Property BaboDebugging  Auto  
+
+Quest Property BaboSceneController  Auto  
+
+Quest Property BaboMsgScript  Auto  
+
+ReferenceAlias[] Property BanditArray  Auto  
+
+GlobalVariable Property BaboEncounter02FoeNum  Auto  
+
+FormList Property BaboTempList  Auto  

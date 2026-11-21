@@ -6,7 +6,7 @@ Scriptname BaboEvent03Dialogue16 Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-GetowningQuest().setstage(95)
+(GetOwningQuest() as BaboEventNewgnisisMasterScript).RecovertotheClub()
 ;END CODE
 EndFunction
 ;END FRAGMENT

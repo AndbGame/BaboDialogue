@@ -17,7 +17,7 @@ Actor Property PlayerRef Auto
 
 Event OnGainLOS(Actor akViewer, ObjectReference akTarget)
 if MyQuest.getstage() == MyQuestStage || LOSAuto
-	(BaboSexController as BaboSexControllerManager).BCLEventScenePlay(SceneNum, EventName)
+	(BaboSceneController as BaboSceneManager).BCLEventScenePlay(SceneNum, EventName)
 	if PlayerEssential
 		(PlayerAlias as BaboBrawlingPlayerREF).CheckEssential()
 	endif
@@ -58,3 +58,4 @@ Event OnHitEx(ObjectReference akAggressor, Form akSource, Projectile akProjectil
 	endif
 EndEvent
 EndState
+Quest Property BaboSceneController  Auto  

@@ -10,6 +10,7 @@ Getowningquest().setstage(45)
 else 
 Getowningquest().setstage(90)
 endif
+stop()
 ;END CODE
 EndFunction
 ;END FRAGMENT

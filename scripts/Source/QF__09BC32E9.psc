@@ -2,19 +2,9 @@
 ;NEXT FRAGMENT INDEX 6
 Scriptname QF__09BC32E9 Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY NewLocation
-;ALIAS PROPERTY TYPE LocationAlias
-LocationAlias Property Alias_NewLocation Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY OldLocation
 ;ALIAS PROPERTY TYPE LocationAlias
 LocationAlias Property Alias_OldLocation Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY OrcRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_OrcRef Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY PlayerRef
@@ -25,6 +15,16 @@ ReferenceAlias Property Alias_PlayerRef Auto
 ;BEGIN ALIAS PROPERTY CenterMarker
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_CenterMarker Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY OrcRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_OrcRef Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY NewLocation
+;ALIAS PROPERTY TYPE LocationAlias
+LocationAlias Property Alias_NewLocation Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_3
@@ -40,41 +40,6 @@ Utility.wait(1.0)
 Messanger.evaluatepackage()
 BaboEventGiantOrc.setvalue(0)
 ;Debug.notification("changelocationevent04 start")
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-;No giving money. End of the conversation. go to stage 110
-Setstage(110)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
-;BEGIN CODE
-;Shutting down
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent04Messagebox(0)
-BaboEventWhiterunOrcVisitorsTriggerEvent.setvalue(0)
-BaboEventWhiterunOrcVisitiors.setstage(8)
-Self.Setstage(255)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-Actor[] actors
-if Alias_OrcRef
-actors = New Actor[1]
-actors[0] = (Alias_OrcRef.getreference() as actor)
-(BaboSexController as BaboSexControllerManager).DeleteWhenAbleWithTimeout(actors, 60)
-endif
-Alias_OrcRef.clear()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -104,6 +69,41 @@ Setstage(110)
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+Actor[] actors
+if Alias_OrcRef
+actors = New Actor[1]
+actors[0] = (Alias_OrcRef.getreference() as actor)
+(BaboSexController as BaboSexControllerManager).DeleteWhenAbleWithTimeout(actors, 60)
+endif
+Alias_OrcRef.clear()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
+;BEGIN CODE
+;Shutting down
+MsgCtrl.ChangeLocationEvent04Messagebox(0)
+BaboEventWhiterunOrcVisitorsTriggerEvent.setvalue(0)
+BaboEventWhiterunOrcVisitiors.setstage(8)
+Self.Setstage(255)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+;No giving money. End of the conversation. go to stage 110
+Setstage(110)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 BaboReputationMasterScript Property BRMQuest Auto
@@ -121,3 +121,5 @@ Quest Property BaboSexController  Auto
 GlobalVariable Property BaboEventGiantOrc  Auto  
 
 GlobalVariable Property BaboDebugging  Auto  
+
+BaboMsgManager Property MsgCtrl  Auto  

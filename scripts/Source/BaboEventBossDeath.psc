@@ -15,7 +15,7 @@ Event OnDeath(Actor akKiller)
 		Self.GetOwningQuest().SetStage(StageCompleteValue01)
 	Elseif GetOwningQuest().GetStage() == StageValue02
 		Self.GetOwningQuest().SetStage(StageCompleteValue02)
-	Elseif GetOwningQuest().GetStage() >= StageValue03
+	Elseif GetOwningQuest().GetStage() >= StageValue03 && GetOwningQuest().GetStage() < StageCompleteValue03
 		Self.GetOwningQuest().SetStage(StageCompleteValue03)
 	EndIf
 EndEvent

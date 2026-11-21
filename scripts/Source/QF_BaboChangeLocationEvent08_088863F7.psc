@@ -2,14 +2,14 @@
 ;NEXT FRAGMENT INDEX 2
 Scriptname QF_BaboChangeLocationEvent08_088863F7 Extends Quest Hidden
 
+;BEGIN ALIAS PROPERTY FanFriendB
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_FanFriendB Auto
+;END ALIAS PROPERTY
+
 ;BEGIN ALIAS PROPERTY OldLocation
 ;ALIAS PROPERTY TYPE LocationAlias
 LocationAlias Property Alias_OldLocation Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY FollowerRef
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_FollowerRef Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY NewLocation
@@ -22,9 +22,9 @@ LocationAlias Property Alias_NewLocation Auto
 ReferenceAlias Property Alias_SpawnMarker Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY SpouseRef
+;BEGIN ALIAS PROPERTY FollowerRef
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_SpouseRef Auto
+ReferenceAlias Property Alias_FollowerRef Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY PlayerRef
@@ -32,18 +32,20 @@ ReferenceAlias Property Alias_SpouseRef Auto
 ReferenceAlias Property Alias_PlayerRef Auto
 ;END ALIAS PROPERTY
 
+;BEGIN ALIAS PROPERTY SpouseRef
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_SpouseRef Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY FanFriendA
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_FanFriendA Auto
+;END ALIAS PROPERTY
+
 ;BEGIN ALIAS PROPERTY RealFan
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_RealFan Auto
 ;END ALIAS PROPERTY
-
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-stop()
-;END CODE
-EndFunction
-;END FRAGMENT
 
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
@@ -55,6 +57,14 @@ akactor.moveto(Alias_SpawnMarker.getreference())
 else
 setstage(255)
 endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+stop()
 ;END CODE
 EndFunction
 ;END FRAGMENT

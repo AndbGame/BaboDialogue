@@ -204,12 +204,6 @@ Event OnConfigClose()
 		SetToggleOptionValue(OID_TestQuestBaboBadEnd, 0)
 		BaboPosRef.moveto(PlayerRef)
 		BaboBadendKeyword.SendStoryEvent(None, BaboPosRef)
-		Utility.wait(1.0)
-		BaboBadEnd.setstage(2)
-		Utility.wait(2.0)
-		BaboBadEnd.setstage(3)
-		Utility.wait(1.0)
-		BaboBadEnd.setstage(5)
 	EndIf
 	
 	If TestQuestBaboKidnap
@@ -387,8 +381,9 @@ event OnPageReset(string page)
 	UnloadCustomContent()
 	SetCursorFillMode(TOP_TO_BOTTOM)
 	SetCursorPosition(0)
-		AddHeaderOption("$BaboRegionFeatures")
+		AddHeaderOption("$BaboEventConditions")
 		OID_EncounterRegionFeatures = AddToggleOption("$BaboWERegionFeature", BaboWERegion.GetValue())
+		OID_BaboNudityCriteriaEvent = AddSliderOption("$BaboNudityCriteriaEvent", BaboPlayerNudityCriteriaEvent.GetValue(), "{0}")
 		AddHeaderOption("$BaboRoadEventPercentage")
 		OID_Encounter01Percent = AddSliderOption("$BaboEvent01", BaboEncounter01percentage.GetValue(), "{0}")
 		OID_Encounter02Percent = AddSliderOption("$BaboEvent02", BaboEncounter02percentage.GetValue(), "{0}")
@@ -413,8 +408,12 @@ event OnPageReset(string page)
 		OID_BaboChangeLocation06Percentage = AddSliderOption("$BaboChangeLocationEvent06", BaboChangeLocation06Percentage.GetValue(), "{0}")
 		OID_BaboChangeLocation07Percentage = AddSliderOption("$BaboChangeLocationEvent07", BaboChangeLocation07Percentage.GetValue(), "{0}")
 		OID_BaboChangeLocation08Percentage = AddSliderOption("$BaboChangeLocationEvent08", BaboChangeLocation08Percentage.GetValue(), "{0}")
+		; CLEvent09 collector is always forced ??percentage slider disabled for now
+		;OID_BaboChangeLocation09Percentage = AddSliderOption("$BaboChangeLocationEvent09", BaboChangeLocation09Percentage.GetValue(), "{0}")
+		OID_BaboThirskRieklingPercentage = AddSliderOption("$BaboThirskRieklingEvent", BaboThirskRieklingPercentage.GetValue(), "{0}")
 		AddEmptyOption()
 		AddHeaderOption("$BaboUniqueEventSetting")
+		OID_BaboEventThirskRieklingInterval = AddSliderOption("$BaboThirskRieklingInterval", BaboThirskRieklingInterval.GetValue(), "{0}")
 		OID_BaboEventWhiterunOrcVisitorsNextVisitInterval = AddSliderOption("$BaboWhiterunOrcVisitInterval", BaboEventWhiterunOrcVisitorsNextVisitInterval.GetValue(), "{0}")
 		OID_BaboWhiterunBreezehomeGameDayInterval = AddSliderOption("$BaboWhiterunViceCaptainInterval", BaboWhiterunBreezehomeGameDayInterval.GetValue(), "{0}")
 		AddEmptyOption()
@@ -430,6 +429,9 @@ event OnPageReset(string page)
 		OID_BaboCombatWoundPercentMinimum = AddSliderOption("$BaboMinimumHealthPercentage", BaboCombatWoundPercentMinimum.GetValue(), "{0}")
 		AddEmptyOption()
 		OID_BaboSimpleSlaveryChance = AddSliderOption("$BaboSimpleSlaveryChance", BaboSimpleSlaveryChance.GetValue(), "{0}")
+		OID_BaboTimeLapseGlobal = AddToggleOption("$BaboTimeLapse", BaboTimeLapseGlobal.GetValue())
+		AddHeaderOption("$BaboLoanSharkSetting")
+		OID_BaboPossibleLoan = AddSliderOption("$BaboPossibleLoanCap", BaboPossibleLoanGlobal.GetValue(), "{0}")
 		AddHeaderOption("$BaboHireingSetting")
 		OID_HirelingGold = AddSliderOption("$BaboDefaultHirelingGold", HirelingGold.GetValue(), "{0}")
 		OID_discountedHirelingGold = AddSliderOption("$BaboHirelingGoldDiscounted", DiscountedHirelingGold.GetValue(), "{0}")
@@ -639,6 +641,11 @@ event OnPageReset(string page)
 		Else
 			OID_BaboRieklingThirskFuckToyTitle = Addtextoption("$BaboRieklingThirskFuckToyTitle", "$BaboNotAcquired")
 		EndIf
+		If playerref.isinfaction(BaboFactionRieklingPublicToiletTitle)
+			OID_BaboRieklingThirskFuckToyTitle = Addtextoption("$BaboRieklingPublicToiletTitle", "$BaboAcquired")
+		Else
+			OID_BaboRieklingThirskFuckToyTitle = Addtextoption("$BaboRieklingPublicToiletTitle", "$BaboNotAcquired")
+		EndIf
 		If playerref.isinfaction(BaboFactionNightgateInnVictoryTitle)
 			OID_BaboNightgateInnVictoryTitle = Addtextoption("$BaboNightgateInnVictoryTitle", "$BaboAcquired")
 		Else
@@ -714,6 +721,11 @@ event OnPageReset(string page)
 		Else
 			OID_BaboStallionSkewerTitle = Addtextoption("$BaboStallionSkewerTitle", "$BaboNotAcquired")
 		EndIf
+		If playerref.isinfaction(BaboFactionDoggyWaifuTitle)
+			OID_BaboDoggyWaifuTitle = Addtextoption("$BaboDoggyWaifuTitle", "$BaboAcquired")
+		Else
+			OID_BaboDoggyWaifuTitle = Addtextoption("$BaboDoggyWaifuTitle", "$BaboNotAcquired")
+		EndIf
 		SetCursorPosition(1)
 		AddHeaderOption("$BaboStatusStats")
 		LewdnessOID = Addtextoption("$BaboLewdness", BaboSexlabStatLewdness.getvalue() as int)
@@ -740,6 +752,7 @@ event OnPageReset(string page)
 		OID_UnequipOption = AddToggleOption("$BaboUnequipRestraints", 0)
 		OID_RecoverControl = AddToggleOption("$BaboRecoverControl", 0)
 		OID_RecoverEquipments = AddToggleOption("$BaboRecoverEquipments", 0)
+		OID_RecoverCollateral = AddToggleOption("$BaboRecoverCollateral", 0)
 		OID_DisableEssential = AddToggleOption("$BaboDisableEssential", 0)
 		;OID_InstantManipulation = AddToggleOption("$BaboInstantManipulation", 0)
 		Addtextoption("$BaboRescueWholeCounts", (BaboRescueCounts.getvalue() as int) as string)
@@ -945,10 +958,25 @@ ElseIf option == OID_BaboChangeLocation08Percentage
 	SetSliderDialogDefaultValue(50)
 	SetSliderDialogRange(0, 100)
 	SetSliderDialogInterval(1.0)
+;ElseIf option == OID_BaboChangeLocation09Percentage
+;	SetSliderDialogStartValue(BaboChangeLocation09Percentage.GetValue())
+;	SetSliderDialogDefaultValue(50)
+;	SetSliderDialogRange(0, 100)
+;	SetSliderDialogInterval(1.0)
+ElseIf option == OID_BaboThirskRieklingPercentage
+	SetSliderDialogStartValue(BaboThirskRieklingPercentage.GetValue())
+	SetSliderDialogDefaultValue(50)
+	SetSliderDialogRange(0, 100)
+	SetSliderDialogInterval(1.0)
 ElseIf option == OID_BaboEventWhiterunOrcVisitorsNextVisitInterval
 	SetSliderDialogStartValue(BaboEventWhiterunOrcVisitorsNextVisitInterval.GetValue())
 	SetSliderDialogDefaultValue(84)
 	SetSliderDialogRange(1, 84)
+	SetSliderDialogInterval(1.0)
+ElseIf option == OID_BaboEventThirskRieklingInterval
+	SetSliderDialogStartValue(BaboThirskRieklingInterval.GetValue())
+	SetSliderDialogDefaultValue(3)
+	SetSliderDialogRange(1, 30)
 	SetSliderDialogInterval(1.0)
 ElseIf option == OID_BaboWhiterunBreezehomeGameDayInterval
 	SetSliderDialogStartValue(BaboWhiterunBreezehomeGameDayInterval.GetValue())
@@ -975,6 +1003,23 @@ ElseIf option == OID_BaboSimpleSlaveryChance
 	SetSliderDialogDefaultValue(1)
 	SetSliderDialogRange(0, 99)
 	SetSliderDialogInterval(1.0)
+ElseIf option == OID_BaboNudityCriteriaEvent
+	SetSliderDialogStartValue(BaboPlayerNudityCriteriaEvent.GetValue())
+	SetSliderDialogDefaultValue(50)
+	SetSliderDialogRange(0, 100)
+	SetSliderDialogInterval(1.0)
+ElseIf option == OID_BaboPossibleLoan
+	float cap = 30000.0
+	if BaboPossibleLoanGlobal
+		cap = BaboPossibleLoanGlobal.GetValue()
+	endif
+	if cap < 30000.0
+		cap = 30000.0
+	endif
+	SetSliderDialogStartValue(cap)
+	SetSliderDialogDefaultValue(30000)
+	SetSliderDialogRange(30000, 100000)
+	SetSliderDialogInterval(1000.0)
 ElseIf option == OID_BaboDialoguePercentageMerchant
 	SetSliderDialogStartValue(BaboDialoguePercentageMerchant.GetValue())
 	SetSliderDialogDefaultValue(1)
@@ -1239,7 +1284,7 @@ event OnOptionKeyMapChange(int option, int keyCode, string conflictControl, stri
 			else
 				msg = "This key is already mapped to:\n'" + conflictControl + "'\n\nAre you sure you want to continue?"
 			endIf
-			continue = ShowMessage(msg, true, "Yes", "No")
+			continue = ShowMessage(msg, true, "$Yes", "$No")
 		endIf
 		; Set allowed key change
 		if continue
@@ -1493,14 +1538,24 @@ Event OnOptionSliderAccept(Int Option, Float Value)
 		BaboChangeLocation07Percentage.SetValue(Value)
 		SetSliderOptionValue(option, value as int, "{0}")
 		
-		ElseIf option == OID_BaboChangeLocation08Percentage
+	ElseIf option == OID_BaboChangeLocation08Percentage
 		BaboChangeLocation08Percentage.SetValue(Value)
+		SetSliderOptionValue(option, value as int, "{0}")
+
+	;ElseIf option == OID_BaboChangeLocation09Percentage
+	;	BaboChangeLocation09Percentage.SetValue(Value)
+	;	SetSliderOptionValue(option, value as int, "{0}")
+
+	ElseIf option == OID_BaboThirskRieklingPercentage
+		BaboThirskRieklingPercentage.SetValue(Value)
 		SetSliderOptionValue(option, value as int, "{0}")
 	
 	ElseIf option == OID_BaboEventWhiterunOrcVisitorsNextVisitInterval
 		BaboEventWhiterunOrcVisitorsNextVisitInterval.SetValue(Value)
 		SetSliderOptionValue(option, value as int, "{0}")
-		
+	ElseIf option == OID_BaboEventThirskRieklingInterval
+		BaboThirskRieklingInterval.SetValue(Value)
+		SetSliderOptionValue(option, value as int, "{0}")
 	ElseIf option == OID_BaboWhiterunBreezehomeGameDayInterval
 		BaboWhiterunBreezehomeGameDayInterval.SetValue(Value)
 		SetSliderOptionValue(option, value as int, "{0}")
@@ -1520,6 +1575,17 @@ Event OnOptionSliderAccept(Int Option, Float Value)
 	ElseIf option == OID_BaboSimpleSlaveryChance
 		BaboSimpleSlaveryChance.SetValue(Value)
 		SetSliderOptionValue(option, value as int, "{0}")	
+
+	ElseIf option == OID_BaboNudityCriteriaEvent
+		BaboPlayerNudityCriteriaEvent.SetValue(Value)
+		SetSliderOptionValue(option, value as int, "{0}")
+
+	ElseIf option == OID_BaboPossibleLoan
+		if Value < 30000
+			Value = 30000
+		endif
+		BaboPossibleLoanGlobal.SetValue(Value)
+		SetSliderOptionValue(option, value as int, "{0}")
 
 	ElseIf option == OID_BaboDialoguePercentageMerchant
 		BaboDialoguePercentageMerchant.SetValue(Value)
@@ -1732,6 +1798,15 @@ Event OnOptionSelect(Int Option)
 		ElseIf BaboGlobalSpectatorSwitch.GetValue() == 0
 			BaboGlobalSpectatorSwitch.SetValue(1)
 			SetToggleOptionValue(OID_BaboGlobalSpectatorSwitch, 1)
+		EndIf
+
+	ElseIf (option == OID_BaboTimeLapseGlobal)
+		If BaboTimeLapseGlobal.GetValue() == 1
+			BaboTimeLapseGlobal.SetValue(0)
+			SetToggleOptionValue(OID_BaboTimeLapseGlobal, 0)
+		ElseIf BaboTimeLapseGlobal.GetValue() == 0
+			BaboTimeLapseGlobal.SetValue(1)
+			SetToggleOptionValue(OID_BaboTimeLapseGlobal, 1)
 		EndIf
 
 	ElseIf (option == OID_EncounterRegionFeatures)
@@ -2004,24 +2079,28 @@ Event OnOptionSelect(Int Option)
 	ElseIf (option == OID_UnequipOption)
 ;			SetToggleOptionValue(OID_UnequipOption, 0)
 			BSAQuest.FindArmor(PlayerRef, None, BaboRestraints, False, False)
-			ShowMessage("Your restraints in this mod got removed")
+			ShowMessage("$BaboUnequipRestraintsDone")
 			
 	ElseIf (option == OID_RecoverControl)
 			RecoverControl()
-			ShowMessage("You gained your control")
+			ShowMessage("$BaboRecoverControlDone")
 
 	ElseIf (option == OID_RecoverEquipments)
 			RecoverEquipments()
-			ShowMessage("You get your Equipments back")
+			ShowMessage("$BaboRecoverEquipmentsDone")
+
+	ElseIf (option == OID_RecoverCollateral)
+			(BaboResetMCM.BaboLoanSharks as BaboLoanSharkScript).RecoverCollateralFromDebug()
+			ShowMessage("$BaboRecoverCollateralDone")
 			
 	ElseIf (option == OID_DisableEssential)
 			(playerref.getactorbase()).setessential(false)
 			Disableinvincibility()
-			ShowMessage("You are no longer invincible")
+			ShowMessage("$BaboDisableEssentialDone")
 			
 	ElseIf (option == OID_InstantManipulation)
 			Seteveryvalue()
-			ShowMessage("Every and each value is now manipulated.")
+			ShowMessage("$BaboInstantManipulationDone")
 			
 	Elseif Option == OID_ExportSettings
 		If ShowMessage("$ExportWarningMessage") 
@@ -2064,6 +2143,12 @@ ElseIf (Option == OID_BaboCombatWoundPercentMinimum)
 		SetInfoText("$BaboMinimumHealthPercentageInfo")
 ElseIf (Option == OID_BaboSimpleSlaveryChance)
 		SetInfoText("$BaboSimpleSlaveryChanceInfo")
+ElseIf (Option == OID_BaboTimeLapseGlobal)
+		SetInfoText("$BaboTimeLapseInfo")
+ElseIf (Option == OID_BaboPossibleLoan)
+		SetInfoText("$BaboPossibleLoanCapInfo")
+ElseIf (Option == OID_BaboNudityCriteriaEvent)
+		SetInfoText("$BaboNudityCriteriaEventInfo")
 ElseIf (Option == OID_BaboDialoguePercentageGuard)
 		SetInfoText("$BaboGuardDialoguePercentInfo")
 ElseIf (Option == OID_BaboDialoguePercentageMerchant)
@@ -2083,7 +2168,7 @@ ElseIf (Option == OID_BaboDialoguePercentagePopuAdventurer)
 ElseIf (Option == OID_SimpleSlavery)
 		SetInfoText("$BaboSimpleSlaveryCheckInfo")
 ElseIf (Option == OID_SexlabSurvival)
-		SetInfoText("$BaboSimpleSlaveryCheckInfo")
+		SetInfoText("$BaboSLSurvivalCheckInfo")
 ElseIf (Option == OID_BaboHorribleHarassment)
 		SetInfoText("$BaboSLHHCheckInfo")
 ElseIf (Option == OID_BaboEFF)
@@ -2114,8 +2199,14 @@ ElseIf (Option == OID_BaboChangeLocation07Percentage)
 		SetInfoText("$BaboChangeLocationEvent07Info")
 ElseIf (Option == OID_BaboChangeLocation08Percentage)
 		SetInfoText("$BaboChangeLocationEvent08Info")
+;ElseIf (Option == OID_BaboChangeLocation09Percentage)
+;		SetInfoText("$BaboChangeLocationEvent09Info")
+ElseIf (Option == OID_BaboThirskRieklingPercentage)
+		SetInfoText("$BaboThirskRieklingEventInfo")
 ElseIf (Option == OID_BaboEventWhiterunOrcVisitorsNextVisitInterval)
 		SetInfoText("$BaboWhiterunOrcVisitIntervalInfo")
+ElseIf (Option == OID_BaboEventThirskRieklingInterval)
+		SetInfoText("$BaboThirskRieklingIntervalInfo")
 ElseIf (Option == OID_BaboWhiterunBreezehomeGameDayInterval)
 		SetInfoText("$BaboWhiterunViceCaptainIntervalInfo")
 ElseIf (Option == OID_DLC2RieklingRescueChance)
@@ -2152,6 +2243,8 @@ ElseIf (Option == OID_RecoverControl)
 		SetInfoText("$BaboRecoverControlInfo")
 ElseIf (Option == OID_RecoverEquipments)
 		SetInfoText("$BaboRecoverEquipmentsInfo")
+ElseIf (Option == OID_RecoverCollateral)
+		SetInfoText("$BaboRecoverCollateralInfo")
 ElseIf (Option == OID_DisableEssential)
 		SetInfoText("$BaboDisableEssentialInfo")
 ElseIf (Option == OID_InstantManipulation)
@@ -2256,6 +2349,8 @@ ElseIf (option == OID_BaboAlmostEatenTitle)
 		SetInfoText("$BaboAlmostEatenTitleInfo")
 ElseIf (option == OID_BaboStallionSkewerTitle)
 		SetInfoText("$BaboStallionSkewerTitleInfo")
+ElseIf (option == OID_BaboDoggyWaifuTitle)
+		SetInfoText("$BaboDoggyWaifuTitleInfo")
 EndIf
 EndEvent
 
@@ -2298,8 +2393,6 @@ Function ResetQuestsSwitch(Bool TriggerSwitch)
 	if TriggerSwitch == True
 		msg = "$ResetConfirmMessage"
 		continue = ShowMessage(msg, true, "$Yes", "$No")
-		ShowMessage(msg)
-		
 		If Continue == True
 		BaboResetQuestGlobal.SetValue(1)
 		SetToggleOptionValue(OID_ResetQuest, 1)
@@ -2307,8 +2400,6 @@ Function ResetQuestsSwitch(Bool TriggerSwitch)
 	Else
 		msg = "$CancelYourDecisionMessage"
 		continue = ShowMessage(msg, true, "$Yes", "$No")
-		ShowMessage(msg)
-		
 		If Continue == True
 		BaboResetQuestGlobal.SetValue(0)
 		SetToggleOptionValue(OID_ResetQuest, 0)
@@ -2550,8 +2641,11 @@ Function ExportSettings()
 	JsonUtil.SetintValue(File, "BaboChangeLocationEvent06", BaboChangeLocation06Percentage.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboChangeLocationEvent07", BaboChangeLocation07Percentage.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboChangeLocationEvent08", BaboChangeLocation08Percentage.GetValue() as int)
+	;JsonUtil.SetintValue(File, "BaboChangeLocationEvent09", BaboChangeLocation09Percentage.GetValue() as int)
+	JsonUtil.SetintValue(File, "BaboChangeLocationThirskRiekling", BaboThirskRieklingPercentage.GetValue() as int)
 	
 	JsonUtil.SetintValue(File, "BaboWhiterunOrcVisitInterval", BaboEventWhiterunOrcVisitorsNextVisitInterval.GetValue() as int)
+	JsonUtil.SetintValue(File, "BaboThirskRieklingInterval", BaboThirskRieklingInterval.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboWhiterunViceCaptainInterval", BaboWhiterunBreezehomeGameDayInterval.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboDLC2RieklingRescue", DLC2RieklingRescueChance.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboSpectatorSwitch", BaboGlobalSpectatorSwitch.GetValue() as int)
@@ -2559,6 +2653,9 @@ Function ExportSettings()
 	JsonUtil.SetintValue(File, "BaboMaximumHealthPercentage", BaboCombatWoundPercentMaximum.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboMinimumHealthPercentage", BaboCombatWoundPercentMinimum.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboSimpleSlaveryChance", BaboSimpleSlaveryChance.GetValue() as int)
+	JsonUtil.SetintValue(File, "BaboTimeLapse", BaboTimeLapseGlobal.GetValue() as int)
+	JsonUtil.SetintValue(File, "BaboPossibleLoanCap", BaboPossibleLoanGlobal.GetValue() as int)
+	JsonUtil.SetintValue(File, "BaboNudityCriteriaEvent", BaboPlayerNudityCriteriaEvent.GetValue() as int)
 	
 	JsonUtil.SetintValue(File, "BaboDefaultHirelingGold", HirelingGold.GetValue() as int)
 	JsonUtil.SetintValue(File, "BaboHirelingGoldDiscounted", DiscountedHirelingGold.GetValue() as int)
@@ -2674,8 +2771,11 @@ Function ImportSettings()
 	BaboChangeLocation06Percentageint = JsonUtil.GetintValue(File, "BaboChangeLocationEvent06")
 	BaboChangeLocation07Percentageint = JsonUtil.GetintValue(File, "BaboChangeLocationEvent07")
 	BaboChangeLocation08Percentageint = JsonUtil.GetintValue(File, "BaboChangeLocationEvent08")
+	;BaboChangeLocation09Percentageint = JsonUtil.GetintValue(File, "BaboChangeLocationEvent09")
+	BaboThirskRieklingPercentageint = JsonUtil.GetintValue(File, "BaboChangeLocationThirskRiekling")
 	
 	BaboEventWhiterunOrcVisitorsNextVisitIntervalint = JsonUtil.GetintValue(File, "BaboWhiterunOrcVisitInterval", BaboEventWhiterunOrcVisitorsNextVisitInterval.GetValue() as int)
+	BaboThirskRieklingIntervalint = JsonUtil.GetintValue(File, "BaboThirskRieklingInterval", BaboThirskRieklingInterval.GetValue() as int)
 	BaboWhiterunBreezehomeGameDayIntervalint = JsonUtil.GetintValue(File, "BaboWhiterunViceCaptainInterval", BaboWhiterunBreezehomeGameDayInterval.GetValue() as int)
 	DLC2RieklingRescueChanceint = JsonUtil.GetintValue(File, "BaboDLC2RieklingRescue", DLC2RieklingRescueChance.GetValue() as int)
 	BaboGlobalSpectatorSwitchint = JsonUtil.GetintValue(File, "BaboSpectatorSwitch", BaboGlobalSpectatorSwitch.GetValue() as int)
@@ -2683,6 +2783,9 @@ Function ImportSettings()
 	BaboCombatWoundPercentMaximumint = JsonUtil.GetintValue(File, "BaboMaximumHealthPercentage", BaboCombatWoundPercentMaximum.GetValue() as int)
 	BaboCombatWoundPercentMinimumint = JsonUtil.GetintValue(File, "BaboMinimumHealthPercentage", BaboCombatWoundPercentMinimum.GetValue() as int)
 	BaboSimpleSlaveryChanceint = JsonUtil.GetintValue(File, "BaboSimpleSlaveryChance", BaboSimpleSlaveryChance.GetValue() as int)
+	BaboTimeLapseGlobalint = JsonUtil.GetintValue(File, "BaboTimeLapse", BaboTimeLapseGlobal.GetValue() as int)
+	BaboPossibleLoanCapint = JsonUtil.GetintValue(File, "BaboPossibleLoanCap", BaboPossibleLoanGlobal.GetValue() as int)
+	BaboPlayerNudityCriteriaEventint = JsonUtil.GetintValue(File, "BaboNudityCriteriaEvent", BaboPlayerNudityCriteriaEvent.GetValue() as int)
 
 	BaboDefaultHirelingGoldint = JsonUtil.GetintValue(File, "BaboDefaultHirelingGold")
 	BaboHirelingGoldDiscountedint = JsonUtil.GetintValue(File, "BaboHirelingGoldDiscounted")
@@ -2786,9 +2889,11 @@ Function ImportSettings()
 	BaboChangeLocation06Percentage.SetValue(BaboChangeLocation06Percentageint)
 	BaboChangeLocation07Percentage.SetValue(BaboChangeLocation07Percentageint)
 	BaboChangeLocation08Percentage.SetValue(BaboChangeLocation08Percentageint)
+	;BaboChangeLocation09Percentage.SetValue(BaboChangeLocation09Percentageint)
 
 
 	BaboEventWhiterunOrcVisitorsNextVisitInterval.Setvalue(BaboEventWhiterunOrcVisitorsNextVisitIntervalint)
+	BaboThirskRieklingInterval.Setvalue(BaboThirskRieklingIntervalint)
 	BaboWhiterunBreezehomeGameDayInterval.Setvalue(BaboWhiterunBreezehomeGameDayIntervalint)
 	DLC2RieklingRescueChance.Setvalue(DLC2RieklingRescueChanceint)
 	BaboGlobalSpectatorSwitch.Setvalue(BaboGlobalSpectatorSwitchint)
@@ -2796,6 +2901,12 @@ Function ImportSettings()
 	BaboCombatWoundPercentMaximum.Setvalue(BaboCombatWoundPercentMaximumint)
 	BaboCombatWoundPercentMinimum.Setvalue(BaboCombatWoundPercentMinimumint)
 	BaboSimpleSlaveryChance.Setvalue(BaboSimpleSlaveryChanceint)
+	BaboTimeLapseGlobal.Setvalue(BaboTimeLapseGlobalint)
+	if BaboPossibleLoanCapint < 30000
+		BaboPossibleLoanCapint = 30000
+	endif
+	BaboPossibleLoanGlobal.SetValue(BaboPossibleLoanCapint)
+	BaboPlayerNudityCriteriaEvent.SetValue(BaboPlayerNudityCriteriaEventint)
 	
 	
 	HirelingGold.setValue(BaboDefaultHirelingGoldint)
@@ -2931,6 +3042,8 @@ GlobalVariable Property BaboChangeLocation05Percentage Auto
 GlobalVariable Property BaboChangeLocation06Percentage Auto
 GlobalVariable Property BaboChangeLocation07Percentage Auto
 GlobalVariable Property BaboChangeLocation08Percentage Auto
+GlobalVariable Property BaboChangeLocation09Percentage Auto
+GlobalVariable Property BaboThirskRieklingPercentage Auto
 GlobalVariable Property BaboWERegion Auto
 GlobalVariable Property BaboEncounter01percentage Auto
 GlobalVariable Property BaboEncounter02percentage Auto
@@ -2947,6 +3060,7 @@ GlobalVariable Property BaboEncounter12percentage Auto
 GlobalVariable Property BaboEncounter13percentage Auto
 
 GlobalVariable Property BaboEventWhiterunOrcVisitorsNextVisitInterval Auto
+GlobalVariable Property BaboThirskRieklingInterval Auto
 GlobalVariable Property BaboWhiterunBreezehomeGameDayInterval Auto
 
 GlobalVariable Property BaboGlobalArgonianDefeatedTitle Auto
@@ -3048,6 +3162,7 @@ Int OID_BreastsValue
 Int OID_ButtocksValue
 
 Int OID_BaboEventWhiterunOrcVisitorsNextVisitInterval
+Int OID_BaboEventThirskRieklingInterval
 Int OID_BaboWhiterunBreezehomeGameDayInterval
 
 Int OID_BaboChangeLocation01Percentage
@@ -3058,6 +3173,8 @@ Int OID_BaboChangeLocation05Percentage
 Int OID_BaboChangeLocation06Percentage
 Int OID_BaboChangeLocation07Percentage
 Int OID_BaboChangeLocation08Percentage
+Int OID_BaboChangeLocation09Percentage
+Int OID_BaboThirskRieklingPercentage
 Int OID_Encounter01Percent
 Int OID_Encounter02Percent
 Int OID_Encounter03Percent
@@ -3084,6 +3201,7 @@ Int OID_BaboHirelingCompatibility
 Int OID_UnequipOption
 Int OID_RecoverControl
 Int OID_RecoverEquipments
+Int OID_RecoverCollateral
 Int OID_DisableEssential
 Int OID_InstantManipulation
 Int OID_BaboGlobalSpectatorSwitch
@@ -3098,6 +3216,9 @@ Int OID_BaboCombatEssentialSwitch
 Int OID_BaboCombatWoundPercentMaximum
 Int OID_BaboCombatWoundPercentMinimum
 Int OID_BaboSimpleSlaveryChance
+Int OID_BaboTimeLapseGlobal
+Int OID_BaboPossibleLoan
+Int OID_BaboNudityCriteriaEvent
 Int OID_FakeSteal
 Int OID_Stripswitch
 Int OID_BaboGlobalDropItem
@@ -3170,6 +3291,7 @@ int OID_BaboWhiterunSoftTouchTitle
 int OID_BaboSexSlaveTitle
 int OID_BaboAlmostEatenTitle
 int OID_BaboStallionSkewerTitle
+int OID_BaboDoggyWaifuTitle
 
 Int OID_FacetypeCute
 Int OID_FacetypeSexy
@@ -3203,6 +3325,9 @@ int OID_SkimpySpeed
 int OID_DetectSpectator
 
 GlobalVariable Property BaboSimpleSlaveryChance Auto
+GlobalVariable Property BaboPlayerNudityCriteriaEvent Auto
+GlobalVariable Property BaboTimeLapseGlobal Auto
+GlobalVariable Property BaboPossibleLoanGlobal Auto
 
 GlobalVariable Property BaboSexlabStatLewdnessSpeed Auto
 GlobalVariable Property BaboSexlabStatCorruptionSpeed Auto
@@ -3319,8 +3444,11 @@ int BaboChangeLocation05Percentageint
 int BaboChangeLocation06Percentageint
 int BaboChangeLocation07Percentageint
 int BaboChangeLocation08Percentageint
+int BaboChangeLocation09Percentageint
+int BaboThirskRieklingPercentageint
 
 int BaboEventWhiterunOrcVisitorsNextVisitIntervalint
+int BaboThirskRieklingIntervalint
 int BaboWhiterunBreezehomeGameDayIntervalint
 int DLC2RieklingRescueChanceint
 int BaboGlobalSpectatorSwitchint
@@ -3328,7 +3456,9 @@ int BaboCombatEssentialSwitchint
 int BaboCombatWoundPercentMaximumint
 int BaboCombatWoundPercentMinimumint
 int BaboSimpleSlaveryChanceint
-
+int BaboTimeLapseGlobalint
+int BaboPossibleLoanCapint
+int BaboPlayerNudityCriteriaEventint
 int BaboDefaultHirelingGoldint
 int BaboHirelingGoldDiscountedint
 int BaboTipHirelingGoldint
@@ -3408,6 +3538,7 @@ Bool Stripswitch = False
 Faction Property HolyKnight Auto
 
 Faction Property BaboFactionWhiterunOrcFuckToyTitle Auto
+Faction Property BaboFactionRieklingPublicToiletTitle Auto
 Faction Property BaboFactionRieklingThirskFuckToyTitle Auto
 Faction Property BaboFactionNightgateInnVictoryTitle Auto
 Faction Property BaboFactionNightgateInnFuckedTitle Auto
@@ -3423,6 +3554,7 @@ Faction Property BaboFactionWhiterunSoftTouchTitle Auto
 Faction Property BaboFactionSexSlaveTitle Auto
 Faction Property BaboFactionAlmostEatenTitle Auto
 Faction Property BaboFactionStallionSkewerTitle Auto
+Faction Property BaboFactionDoggyWaifuTitle Auto
 Faction Property BaboFactionWarMaidenTitle Auto
 
 

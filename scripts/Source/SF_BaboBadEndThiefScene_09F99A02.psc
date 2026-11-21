@@ -31,8 +31,8 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1()
 ;BEGIN CODE
-If game.getplayer().getitemcount(gold001) >= 100
-Game.getplayer().removeitem(gold001, 1500, false, Alias_Raper.getactorreference())
+If PlayerRef.getitemcount(gold001) >= 100
+PlayerRef.removeitem(gold001, 1500, false, Alias_Raper.getactorreference())
 endif
 ;END CODE
 EndFunction
@@ -49,7 +49,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_5
 Function Fragment_5()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).EquipGag(Game.getplayer(), false)
+(BaboSexController as BaboSexControllerManager).EquipGag(PlayerRef, false)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -64,3 +64,5 @@ BaboXMarkerMoverGeneric Property XmarkerMover Auto
 Keyword Property BaboRestraintsWoodenGag  Auto  
 
 Quest Property BaboSexController  Auto  
+
+Actor Property PlayerRef  Auto

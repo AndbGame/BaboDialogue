@@ -9,6 +9,7 @@ Message Property BaboAnimalCareDiagnosis03B  Auto
 Message Property BaboSkipMsg  Auto
 Message Property BaboSkipGamepadMsg  Auto
 
+Quest Property BaboMsgScript Auto
 Quest Property BaboSexController Auto
 Quest Property BaboEventAnimalCare Auto
 Quest Property BaboReputationScript Auto
@@ -27,7 +28,7 @@ Bool Property PlayingAnimation Auto hidden
 Actor Property CreatureActor auto hidden
 Idle Property HorseIdleRearUp Auto
 Faction Property PlayerHorseFaction Auto
-Faction Property BaboPlayerHorseFaction Auto
+Faction Property BaboPlayerAnimalFaction Auto
 Faction Property PlayerFaction Auto
 Faction Property CrimeFactionWhiterun  Auto
 Faction Property BaboFactionStallionSkewerTitle  Auto
@@ -64,12 +65,12 @@ Event OnUpdateGameTime()
 		(BaboSexController as BaboSexControllerManager).ReputationDecrease(30, 10)
 		CrimeFactionWhiterun.modcrimegold(3000)
 		MyHorse()
-		(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(6)
+		(BaboMsgScript as BaboMsgManager).AnimalCareEventMessagebox(6)
 		BaboEventAnimalCare.setstage(255)
 		;You are a thief!
 	else
 		(BaboSexController as BaboSexControllerManager).ReputationDecrease(15, 0)
-		(BaboSexController as BaboSexControllerManager).AnimalCareEventMessagebox(8)
+		(BaboMsgScript as BaboMsgManager).AnimalCareEventMessagebox(8)
 		BaboEventAnimalCare.setstage(255)
 		;reputation down
 	endif
@@ -104,7 +105,7 @@ EndFunction
 Function MyHorse()
 CreatureActor = CreatureRef.getreference() as actor
 CreatureActor.SetFactionRank(PlayerHorseFaction, 1)
-CreatureActor.SetFactionRank(BaboPlayerHorseFaction, 1)
+CreatureActor.SetFactionRank(BaboPlayerAnimalFaction, 1)
 CreatureActor.SetFactionOwner(PlayerFaction)
 ;PlayersHorse.ForceRefTo(Alias_Horse.GetActorRef())
 ;game.IncrementStat( "Horses Owned" )

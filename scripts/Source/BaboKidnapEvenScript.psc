@@ -14,6 +14,8 @@ Bool bwearingcollar
 Bool bSnareTrapped
 int CurrentDDI
 
+BaboMsgManager Property MsgCtrl Auto
+
 Key Property BaboKidnapperKey Auto
 
 Cell Property BaboKidnapperHouse01 Auto
@@ -1228,7 +1230,7 @@ EndFunction
 
 
 Function KidnapEventStringOut(int num)
-	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(num)
+	MsgCtrl.KidnapEvent01Messagebox(num)
 EndFunction
 
 Event OnSleepStart(float afSleepStartTime, float afDesiredSleepEndTime)
@@ -1909,7 +1911,7 @@ int ri = Utility.randomint(0, 100)
 
 if bsex
 	KidnapperActors[actori].moveto(PlayerRef)
-	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(17)
+	MsgCtrl.KidnapEvent01Messagebox(17)
 	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, KidnapperActors[actori], None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE10B", "KidnapEvent10B", True)
 else
 	if ri < 10
@@ -2230,7 +2232,7 @@ Bool Function KeyPress()
 					if BaboPlayerGagged.getvalue() == 1
 						;WIP
 						zbfSoundGagFrustrated.play(PlayerRef)
-						(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(16)
+						MsgCtrl.KidnapEvent01Messagebox(16)
 					else
 						BaboKidnapScenePlay(4)
 					endif
@@ -2245,7 +2247,7 @@ Bool Function KeyPress()
 					if BaboPlayerGagged.getvalue() == 1
 						;Murmur soundWIP
 						zbfSoundGagFrustrated.play(PlayerRef)
-						(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(16)
+						MsgCtrl.KidnapEvent01Messagebox(16)
 						return false
 					else
 						if ChanceofSuccess <= ChanceSpeech
@@ -2291,7 +2293,7 @@ if akTarget == PlayerRef
 			Armor thisArmor = PlayerRef.GetWornForm(0x00000004) as Armor
 				if thisArmor;You retrieved your gear, Maybe a few keyword exceptions later? WIP
 					(BaboSexController as BaboSexControllerManager).ChallengeStart(Kidnapper01);Battle
-					(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(13)
+					MsgCtrl.KidnapEvent01Messagebox(13)
 					FrontDoor.Getreference().lock(true)
 					LOSUnRegister(akViewer, PlayerRef)
 					;Maybe possibly some other dialogue trees? WIP
@@ -2346,7 +2348,7 @@ endif
 EndFunction
 
 Function KidnapperDied(int iactor)
-	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(12)
+	MsgCtrl.KidnapEvent01Messagebox(12)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcCorruptionExpLoss(35.0)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcTraumaExpLoss(6.0)
 	(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper01)
@@ -2592,7 +2594,7 @@ int ri = Utility.randomint(0, 100)
 if bsex && KidnapperActors[actori]
 	StartUptheEvent(0)
 	KidnapperActors[actori].moveto(PlayerRef)
-	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(17)
+	MsgCtrl.KidnapEvent01Messagebox(17)
 	(BaboSexController as BaboSexControllerManager).SexCustomActor(PlayerRef, KidnapperActors[actori], None, None, None, SLKeywordA, SLKeywordB, SLKeywordC, True, "KidnapE10B", "KidnapEvent10B", True)
 elseif !bsex && KidnapperActors[actori]
 	if ri < 10
@@ -2661,7 +2663,7 @@ Bool Function KeyPress()
 						if CheckEscapeStruggleDetect()
 							BaboKidnapScenePlay(2);Kidnapper comes
 						else
-							(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(18)
+							MsgCtrl.KidnapEvent01Messagebox(18)
 						endif
 						Debug.sendanimationevent(PlayerRef, "BaboRopeHit")
 					endif
@@ -2686,7 +2688,7 @@ Bool Function KeyPress()
 						if CheckEscapeStruggleDetect()
 							BaboKidnapScenePlay(3);Kidnapper comes
 						else
-							(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(18)
+							MsgCtrl.KidnapEvent01Messagebox(18)
 						endif
 						;BaboKidnapScenePlay(3);sound
 					endif
@@ -2696,7 +2698,7 @@ Bool Function KeyPress()
 					if BaboPlayerGagged.getvalue() == 1
 						;WIP
 						zbfSoundGagFrustrated.play(PlayerRef)
-						(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(16)
+						MsgCtrl.KidnapEvent01Messagebox(16)
 					else
 						CalltheGuard()
 					endif
@@ -2735,7 +2737,7 @@ Function CalltheGuard()
 	elseif (akactor == KidnapperActors[3]) || (akactor == KidnapperActors[4]) || (akactor == KidnapperActors[5]) || (akactor == KidnapperActors[6]) || (akactor == KidnapperActors[7])
 		BaboKidnapEventCalling04.forcestart()
 	else
-		(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(16)
+		MsgCtrl.KidnapEvent01Messagebox(16)
 	endif
 EndFunction
 
@@ -2778,16 +2780,8 @@ Function KidnapperDied(int iactor)
 	if kidnapperKill == kidnapperNum
 		(BaboMonitorScript as BaboDiaMonitorScript).CalcCorruptionExpLoss(35.0)
 		(BaboMonitorScript as BaboDiaMonitorScript).CalcTraumaExpLoss(6.0)
-		(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(12)
-		
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper01)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper02)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper03)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper04)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper05)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper06)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper07)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper08)
+		MsgCtrl.KidnapEvent01Messagebox(12)
+		(BaboSexController as BaboSexControllerManager).pacifyAliasArray(KidnappersAliases)
 	endif
 	;FrontDoor.Getreference().lock(false)
 EndFunction
@@ -2813,14 +2807,8 @@ Function GetTrapped(bool bTrapped)
 	bSnareTrapped = bTrapped
 	BaboKidnapPlayerGotTrappedGlobal.setvalue(bTrapped as float)
 	if bTrapped
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper01)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper02)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper03)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper04)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper05)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper06)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper07)
-		(BaboSexController as BaboSexControllerManager).pacifyAlias(Kidnapper08)
+		
+		(BaboSexController as BaboSexControllerManager).pacifyAliasArray(KidnappersAliases)
 		FadeinScene(true)
 		ReassignKidnapperAliasArray()
 		SetAlignActor(PlayerRef, KidnappersCombatAliases[0].getreference() as actor, 180, 0, 90)
@@ -2853,7 +2841,7 @@ if akTarget == PlayerRef
 			BaboPlayerDetected.setvalue(1)
 			if bweapondrawn && !bSnareTrapped;You unsheathed your weapon
 				if !PlayerRef.isincombat()
-					(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(13)
+					MsgCtrl.KidnapEvent01Messagebox(13)
 				endif
 				;(BaboTrapMarker as BaboDiaSnareRopeTrap).ManageState("OpenStandby")
 				(BaboSexController as BaboSexControllerManager).ActorChallengeStart(akViewer);Battle
@@ -3005,7 +2993,7 @@ elseif Scenario == 5;No Guard Coming
 	if BaboKidnapPlayerGotTrappedGlobal.getvalue() == 1
 		
 	endif
-	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(14)
+	MsgCtrl.KidnapEvent01Messagebox(14)
 	FadeinMoveScene(PlayerAlias, CenterMarkerPlayer, 0, false, true, "BaboRopeHit")
 	StartUptheEvent(1)
 	TimeLapse(true, False)
@@ -3127,7 +3115,7 @@ Function YouAreRescued()
 	YesCollision(PlayerAlias, "IdleForceDefaultState")
 	SetvehicleRef(None, None)
 	(BaboSexController as BaboSexControllerManager).RecoverControl(true)
-	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(15)
+	MsgCtrl.KidnapEvent01Messagebox(15)
 	KidnapQuestStopCheck()
 EndFunction
 
@@ -3492,7 +3480,7 @@ Event OnUpdate()
 			Armor thisArmor = PlayerRef.GetWornForm(0x00000004) as Armor
 			if (thisArmor) && (thisArmor != BaboTribalClotheTop);You retrieved your gear, Maybe a few keyword exceptions later? WIP
 				(BaboSexController as BaboSexControllerManager).ChallengeStart(Kidnapper01);Battle
-				(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(13)
+				MsgCtrl.KidnapEvent01Messagebox(13)
 				FrontDoor.Getreference().lock(true)
 				UnRegisterForUpdate()
 				return
@@ -3575,7 +3563,7 @@ if (akTarget == PlayerRef)
 				Armor thisArmor = PlayerRef.GetWornForm(0x00000004) as Armor
 				if (thisArmor) && (thisArmor != BaboTribalClotheTop);You retrieved your gear, Maybe a few keyword exceptions later? WIP
 					if !PlayerRef.isincombat()
-						(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(13)
+						MsgCtrl.KidnapEvent01Messagebox(13)
 					endif
 					if BaboKidnapGuardHelpPlayer.getvalue() > 0
 						akViewer.say(BaboKidnapEventBranchGuardSayT01);Kidnapper02 say
@@ -3753,7 +3741,7 @@ endif
 EndFunction
 
 Function KidnapperDied(int iactor)
-	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(12)
+	MsgCtrl.KidnapEvent01Messagebox(12)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcCorruptionExpLoss(12.0)
 	(BaboMonitorScript as BaboDiaMonitorScript).CalcTraumaExpLoss(2.0)
 	Gotostate("BaboSlaverDied")
@@ -4147,7 +4135,7 @@ Function YouAreRescued()
 	YesCollision(PlayerAlias, "IdleForceDefaultState")
 	SetvehicleRef(None, None)
 	(BaboSexController as BaboSexControllerManager).RecoverControl(true)
-	(BaboSexController as BaboSexControllerManager).KidnapEvent01Messagebox(15)
+	MsgCtrl.KidnapEvent01Messagebox(15)
 	KidnapQuestStopCheck()
 EndFunction
 

@@ -6,8 +6,6 @@ Scriptname SF_BaboDialogueWhiterunScene_09E18C26 Extends Scene Hidden
 Function Fragment_0()
 ;BEGIN CODE
 BDMScript.StruggleAnim(Game.getplayer(), ViceCaptainRef.getactorref(), true, Paired_BaboStripMotionS03_A01, Paired_BaboStripMotionS03_A02)
-;Utility.wait(1.0)
-;BSAScript.GetStrippedArmor(Game.getplayer(), ViceCaptainRef.getactorref(), True)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -16,8 +14,8 @@ EndFunction
 Function Fragment_1()
 ;BEGIN CODE
 BDMScript.StruggleAnim(Game.getplayer(), ViceCaptainRef.getactorref(), true, Paired_BaboStripMotionS04_A01, Paired_BaboStripMotionS04_A02)
-Utility.wait(3.0)
-BSAScript.GetStrippedArmor(Game.getplayer(), ViceCaptainRef.getactorref(), True)
+;BSAScript.GetStrippedArmor(Game.getplayer(), ViceCaptainRef.getactorref(), True)
+BSAScript.RipoffClothes(Game.getplayer())
 ;END CODE
 EndFunction
 ;END FRAGMENT

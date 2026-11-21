@@ -6,7 +6,8 @@ Scriptname BaboDiaLoanSharkTIF08 Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-(Getowningquest() as BaboLoanSharkScript).DraggingtoSexMarketWithPossibility()
+(Getowningquest() as BaboLoanSharkScript).BrothelScene04Done()
+(Getowningquest() as BaboLoanSharkScript).EndofBrothel()
 ;END CODE
 EndFunction
 ;END FRAGMENT

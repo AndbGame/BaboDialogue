@@ -6,7 +6,7 @@ Scriptname BaboEvent01Dialogue08 Extends TopicInfo Hidden
 Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-GetOwningQuest().setstage(50)
+GetOwningQuest().SetStage(50)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -15,7 +15,8 @@ EndFunction
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-SexLabUtil.GetAPI().StripActor(Player, DoAnimate = True)
+;SexLabUtil.GetAPI().StripActor(Player, DoAnimate = True)
+(BaboDialogueUtil as BaboDia_Util).StripNaked(player, true, true)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -23,3 +24,5 @@ EndFunction
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 Actor Property Player Auto
+
+Quest Property BaboDialogueUtil  Auto  

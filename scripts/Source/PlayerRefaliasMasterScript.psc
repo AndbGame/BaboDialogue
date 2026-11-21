@@ -2,7 +2,6 @@ Scriptname PlayerRefaliasMasterScript extends ReferenceAlias
 
 Event OnInit()
 	debug.Notification("$BaboDialogueOnint")
-	CheckingVersion()
 	Maintenance()
 	if BaboDialogueMCMRestart.isrunning() == true
 		BaboDialogueMCMRestart.Stop()
@@ -19,7 +18,7 @@ Event OnInit()
 EndEvent
 
 Function UpdateVersion()
-	(BaboDialogueMCMRestart as BaboMCMRestart).Updatetofive()
+	(BaboDialogueMCMRestart as BaboMCMRestart).UpdatetoSix()
 	(BaboSexController as BaboSexControllerManager).SOSSize()
 	;BaboDialogueConfigMCM.PageReset()
 	Debug.notification("$BaboDialogueOnLoadUpdate")
@@ -33,14 +32,9 @@ EndFunction
 
 Function Maintenance()
 CheckingVersion()
-If version == 5
-	if versiondecimal == 0
-		CheckingVersionDecimal()
-		UpdateVersion()
-	elseif versiondecimal == 8
-		CheckingVersionDecimal()
-		UpdateVersionPatch()
-	endif
+If version == 6 && VersionDecimal != 10
+	CheckingVersionDecimal()
+	UpdateVersion()
 Debug.notification("$BaboDialogueOnLoad")
 endif
 EndFunction
@@ -66,6 +60,7 @@ Event OnPlayerLoadGame()
 	BaboDialogueConfigMCM.RegisterUpdate(24)
 	(BaboSexController as BaboSexControllerManager).RegisterSexlabHooks()
 	(BaboSexController as BaboSexControllerManager).SOSSize()
+	(BaboAnimalCareAdopt as BaboAnimalCareConfig).SetTimer(2.0)
 EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
@@ -73,12 +68,12 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
 EndEvent
 
 int Function CheckingVersion()
-	Version = 5
+	Version = 6
 	Return Version
 EndFunction
 
 int Function CheckingVersionDecimal()
-	VersionDecimal = 81
+	VersionDecimal = 10
 	Return VersionDecimal
 EndFunction
 
@@ -222,13 +217,14 @@ EndFunction
 Quest Property BaboDialogueMCMRestart Auto
 BaboDialogueConfigMenu Property BaboDialogueConfigMCM Auto
 BaboSlaveRescueScript Property BSRScript Auto
-int Version = 3
+int Version = 6
 int VersionDecimal = 0
 Bool DebugMessage = True
 BaboDialogueHirelingsQuest Property BDHQuest Auto
 BaboDiaMonitorScript Property BMSQuest Auto
 BaboReputationMasterScript Property BRMQuest Auto
 BaboBoyFriendVariableScript Property BFVariableScript Auto
+Quest Property BaboAnimalCareAdopt  Auto  
 Quest Property BaboDialogueRiverwood  Auto  
 Quest Property BaboEventMarkarthGuard Auto
 Quest Property BaboSoliloquyOnStart Auto

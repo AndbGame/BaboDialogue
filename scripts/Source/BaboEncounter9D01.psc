@@ -13,6 +13,6 @@ EndFunction
 
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
-Weapon Property Dagger  Auto 
-Outfit Property NormalOutfit  Auto  
-Idle Property Standingup Auto
+;Weapon Property Dagger  Auto 
+;Outfit Property NormalOutfit  Auto  
+;Idle Property Standingup Auto

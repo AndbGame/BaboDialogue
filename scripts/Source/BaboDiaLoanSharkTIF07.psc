@@ -7,6 +7,7 @@ Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 (Getowningquest() as BaboLoanSharkScript).GotoKidnapEvent()
+(Getowningquest() as BaboLoanSharkScript).BrothelScene04Done()
 ;END CODE
 EndFunction
 ;END FRAGMENT

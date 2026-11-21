@@ -6,7 +6,7 @@ Scriptname BaboEventRiekling01 Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-BaboEventRieklingQuest.RieklingSexActor(Game.getplayer(), akspeaker)
+(Getowningquest() as BaboDialogueRieklingScript).RieklingSexActor(Game.getplayer(), akspeaker, "", "", false, false)
 ;END CODE
 EndFunction
 ;END FRAGMENT
