@@ -2,6 +2,8 @@
 ;NEXT FRAGMENT INDEX 3
 Scriptname TIF__08173183 Extends TopicInfo Hidden
 
+sexlabframework Property SexLab Auto
+
 ;BEGIN FRAGMENT Fragment_2
 Function Fragment_2(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor

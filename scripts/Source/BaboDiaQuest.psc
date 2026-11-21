@@ -795,3 +795,12 @@ Quest Property BaboSexController Auto
 Spell Property BaboCalmSpell Auto
 
 sslThreadSlots Property ThreadSlot Auto
+; --- andb: declared to match 6.51 compiled pex call sites (BaboBrawlingREF.psc calls
+;     these on the BaboDiaQuest-typed property). The shipped 6.51 Source Files copy is
+;     stale - author's own babodiaquest.pex does not contain them (runtime Papyrus
+;     resolves calls by name on the bound quest object; missing fn = error log + no-op).
+Function CorruptionExp(Float Mult)
+EndFunction
+
+Function TraumaExp(Float Mult)
+EndFunction

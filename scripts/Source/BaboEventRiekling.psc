@@ -616,7 +616,7 @@ EndFunction
 ;PairedMotionCreature
 
 
-Function BacktoThirsk()
+Function BacktoThirsk(ReferenceAlias akRiekling = None)
 	gotostate("KneelBeforeChief")
 EndFunction
 
@@ -1523,7 +1523,7 @@ State NightTimeGateOpen
 		endif
 	EndFunction
 
-	Function BacktoThirsk()
+	Function BacktoThirsk(ReferenceAlias akRiekling = None)
 		gotostate("KneelBeforeChief")
 	EndFunction
 
@@ -2158,3 +2158,8 @@ float property FTimetopass  auto hidden
 ObjectReference property BaboDia_RieklingCrossCruxLookD  auto
 GlobalVariable Property BaboTimeLapseGlobal Auto
 Message Property BaboTimeLapseWarningMsg Auto
+; --- andb: called by BaboEventRiekling05 fragment; the shipped 6.51 source is stale
+;     (author's compiled BaboEventRiekling.pex has no such function either - runtime
+;     no-op with error log). Declared empty to match shipped behavior.
+Function NewChiefRape(Actor akPlayer, Actor akSpeaker)
+EndFunction

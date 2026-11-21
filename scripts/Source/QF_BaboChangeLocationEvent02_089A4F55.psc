@@ -424,7 +424,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_7
 Function Fragment_7()
 ;BEGIN CODE
-(BaboSexController as BaboSexControllerManager).ChangeLocationEvent02Messagebox(8)
+MsgCtrl.ChangeLocationEvent02Messagebox(8)
 (BaboSexController as BaboSexControllerManager).SLHHActivate(Alias_CreatureRef.getactorreference(), None)
 ;END CODE
 EndFunction
@@ -616,7 +616,8 @@ BaboReputationMasterScript Property BRMQuest  Auto
 
 GlobalVariable Property BaboHorribleHarassment  Auto  
 
-Quest Property BaboSexController  Auto  
+Quest Property BaboSexController  Auto
+Quest Property BaboMsgScript Auto  
 
 Faction Property BaboDialogueFaction  Auto  
 

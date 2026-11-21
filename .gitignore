@@ -1,1 +1,8 @@
-PAPYRUS
+# --- build toolkit (copied/cloned locally, never tracked) ---
+PAPYRUS/
+
+# --- compiler output ---
+*.pex
+
+# AFKPexAnon.exe gets copied into scripts/ by the toolkit's own BUILD.bat
+scripts/*.exe

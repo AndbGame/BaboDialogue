@@ -978,7 +978,7 @@ Function Payback()
 	UpdateDebtInterestGlobal()
 EndFunction
 
-Function InterimPayback(int money)
+Function InterimPayback(int money = 0)
 	if !CanRepayPrincipal()
 		Messagebox(10)
 		return
