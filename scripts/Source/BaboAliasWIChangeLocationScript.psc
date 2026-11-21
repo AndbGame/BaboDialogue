@@ -27,34 +27,49 @@ int Property TimeB Auto
 
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboAliasWIChangeLocationScript), reduced:
+; guard the empty location alias only. In 6.51 an unresolved NewLocationRef.GetLocation() (alias
+; not filled, or a reference-following alias whose ref stands in a location-less wilderness cell)
+; makes every "left the location" test evaluate TRUE (None.IsChild() errors to False,
+; None == akNewLoc is False) -> spurious setstage/Stop on the quests configured with these flags.
+; The patch's `akNewLoc == None -> return` is deliberately NOT ported: with a valid targetLoc a
+; None akNewLoc is well-defined in 6.51 (IsChild(None) = False -> "left" fires), and suppressing
+; it would change the author's configured semantics for wilderness movement.
+	Location targetLoc = NewLocationRef.GetLocation()
+	if targetLoc == None
+		return
+	endif
+	bool isChildLocation = targetLoc.IsChild(akNewLoc)
+	bool isExactLocation = (targetLoc == akNewLoc)
+
 	if StageChangeOnLocationChangewStageup
-		If !(NewLocationRef.getlocation().Ischild(akNewLoc)) && Getowningquest().getstage() >= CurrentStageup
+		If !isChildLocation && Getowningquest().getstage() >= CurrentStageup
 			GetOwningQuest().setstage(NextStageup)
 		EndIf
 	EndIf
 	if StageChangeOnLocationChangewStagedown
-		If !(NewLocationRef.getlocation().Ischild(akNewLoc)) && Getowningquest().getstage() <= CurrentStagedown
+		If !isChildLocation && Getowningquest().getstage() <= CurrentStagedown
 			GetOwningQuest().setstage(NextStagedown)
 		EndIf
 	EndIf
 	if StageChangeOnLocationChangewStagemiddle
-		If !(NewLocationRef.getlocation().Ischild(akNewLoc)) && Getowningquest().getstage() >= CurrentStagemiddleup && Getowningquest().getstage() <= CurrentStagemiddledown
+		If !isChildLocation && Getowningquest().getstage() >= CurrentStagemiddleup && Getowningquest().getstage() <= CurrentStagemiddledown
 			GetOwningQuest().setstage(NextStagemiddle)
 		EndIf
 	EndIf
 	if StageChangeOnLocationChange
-		If !(NewLocationRef.getlocation() == akNewLoc)
+		If !isExactLocation
 			GetOwningQuest().setstage(NextStage)
 		EndIf
 	EndIf
 	if StopQuestOnLocationChange
-		If !(NewLocationRef.getlocation() == akNewLoc)
+		If !isExactLocation
 			GetOwningQuest().Stop()
 			return
 		EndIf
 	EndIf
 	if StopQuestOnLocationTimeChange
-		If !(NewLocationRef.getlocation() == akNewLoc)
+		If !isExactLocation
 			if GetCurrentHourOfDay() > TimeA && GetCurrentHourOfDay() < TimeB
 				GetOwningQuest().Stop()
 				return
@@ -62,7 +77,7 @@ Event OnLocationChange(Location akOldLoc, Location akNewLoc)
 		EndIf
 	EndIf
 	if StopQuestOnLocationTimeChangeOr
-		If !(NewLocationRef.getlocation() == akNewLoc)
+		If !isExactLocation
 			if GetCurrentHourOfDay() > TimeA || GetCurrentHourOfDay() < TimeB
 				GetOwningQuest().Stop()
 				return

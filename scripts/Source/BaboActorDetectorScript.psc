@@ -15,17 +15,26 @@ Actor Property PlayerRef Auto
 
 
 Bool Function CountActors()
-Int iIndex = ReferenceArray.Length
-	If iIndex != 0
-	While iIndex
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboActorDetectorScript) the 6.51 loop
+; computes kActor and discards it, so CountActors() returns True whenever ReferenceArray is
+; non-empty regardless of whether any watched alias actually holds an actor. With
+; ActorArrayToggle=true (14 of 20 detector triggers in the 6.51 ESP, all watching
+; BaboKidnapEvent's alias #1) the detector fires even when the watched actor does not exist.
+	Int iIndex = ReferenceArray.Length
+	if iIndex == 0
+		return false
+	endif
+
+	while iIndex
 		iIndex -= 1
 		Referencealias kalias = ReferenceArray[iIndex]
 		Actor kActor = (kalias.getref() as actor)
-	EndWhile
-	Else
-		Return false
-	EndIf
-	Return True
+		if kActor != None
+			return true
+		endif
+	endwhile
+
+	return false
 EndFunction
 
 Function ReArmTrigger()
