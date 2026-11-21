@@ -2,8 +2,12 @@ Scriptname BaboBrawlingWhiterunRef extends ReferenceAlias
 
 
 Event Onint()
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboBrawlingWhiterunRef) guard alias before setup
 if SetEssentialNPC
-	GetActorReference().GetActorBase().SetEssential(true)
+	Actor selfActorRef = GetActorReference()
+	if selfActorRef != None
+		selfActorRef.GetActorBase().SetEssential(true)
+	endif
 endif
 EndEvent
 
@@ -16,9 +20,13 @@ EndIf
 EndEvent
 
 Event OnEnterBleedout()
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboBrawlingWhiterunRef) guard quest / alias before bleedout handling
+	if BaboQuest == None
+		return
+	endif
 Deathcount = BaboQuest.DeathCountNum
 DeathcountGoal = BaboQuest.DeathCountGoalNum
-Faintcount = BaboQuest.FaintCountNum 
+Faintcount = BaboQuest.FaintCountNum
 FaintcountGoal = BaboQuest.FaintCountGoalNum
 
 	If BleedOutSwitch
@@ -26,21 +34,33 @@ FaintcountGoal = BaboQuest.FaintCountGoalNum
 			; this actor just lost
 			;GetActorReference().GetActorBase().SetEssential(true)
 			Utility.wait(0.5)
-			GetActorReference().SetUnconscious(true)
-			GetActorReference().PushActorAway(GetActorReference(), 1)
+			Actor selfActorRef = GetActorReference()
+			if selfActorRef == None
+				return
+			endif
+			selfActorRef.SetUnconscious(true)
+			selfActorRef.PushActorAway(selfActorRef, 1)
 			If FaintSwitch
 				BaboQuest.FaintCount()
 				;Debug.notification(BaboQuest.FaintCount() + "added")
 			EndIF
 		ElseIf GetOwningQuest().GetStage() != FirstStage || Deathcount == DeathCountGoal
 			; this actor not just lost but die
-			GetActorReference().SetUnconscious(false)
-			GetActorReference().GetActorBase().SetEssential(false)
+			Actor selfActorRef = GetActorReference()
+			if selfActorRef == None
+				return
+			endif
+			selfActorRef.SetUnconscious(false)
+			selfActorRef.GetActorBase().SetEssential(false)
 		EndIf
 	EndIf
 EndEvent
 
 Event OnDeath(Actor akKiller)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboBrawlingWhiterunRef) guard quest / BSCM before death handling
+	if BaboQuest == None || BSCM == None
+		return
+	endif
 	If DeathSwitch
 		BaboQuest.DeathCount()
 		BSCM.CorruptionExpLoss(1.0)

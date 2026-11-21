@@ -64,7 +64,11 @@ Event OnPlayerLoadGame()
 EndEvent
 
 Event OnLocationChange(Location akOldLoc, Location akNewLoc)
-	(GetOwningQuest() as BaboDiaMonitorScript).PlayerChangeLocation(akOldLoc, akNewLoc)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (PlayerRefaliasMasterScript) guard: monitor quest may not be running
+	BaboDiaMonitorScript monitor = (GetOwningQuest() as BaboDiaMonitorScript)
+	if monitor != None
+		monitor.PlayerChangeLocation(akOldLoc, akNewLoc)
+	endif
 EndEvent
 
 int Function CheckingVersion()
@@ -122,6 +126,10 @@ EndEvent
 
 Event OnMenuOpen(string sMenuName)
 	int iIndex = MenuEventStrings.Find(sMenuName)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (PlayerRefaliasMasterScript) bounds-check: array OOB aborts the function mid-way leaving half-updated state
+	if iIndex < 0 || iIndex >= StateStrings.Length
+		return
+	endif
 	GoToState(StateStrings[iIndex])
 EndEvent
 

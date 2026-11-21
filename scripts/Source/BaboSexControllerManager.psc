@@ -314,10 +314,16 @@ idle[] Function WolfKillMove()
 EndFunction
 
 Function AddHadSexFaction(actor[] akactorArray, Bool brape = false)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) guard against None array / None entries
+if akactorArray == None
+	return
+endif
 int i = akactorArray.length
 while i > 1;to exclude player
 i -= 1
-	if brape
+	if akactorArray[i] == None
+	;skip empty slots
+	elseIf brape
 		if akactorArray[i].isinfaction(BaboHadRapedPlayerFaction)
 			akactorArray[i].setfactionrank(BaboHadRapedPlayerFaction, akactorArray[i].getfactionrank(BaboHadRapedPlayerFaction) + 1)
 		else
@@ -417,8 +423,15 @@ Function StopAllSexlabAnimations()
 EndFunction
 
 Function SexCustomActor(Actor Actor01, Actor Actor02, Actor Actor03, Actor Actor04, Actor Actor05, String Tag01, String Tag02, String Tag03, Bool NextScene, String EventRegisterDummy, String EventName, Bool Rape)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) never start a scene with missing actors
+	if Actor01 == None || Actor02 == None
+		return
+	endif
 
 	Actor[] sexActors = MakeActorArray(Actor01, Actor02, Actor03, Actor04, Actor05)
+	if sexActors == None
+		return
+	endif
 	Int ActorCount = sexActors.Length
 	sslBaseAnimation[] anims
 	anims = SexLab.GetAnimationsByTag(ActorCount, Tag01, Tag02, Tag03,  TagSuppress = "Femdom")
@@ -449,7 +462,14 @@ Function SexCustom(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, Referen
 	Actor Actor03 = ActorRef03.GetActorReference()
 	Actor Actor04 = ActorRef04.GetActorReference()
 	Actor Actor05 = ActorRef05.GetActorReference()
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) never start a scene with missing actors
+	if Actor01 == None || Actor02 == None
+		return
+	endif
 	Actor[] sexActors = MakeActorArray(Actor01, Actor02, Actor03, Actor04, Actor05)
+	if sexActors == None
+		return
+	endif
 	Int ActorCount = sexActors.Length
 	sslBaseAnimation[] anims
 	anims = SexLab.GetAnimationsByTag(ActorCount, Tag01, Tag02, Tag03,  TagSuppress = "Femdom")
@@ -474,8 +494,15 @@ Function SexCustom(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, Referen
 EndFunction
 
 Function SexCustomActorTag(Actor Actor01, Actor Actor02, Actor Actor03, Actor Actor04, Actor Actor05, String Tag, String SuppressTag, Bool NextScene, String EventRegisterDummy, String EventName, Bool Rape)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) never start a scene with missing actors
+	if Actor01 == None || Actor02 == None
+		return
+	endif
 
 	Actor[] sexActors = MakeActorArray(Actor01, Actor02, Actor03, Actor04, Actor05)
+	if sexActors == None
+		return
+	endif
 	Int ActorCount = sexActors.Length
 	sslBaseAnimation[] anims
 	anims = SexLab.GetAnimationsByTags(ActorCount, Tag, TagSuppress = SuppressTag)
@@ -506,7 +533,14 @@ Function SexCustomTag(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, Refe
 	Actor Actor03 = ActorRef03.GetActorReference()
 	Actor Actor04 = ActorRef04.GetActorReference()
 	Actor Actor05 = ActorRef05.GetActorReference()
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) never start a scene with missing actors
+	if Actor01 == None || Actor02 == None
+		return
+	endif
 	Actor[] sexActors = MakeActorArray(Actor01, Actor02, Actor03, Actor04, Actor05)
+	if sexActors == None
+		return
+	endif
 	Int ActorCount = sexActors.Length
 	sslBaseAnimation[] anims
 	anims = SexLab.GetAnimationsByTags(ActorCount, Tag, TagSuppress = SuppressTag)
@@ -537,7 +571,14 @@ Function SexCustombyName(ReferenceAlias ActorRef01, ReferenceAlias ActorRef02, R
 	Actor Actor03 = ActorRef03.GetActorReference()
 	Actor Actor04 = ActorRef04.GetActorReference()
 	Actor Actor05 = ActorRef05.GetActorReference()
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) never start a scene with missing actors
+	if Actor01 == None || Actor02 == None
+		return
+	endif
 	Actor[] sexActors = MakeActorArray(Actor01, Actor02, Actor03, Actor04, Actor05)
+	if sexActors == None
+		return
+	endif
 	Int ActorCount = sexActors.Length
 
 	sslBaseAnimation[] anims = new sslBaseAnimation[1]
@@ -748,6 +789,8 @@ else
 		Game.SetPlayerAIDriven(false)
 		akactor.SetHeadTracking(true)
 		akactor.SetVehicle(None)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) player un-restrained without RecoverControl -> resume Acheron
+		BaboResumeAcheron()
 		;akActor.playidle(StaggerStart)
 	else
 		akActor.SetRestrained(False)
@@ -767,6 +810,8 @@ Function LosingControl()
 	;PlayerRef.SetRestrained(True)
 	Game.ForceThirdPerson()
 	ControlBool = false
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) Babo seized control -> suspend Acheron defeat processing
+	BaboSuspendAcheron()
 EndFunction
 
 Function StuckControl()
@@ -777,9 +822,13 @@ Function StuckControl()
 	ActorUtil.AddPackageOverride(PlayerRef, BaboDoNothing, 100, 1)
 ;	PlayerRef.SetDontMove(True)
 	ControlBool = false
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) Babo seized control -> suspend Acheron defeat processing
+	BaboSuspendAcheron()
 EndFunction
 
 Bool Function RecoverControl(Bool ResetIdle = true)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager) resume on ANY control-restore, even when the ControlBool guard below is skipped
+	BaboResumeAcheron()
 if ControlBool == false
 	PrecisionCheck(PlayerRef, false)
 	Game.EnablePlayerControls()
@@ -796,6 +845,56 @@ if ControlBool == false
 else
 	return false
 endif
+EndFunction
+
+; ===================== Acheron (Death Alternative) coexistence =====================
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (babosexcontrollermanager)
+; Babo has its own built-in defeat/surrender/capture scenes. When an external defeat
+; framework (Acheron) is installed, its lethal-damage interception can hijack those
+; scenes. LosingControl/StuckControl (Babo seizes the player) and RecoverControl
+; (Babo releases the player) are the common chokepoint for every scripted-defeat
+; pathway, so we suspend Acheron's hit processing for exactly that window.
+; Soft dependency: no-ops when Acheron is absent, and only ever re-enables what THIS
+; script disabled (never stomps another mod's DisableProcessing state).
+;
+; SELF-HEALING: DisableProcessing is a sticky global toggle, so a missed resume would
+; leave Acheron disabled for the whole save. Guard against that three ways:
+;   1) RecoverControl resumes UNCONDITIONALLY (not gated by ControlBool).
+;   2) Restrained(player, False) - a control-restore that bypasses RecoverControl -
+;      also resumes.
+;   3) ReconcileAcheron(), called every tick from BaboDiaMonitorScript's game-time
+;      update loop, resumes whenever Babo is no longer driving the player
+;      (ControlBool == True). This also runs after load, so any legacy stuck state
+;      clears on its own.
+Bool AcheronSuspendedByUs = False
+
+Bool Function AcheronReady()
+  ; 0x801 = AcheronDefeated keyword; GetFormFromFile resolves for ESL/ESM/ESP alike
+  ; and returns None when Acheron.esm is not in the load order.
+  Return Game.GetFormFromFile(2049, "Acheron.esm") != None
+EndFunction
+
+Function BaboSuspendAcheron()
+  If !AcheronSuspendedByUs && AcheronReady()
+    Acheron.DisableProcessing(True)
+    AcheronSuspendedByUs = True
+  EndIf
+EndFunction
+
+Function BaboResumeAcheron()
+  If AcheronSuspendedByUs
+    Acheron.DisableProcessing(False)
+    AcheronSuspendedByUs = False
+  EndIf
+EndFunction
+
+; Fail-safe reconcile, driven by the monitor's update loop. If Babo is not currently
+; driving the player (control restored) but we still hold Acheron suspended, release
+; it. Cheap: one bool test, and BaboResumeAcheron is a no-op unless we suspended.
+Function ReconcileAcheron()
+  If AcheronSuspendedByUs && ControlBool
+    BaboResumeAcheron()
+  EndIf
 EndFunction
 
 Function CompatiblityCheck(Bool Botton)

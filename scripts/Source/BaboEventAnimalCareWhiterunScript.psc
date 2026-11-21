@@ -57,11 +57,18 @@ Function OffTimer()
 EndFunction
 	
 Event OnUpdateGameTime()
-	if (CreatureRef.getreference() as actor).Is3DLoaded() && (OwnerRef.getreference() as actor).Is3DLoaded()
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboEventAnimalCareWhiterunScript) cache aliases + fail-safe: quest force-completes when aliases are empty instead of hanging on None
+	Actor creatureActorRef = CreatureRef.getreference() as actor
+	Actor ownerActorRef = OwnerRef.getreference() as actor
+	if creatureActorRef == None || ownerActorRef == None
+		BaboEventAnimalCare.setstage(255)
+		return
+	endif
+	if creatureActorRef.Is3DLoaded() && ownerActorRef.Is3DLoaded()
 		SetTimer(1.0)
 	elseif BaboEventAnimalCare.getstage() < 20 || BaboEventAnimalCare.getstage() >= 100
 		BaboEventAnimalCare.setstage(255)
-	elseif (CreatureRef.getreference() as actor).Is3DLoaded() && !(OwnerRef.getreference() as actor).Is3DLoaded()
+	elseif creatureActorRef.Is3DLoaded() && !ownerActorRef.Is3DLoaded()
 		(BaboSexController as BaboSexControllerManager).ReputationDecrease(30, 10)
 		CrimeFactionWhiterun.modcrimegold(3000)
 		MyHorse()

@@ -3,21 +3,29 @@ Scriptname BaboAliasHiringScript extends ReferenceAlias
 Event OnUpdateGameTime()
 
 	;kill the update if the follower isn't waiting anymore
-	If Self.GetActorRef().GetAv("WaitingforPlayer") == 0
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboAliasHiringScript) timer stops ticking forever on an empty alias
+	Actor followerRef = Self.GetActorRef()
+	if followerRef == None
+		UnRegisterForUpdateGameTime()
+		return
+	endif
+
+	If followerRef.GetAv("WaitingforPlayer") == 0
 		UnRegisterForUpdateGameTime()
 	Else
 ; 		debug.trace(self + "follower will go after player because he is waiting and 3 days have passed.")
 ;		(GetOwningQuest() as BaboDialogueHirelingsQuest).ChasingPlayer()
 ;		(GetOwningQuest() as BaboDialogueHirelingsQuest).DismissFollower(1)
 		UnRegisterForUpdateGameTime()
-	EndIf	
-	
+	EndIf
+
 EndEvent
 
 Event OnUnload()
 
 	;if follower unloads while waiting for the player, wait three days then dismiss him.
-	If Self.GetActorRef().GetAv("WaitingforPlayer") == 1
+	Actor followerRef = Self.GetActorRef()
+	If followerRef != None && followerRef.GetAv("WaitingforPlayer") == 1
 		(GetOwningQuest() as BaboDialogueHirelingsQuest).FollowerWait()
 	EndIf
 

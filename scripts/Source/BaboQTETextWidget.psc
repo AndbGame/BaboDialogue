@@ -163,13 +163,18 @@ EndFunction
 
 Function MoveTo(float newX, float newY)
 	if newX != X || newY != Y
-		UI.InvokeBool(HUD_MENU, WidgetRoot + ".setVisible", false)
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboQTETextWidget) don't touch the widget before it is initialized (Ready)
+		if Ready
+			UI.InvokeBool(HUD_MENU, WidgetRoot + ".setVisible", false)
+		endif
 		if X != newX
 			X = newX
 		endif
 		if Y != newY
 			Y = newY
 		endif
-		UpdateWidgetVisible()
+		if Ready
+			UpdateWidgetVisible()
+		endif
 	endif
 EndFunction

@@ -1009,6 +1009,8 @@ Function BeginUpdates()
 EndFunction
 
 Event OnUpdateGameTime()
+; --- andb: ported from crajjjj stability patch 6.1.1.3 (BaboDiaMonitorScript) fail-safe: never leave Acheron suspended once Babo has handed control back (self-heals a missed resume, including on save reload)
+	(BaboSexController as babosexcontrollermanager).ReconcileAcheron()
 	DoUpdate()
 	DoStatus()
 EndEvent
